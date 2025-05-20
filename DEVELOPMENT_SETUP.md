@@ -31,7 +31,7 @@ To ensure a consistent development experience for everyone, please follow these 
         ```bash
         cp .env.example .env
         ```
-    - Open the newly created `.env` file and fill in the necessary values (see [Environment Variables](#environment-variables) and [MongoDB Setup](#mongodb-setup) sections). **Do not commit your `.env` file.**
+    - Open the newly created `.env` file and fill in the necessary values (see [Environment Variables](./README.md#environment-variables) and [MongoDB Setup](#mongodb-setup) sections). **Do not commit your `.env` file.**
 
 4.  **Initialize Husky (for pre-commit hooks):**
     This should happen automatically after `npm install` if Husky is set up correctly. If you encounter issues with pre-commit hooks, you might need to run:

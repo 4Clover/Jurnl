@@ -167,7 +167,7 @@ To make working with this workflow smoother:
 
 ## Contributing
 
-1.  Pick an issue to work on (or create one) from the [GitHub Issues page](<Link to your GitHub issues>). Assign yourself or comment to claim it.
+1.  Pick an issue to work on (or create one) from the [GitHub Issues page](https://github.com/4Clover/ScribblyScraps/issues). Assign yourself or comment to claim it.
 2.  Follow the [Git Workflow](#git-workflow) to create a branch and make your changes.
 3.  Ensure your code adheres to the [Coding Standards & Conventions](#coding-standards--conventions).
 4.  Thoroughly test your changes locally.
