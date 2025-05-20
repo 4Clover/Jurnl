@@ -7,7 +7,7 @@ Welcome to the ScribblyScraps repository! This project aims to create a rich, in
 1.  [Project Overview](#project-overview)
     - [Key Features (Planned)](#key-features-planned)
 2.  [Technology Stack](#technology-stack)
-3.  [Development Environment Setup](./DEVELOPMENT_SETUP.md) <!-- Link to the separate file -->
+3.  [Development Environment Setup](README/DEV_ENV_SETUP.md)
 4.  [Coding Standards & Conventions](#coding-standards--conventions)
     - [Code Editor](#code-editor)
     - [Formatting & Linting](#formatting--linting)
@@ -42,15 +42,15 @@ ScribblyScraps is a full-stack web application built with SvelteKit and MongoDB.
 
 ## Technology Stack
 
-- **Framework:** SvelteKit (with TypeScript)
-- **Database:** MongoDB
+- **Framework:** [SvelteKit (with TypeScript)](README/SVELTE_KIT_EXPLAINED.md)
+- **Database:** [MongoDB](README/MONGODB_EXPLAINED.md)
 - **Styling:** Tailwind CSS
-- **Authentication:** Lucia
+- **Authentication:** [Lucia](README/LUCIA_EXPLAINED.md)
 - **Build Tool:** Vite (managed by SvelteKit)
 - **Package Manager:** npm
 - **Version Control:** Git, hosted on GitHub
 
-For detailed instructions on setting up your development environment, please see [DEVELOPMENT_SETUP.md](./DEVELOPMENT_SETUP.md).
+For detailed instructions on setting up your development environment, please see [DEVELOPMENT_SETUP.md](README/DEV_ENV_SETUP.md).
 
 ## Coding Standards & Conventions
 
