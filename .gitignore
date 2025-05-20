@@ -1,5 +1,7 @@
 # IDE
 .idea
+.vscode
+!.vscode/extensions.json
 
 # npm
 node_modules
@@ -25,3 +27,6 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+#Husky
+!.husky

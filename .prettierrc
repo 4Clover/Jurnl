@@ -1,8 +1,16 @@
 {
-	"useTabs": true,
+	"printWidth": 80,
+	"tabWidth": 4,
+	"useTabs": false,
+	"semi": true,
 	"singleQuote": true,
-	"trailingComma": "none",
-	"printWidth": 100,
+	"quoteProps": "as-needed",
+	"jsxSingleQuote": false,
+	"trailingComma": "es5",
+	"bracketSpacing": true,
+	"bracketSameLine": false,
+	"arrowParens": "always",
+	"endOfLine": "lf",
 	"plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
 	"overrides": [
 		{

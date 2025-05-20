@@ -1,0 +1,14 @@
+﻿version: '3.8'
+services:
+  mongo:
+    image: mongo:latest
+    container_name: ecs162-final-project
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: root
+       MONGO_INITDB_ROOT_PASSWORD: example
+volumes:
+  mongo_data:

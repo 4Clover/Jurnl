@@ -1,38 +1,42 @@
-# sv
+# ScribblyScraps - A Digital Journaling & Scrapbooking Platform
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Welcome to the ScribblyScraps repository! This project aims to create a rich, interactive web application where users can create and personalize digital journal entries, much like a scrapbook.
 
-## Creating a project
+## Table of Contents
 
-If you're seeing this, you've probably already done this step. Congrats!
+1.  [Project Overview](#project-overview)
+    - [Key Features](#key-features)
+2.  [Technology Stack](#technology-stack)
+3.  [Development Environment Setup](WIP_SETUP.md)
 
-```bash
-# create a new project in the current directory
-npx sv create
+## Project Overview
 
-# create a new project in my-app
-npx sv create my-app
-```
+ScribblyScraps is a full-stack web application built with SvelteKit and MongoDB. It allows users to:
 
-## Developing
+- Create text-based journal entries.
+- Upload and incorporate photos into entries.
+- Access a calendar view to see entries by date.
+- Customize entries with different "paper" styles, fonts, and digital "stickers."
+- (Future) Share entries with friends or make selected entries public.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Key Features (Planned)
 
-```bash
-npm run dev
+- User authentication and private journals.
+- Rich text editor for journaling.
+- Image uploads and embedding.
+- Calendar view.
+- Customization options (paper, fonts, stickers).
+- Drag-and-drop interface for placing elements.
+- (Barebones) Friends system, custom paper, multiple fonts, image positioning.
+- (Additional) Speech-to-text, prompt of the day, Spotify integration, emoji reactions.
+- (Stretch) Uploadable stickers.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## Technology Stack
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- **Framework:** SvelteKit (with TypeScript)
+- **Database:** MongoDB
+- **Styling:** Tailwind CSS
+- **Authentication:** Lucia
+- **Build Tool:** Vite (managed by SvelteKit)
+- **Package Manager:** npm
+- **Version Control:** Git, hosted on GitHub
