@@ -38,8 +38,8 @@ jobs:
               run: npm ci # Use 'ci' for clean, reproducible installs
 
             - name: Synchronize SvelteKit
-                # This command generates necessary files in .svelte-kit, including tsconfig.json
-                # It's often part of `svelte-check` or `dev`/`build` scripts but can be run standalone.
+              # This command generates necessary files in .svelte-kit, including tsconfig.json
+              # It's often part of `svelte-check` or `dev`/`build` scripts but can be run standalone.
               run: npx svelte-kit sync
 
             - name: Run Linting and Formatting Check
