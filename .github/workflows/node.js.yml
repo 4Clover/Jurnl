@@ -22,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ['20.x'] # Specify your project's Node.js version
+        node-version: ['22.15.1'] # Specify your project's Node.js version
 
     steps:
       - name: Checkout code
