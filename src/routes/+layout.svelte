@@ -1,7 +1,8 @@
 <script lang="ts">
-	import '../app.css';
-
-	let { children } = $props();
+    import '../app.css';
+    import Page from './+page.svelte';
 </script>
 
-{@render children()}
+<main>
+    <Page />
+</main>
