@@ -37,6 +37,11 @@ jobs:
             - name: Install dependencies
               run: npm ci # Use 'ci' for clean, reproducible installs
 
+            - name: Synchronize SvelteKit
+                # This command generates necessary files in .svelte-kit, including tsconfig.json
+                # It's often part of `svelte-check` or `dev`/`build` scripts but can be run standalone.
+              run: npx svelte-kit sync
+
             - name: Run Linting and Formatting Check
               # Assuming your `npm run lint` script in package.json handles both ESLint and Prettier check
               # Example package.json script: "lint": "prettier --check . && eslint ."
