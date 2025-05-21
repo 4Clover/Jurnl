@@ -140,7 +140,7 @@ Often, your pages need data from a server (like our MongoDB database) before the
         });
 
         if (!entry) {
-            throw error(404, 'Journal entry not found');
+            error(404, 'Journal entry not found');
         }
 
         return {
@@ -188,7 +188,7 @@ For handling form submissions (POST, PUT, DELETE requests) that modify data, Sve
     // Optional: load function if this page needs initial data
     export const load: PageServerLoad = async ({ locals }) => {
         if (!locals.user) {
-            throw redirect(303, '/login'); // Protect this page
+            redirect(303, '/login'); // Protect this page
         }
         return {};
     };
@@ -220,7 +220,7 @@ For handling form submissions (POST, PUT, DELETE requests) that modify data, Sve
                     createdAt: new Date(),
                 });
                 // Redirect to the new entry or another page
-                throw redirect(303, `/journal/${result.insertedId.toString()}`);
+                redirect(303, `/journal/${result.insertedId.toString()}`);
             } catch (err) {
                 console.error('Error saving entry:', err);
                 return fail(500, { message: 'Failed to save entry.' });
@@ -382,18 +382,22 @@ SvelteKit uses Vite's system for environment variables.
 ## 10. Key SvelteKit Globals & Types
 
 - **`./$types`:** In `+page.svelte`, `+page.server.ts`, `+layout.svelte`, etc., you'll often import types like `PageData`, `PageServerLoad`, `ActionData`, `Actions`, `RequestHandler` from `'./$types'`. SvelteKit automatically generates these types based on your `load` functions and `actions`, providing excellent type safety.
-- **`$app/stores`:** Provides Svelte stores for accessing page data, navigation status, etc. (e.g., `getStores().page` gives you access to `$page`).
-    ```html
+- **`$app/state`:** Provides rune-like reactive objects for accessing page data, navigation state, etc., replacing `$app/stores`.
+- `page`: Contains `url`, `params`, `data` (from `load` functions), `status`, `error`, and `state`.
+    ```sveltehtml
     <script lang="ts">
-        import { page } from '$app/stores';
+        import { page } from '$app/state';
         // $page.url, $page.params, $page.data, $page.status, etc.
     </script>
-    <p>Current path: {$page.url.pathname}</p>
-    <p>Entry ID from URL: {$page.params.entryId}</p>
+    <p>Current path: {page.url.pathname}</p>
+    <p>Entry ID from URL: {page.params.entryId}</p>
+    {#if page.data.someLoadedData}
+        <p>Data from load: {page.data.someLoadedData.title}</p>
+    {/if}
     ```
 - **`$app/forms`:** Provides `enhance` for progressive enhancement of forms, and `applyAction` for handling action results.
 - **`$app/navigation`:** Provides `goto`, `invalidate`, `invalidateAll`, `preloadData`, `preloadCode` for programmatic navigation and data reloading.
-- **`@sveltejs/kit`:** Provides utilities like `error`, `fail`, `redirect`, `json`.
+- **`@sveltejs/kit`:** Provides utilities like `error`, `fail`, `redirect`, `json`. **NOTE:** `error` and `redirect` are called directly, rather than thrown.
 
 ## 11. Building & Adapters
 
