@@ -48,7 +48,10 @@
         "node": "v22.15.1"
     },
     "lint-staged": {
-        "*.{js,ts,svelte}": "eslint --fix",
+        "*.{js,ts,svelte}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
         "*.{js,ts,svelte,json,md,html,css}": "prettier --write"
     }
 }
