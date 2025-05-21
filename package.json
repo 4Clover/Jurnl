@@ -10,10 +10,10 @@
         "prepare": "husky",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-        "format": "prettier --write .",
+        "format": "prettier --write . && eslint --fix .",
         "lint": "prettier --check . && eslint .",
         "test:unit": "vitest",
-        "test": "npm run test:unit -- --run"
+        "test": "vitest run"
     },
     "devDependencies": {
         "@eslint/compat": "^1.2.5",
@@ -45,7 +45,6 @@
         "vitest": "^3.0.0"
     },
     "engines": {
-        "npm": "11.4.0",
         "node": "v22.15.1"
     },
     "lint-staged": {
