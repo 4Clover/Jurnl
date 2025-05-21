@@ -1,0 +1,103 @@
+name: CI Checks for ScribblyScraps
+
+# When this workflow should run:
+on:
+  push: # Run on pushes to any branch (for early feedback)
+    branches:
+      - main # And specifically on pushes to main
+      - 'feature/**'
+      - 'fix/**'
+      - 'chore/**'
+  pull_request: # Also run on pull requests targeting main (crucial for branch protection)
+    branches:
+      - main
+  workflow_dispatch: # Allows manual triggering from the Actions tab
+
+jobs:
+  # Job for linting, formatting, type checking, and unit tests
+  # These are generally faster and can run without a full build artifact for E2E
+  quality_checks:
+    name: Quality Checks (Lint, Format, Types, Unit Tests)
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['20.x'] # Specify your project's Node.js version
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm' # Cache npm dependencies
+
+      - name: Install dependencies
+        run: npm ci # Use 'ci' for clean, reproducible installs
+
+      - name: Run Linting and Formatting Check
+        # Assuming your `npm run lint` script in package.json handles both ESLint and Prettier check
+        # Example package.json script: "lint": "prettier --check . && eslint ."
+        run: npm run lint
+
+      - name: Run TypeScript Type Check
+        # Assuming your `npm run check` script in package.json runs tsc --noEmit
+        # Example package.json script: "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
+        # Or directly: "check": "tsc --noEmit --project tsconfig.json"
+        run: npm run check
+
+      - name: Run Unit Tests (Vitest)
+        # Assuming your `npm run test` script in package.json runs Vitest
+        # Example package.json script: "test": "vitest run"
+        run: npm run test
+
+  # Job for building the application and running E2E tests
+  # This job might depend on the quality_checks job passing
+  # build_and_e2e_tests:
+  #   name: Build & E2E Tests
+  #   runs-on: ubuntu-latest
+  #   needs: quality_checks # Make this job dependent on the quality_checks job succeeding
+
+  #   strategy:
+  #     matrix:
+  #       node-version: ['20.x'] # Specify your project's Node.js version
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #         cache: 'npm'
+
+  #     - name: Install dependencies
+  #       run: npm ci
+
+  #     - name: Install Playwright Browsers
+  #       # Playwright needs its browsers installed in the CI environment
+  #       run: npx playwright install --with-deps
+
+  #     - name: Build SvelteKit Application
+  #       # Assuming your `npm run build` script builds the app
+  #       run: npm run build
+
+  #     - name: Run E2E Tests (Playwright)
+  #       # Assuming your `npm run test:e2e` script runs Playwright tests
+  #       # This script might internally start a preview server for Playwright to test against
+  #       # Example package.json script: "test:e2e": "playwright test"
+  #       # Ensure your Playwright config uses a command to start a preview server if needed,
+  #       # or that your test script handles it.
+  #       run: npm run test:e2e
+
+  #     # Optional: Upload Playwright report as an artifact if tests fail
+  #     - name: Upload Playwright report
+  #       if: always() # Run this step even if previous steps fail
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: playwright-report-${{ matrix.node-version }}
+  #         path: playwright-report/ # Default Playwright report output directory
+  #         retention-days: 7 # Keep reports for 7 days
