@@ -1,0 +1,73 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.pajamas--hamburger {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M0 3.75A.75.75 0 0 1 .75 3h14.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 3.75M0 8a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 8m.75 3.5a.75.75 0 0 0 0 1.5h14.5a.75.75 0 0 0 0-1.5z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-color: currentColor;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fdfff4;
+}
+
+.navbar {
+    background-color: #999f85;
+    padding: 1rem;
+}
+.navbar__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar__logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fdfff4;
+}
+.navbar__links {
+    display: flex;
+    gap: 1rem;
+}
+.navbar__links a {
+    text-decoration: none;
+    color: #fdfff4;
+    transition: color 0.3s;
+}
+.navbar__links a:hover {
+    color: #e1d4cb;
+}
+.navbar__links.active {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+.navbar__toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+@media (max-width: 758px) {
+    .navbar__links {
+        display: none;
+    }
+    .navbar__toggle {
+        display: block;
+    }
+}
+
+/*# sourceMappingURL=style.css.map */
