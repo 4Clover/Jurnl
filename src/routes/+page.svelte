@@ -1,1 +1,1 @@
-<h1>Welcome to ScribblyScraps!</h1>
+<h1>Welcome to Jurnl.</h1>
