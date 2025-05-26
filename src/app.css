@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+@font-face {
+    font-family: Seol Display;
+    src: url('./lib/assets/fonts/SaolDisplay-Regular.ttf');
+}
+
 @theme {
     --color-lightbrown: #bf9f86;
     --color-sage: #999f85;
@@ -8,4 +13,5 @@
     --color-brown: #715138;
     --color-olive: #4a571a;
     --color-offwhite: #fdfff4;
+    --font-seol: Seol Display;
 }

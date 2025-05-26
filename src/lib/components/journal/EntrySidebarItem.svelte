@@ -4,7 +4,7 @@
     let { entryDate, createdAt, updatedAt }: EntrySidebarItemProps = $props();
 </script>
 
-<div class="">
+<div class="bg-babyblue">
     <h2>{entryDate}</h2>
     <p>Created {createdAt}</p>
     <p>Last updated {updatedAt}</p>
