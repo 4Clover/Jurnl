@@ -1,35 +1,52 @@
-import { MongoClient, Db } from 'mongodb';
 import { MONGODB_URI } from '$env/static/private';
+import mongoose, { Mongoose } from 'mongoose';
 
-if (!MONGODB_URI) {
-    throw new Error(
-        'Please define the MONGODB_URI environment variable inside .env or .env.local'
-    );
+import './database/schemas';
+
+interface MongooseConnection {
+    promise: Promise<Mongoose> | null;
+    connection: Mongoose | null;
 }
 
-const client = new MongoClient(MONGODB_URI);
-let dbInstance: Db;
+let cached: MongooseConnection = (globalThis as any).mongoose;
 
-export async function connectToDatabase(): Promise<Db> {
-    if (dbInstance) {
-        return dbInstance;
+if (!cached) {
+    cached = (globalThis as any).mongoose = { connection: null, promise: null };
+}
+
+async function connectToDatabase(): Promise<Mongoose> {
+    if (!MONGODB_URI) {
+        throw new Error(
+            'Please define the MONGODB_URI environment variable inside .env or .env.local'
+        );
     }
+
+    if (cached.connection) {
+        console.log('Using cached MongoDB connection');
+        return cached.connection;
+    }
+
+    if (!cached.promise) {
+        console.log('Attempting to connect to MongoDB...');
+        cached.promise = mongoose.connect(MONGODB_URI).then((mongooseInstance) => {
+            console.log('Successfully connected to MongoDB!');
+            return mongooseInstance;
+        }).catch(err => {
+            console.error('MongoDB connection error:', err);
+            cached.promise = null; // reset on error
+            throw err; // for caller
+        });
+    }
+
     try {
-        await client.connect();
-        console.log('Successfully connected to MongoDB!');
-        // Extract database name from URI or set a default
-        const dbName =
-            MONGODB_URI.split('/').pop()?.split('?')[0] || 'myJournalApp';
-        dbInstance = client.db(dbName);
-        return dbInstance;
-    } catch (error) {
-        console.error('Error connecting to MongoDB:', error);
-        throw new Error('Failed to connect to the database.');
+        cached.connection = await cached.promise;
+    } catch (e) {
+        cached.promise = null; // clear promise on error
+        throw e; // let caller catch
     }
+
+    return cached.connection;
 }
 
-// Export the db instance directly after ensuring connection (simplified for common use)
-// Or always call connectToDatabase() before operations if you prefer more explicit control
-// This approach attempts to connect once and reuse the instance.
-const db = await connectToDatabase();
-export { db };
+// Call whenever needed, caching will let this be fine
+export default connectToDatabase;

@@ -1,5 +1,4 @@
-﻿version: '3.8'
-services:
+﻿services:
     mongo:
         image: mongo:latest
         container_name: ecs162-final-project
