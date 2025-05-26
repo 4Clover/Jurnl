@@ -8,7 +8,7 @@
             <div class="pajamas--hamburger"></div>
         </button>
         <div class="navbar__logo">Jurnl</div>
-        <div class="navbar__toggle" id="menu-toggle">&#9776;</div>
+        <div class="navbar__toggle" id="menu-toggle"></div>
         <div class="navbar__links" id="navbar-links">
             <a href="/">Home</a>
             <a href="/login">Login</a>
