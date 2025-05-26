@@ -6,8 +6,8 @@
     let username = $state(form?.data?.username ?? '');
     let password = $state('')
 
-    const usernameError = $derived(form?.errors?.username);
-    const passwordError = $derived(form?.errors?.password);
+    const usernameError = $derived(form?.errors);
+    const passwordError = $derived(form?.errors?.form);
     const generalFormError = $derived(form?.errors?.form);
     
 </script>

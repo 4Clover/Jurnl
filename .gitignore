@@ -2,6 +2,7 @@
 .idea
 .vscode
 !.vscode/extensions.json
+.husky
 
 # npm
 node_modules
