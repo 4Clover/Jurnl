@@ -1,5 +1,5 @@
 ﻿import type { RequestEvent } from '@sveltejs/kit';
-import { dev } from "$app/environment";
+import { dev } from '$app/environment';
 
 export const SESSION_COOKIE_NAME = 'le_undecided_name_session_token';
 

@@ -1,12 +1,12 @@
-﻿import {fail, isRedirect, redirect} from '@sveltejs/kit';
-import type {Actions, PageServerLoad} from './$types';
+﻿import { fail, isRedirect, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 import connectToDatabase from '$lib/server/database';
-import {User} from '$lib/server/database/schemas';
-import {hashPassword} from '$lib/server/auth/password';
-import {createSession} from '$lib/server/auth/sessionManager';
-import {setSessionCookie} from '$lib/server/auth/cookies';
-import {z} from 'zod';
-import {fromZodError} from 'zod-validation-error';
+import { User } from '$lib/server/database/schemas';
+import { hashPassword } from '$lib/server/auth/password';
+import { createSession } from '$lib/server/auth/sessionManager';
+import { setSessionCookie } from '$lib/server/auth/cookies';
+import { z } from 'zod';
+import { fromZodError } from 'zod-validation-error';
 
 // Zod schema for registration form validation
 const registerSchema = z.object({
@@ -40,7 +40,7 @@ export const actions: Actions = {
         };
 
         let registrationSuccess = false;
-        let redirectToPath: string | null = '/homepage';
+        const redirectToPath: string | null = '/homepage';
 
         try {
             await connectToDatabase();
@@ -50,11 +50,17 @@ export const actions: Actions = {
             // const email = parsedData.email || undefined; // Ensure empty string becomes undefined if schema allows
 
             // check if the username already exists
-            const existingUserByUsername = await User.findOne({ username }).lean();
+            const existingUserByUsername = await User.findOne({
+                username,
+            }).lean();
             if (existingUserByUsername) {
-                return fail(409, { // 409 = already exists
+                return fail(409, {
+                    // 409 = already exists
                     data: { username /*, email*/ }, // validated data
-                    errors: { username: 'Username already taken. Please choose another.' }
+                    errors: {
+                        username:
+                            'Username already taken. Please choose another.',
+                    },
                 });
             }
 
@@ -81,7 +87,11 @@ export const actions: Actions = {
             // create the new user session
             const sessionDetails = await createSession(newUserDoc._id);
 
-            setSessionCookie(event, sessionDetails.clientToken, sessionDetails.expiresAt);
+            setSessionCookie(
+                event,
+                sessionDetails.clientToken,
+                sessionDetails.expiresAt
+            );
 
             // update locals with new user info
             locals.user = {
@@ -100,25 +110,34 @@ export const actions: Actions = {
             };
 
             registrationSuccess = true;
-
         } catch (error: any) {
             if (isRedirect(error)) {
                 // should never be hit
-                console.warn("Registration: A SvelteKit redirect was caught unexpectedly. Redirecting again:", error);
+                console.warn(
+                    'Registration: A SvelteKit redirect was caught unexpectedly. Redirecting again:',
+                    error
+                );
                 redirect(303, redirectToPath);
             }
 
             if (error instanceof z.ZodError) {
                 const validationErrors = fromZodError(error);
-                console.warn('Registration validation error:', validationErrors.toString());
-                return fail(400, { // 400 = validation errors
+                console.warn(
+                    'Registration validation error:',
+                    validationErrors.toString()
+                );
+                return fail(400, {
+                    // 400 = validation errors
                     data: submittedDataForRepopulation,
-                    errors: validationErrors.details.reduce((acc, curr) => {
-                        if (curr.path && curr.path.length > 0) {
-                            acc[curr.path[0] as string] = curr.message;
-                        }
-                        return acc;
-                    }, {} as Record<string, string>)
+                    errors: validationErrors.details.reduce(
+                        (acc, curr) => {
+                            if (curr.path && curr.path.length > 0) {
+                                acc[curr.path[0] as string] = curr.message;
+                            }
+                            return acc;
+                        },
+                        {} as Record<string, string>
+                    ),
                 });
             }
 
@@ -126,20 +145,29 @@ export const actions: Actions = {
             console.error('Registration action error:', error);
             return fail(500, {
                 data: submittedDataForRepopulation,
-                errors: { form: 'An unexpected error occurred during registration. Please try again later.' }
+                errors: {
+                    form: 'An unexpected error occurred during registration. Please try again later.',
+                },
             });
         }
 
         // ---- SUCCESSFUL REGISTRATION CONDITIONS MET, REDIRECT WITHOUT CATCH ----
         if (registrationSuccess && redirectToPath) {
-            console.log('Registration successful, redirecting to:', redirectToPath);
+            console.log(
+                'Registration successful, redirecting to:',
+                redirectToPath
+            );
             throw redirect(303, redirectToPath);
         }
 
-        console.warn("Registration fallback reached, unhandled logic likely exists.");
+        console.warn(
+            'Registration fallback reached, unhandled logic likely exists.'
+        );
         return fail(500, {
             data: submittedDataForRepopulation,
-            errors: { form: 'Registration process did not complete as expected.' }
+            errors: {
+                form: 'Registration process did not complete as expected.',
+            },
         });
-    }
+    },
 } satisfies Actions;

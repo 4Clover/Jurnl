@@ -16,9 +16,16 @@ export async function hashPassword(plainTextPassword: string): Promise<string> {
     }
 }
 
-export async function verifyPassword(hashedPassword: string, plainTextPassword: string): Promise<boolean> {
+export async function verifyPassword(
+    hashedPassword: string,
+    plainTextPassword: string
+): Promise<boolean> {
     try {
-        return await argon2.verify(hashedPassword, plainTextPassword, ARGON2_OPTIONS);
+        return await argon2.verify(
+            hashedPassword,
+            plainTextPassword,
+            ARGON2_OPTIONS
+        );
     } catch (err) {
         console.error('Error verifying password (or password mismatch):', err);
         return false;

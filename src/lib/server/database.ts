@@ -28,14 +28,17 @@ async function connectToDatabase(): Promise<Mongoose> {
 
     if (!cached.promise) {
         console.log('Attempting to connect to MongoDB...');
-        cached.promise = mongoose.connect(MONGODB_URI).then((mongooseInstance) => {
-            console.log('Successfully connected to MongoDB!');
-            return mongooseInstance;
-        }).catch(err => {
-            console.error('MongoDB connection error:', err);
-            cached.promise = null; // reset on error
-            throw err; // for caller
-        });
+        cached.promise = mongoose
+            .connect(MONGODB_URI)
+            .then((mongooseInstance) => {
+                console.log('Successfully connected to MongoDB!');
+                return mongooseInstance;
+            })
+            .catch((err) => {
+                console.error('MongoDB connection error:', err);
+                cached.promise = null; // reset on error
+                throw err; // for caller
+            });
     }
 
     try {

@@ -1,12 +1,15 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
-import type { SerializableUser, SerializableSession } from '$lib/server/database/schemas';
+import type {
+    SerializableUser,
+    SerializableSession,
+} from '$lib/server/database/schemas';
 
 declare global {
     namespace App {
         interface Error {
             message: string; // default svelte
-            code?: string;// custom error codes
+            code?: string; // custom error codes
             stack?: string;
         }
         interface Locals {
