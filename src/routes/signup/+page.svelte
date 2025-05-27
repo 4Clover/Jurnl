@@ -1,4 +1,6 @@
 <script lang="ts">
+    let first = $state("");
+    let last = $state("");
     let email = $state("");
     let password = $state("");
 </script>
@@ -6,7 +8,19 @@
 <main class="center-container">
     <div class="login-box">
         <div class="spacing"></div>
-        <h2 class = "center_item">Log In to View Your Journal</h2>
+        <div class = "center_item">
+            <h2 >Welcome to Jurnl!</h2>
+            <h2>Let's get started.</h2>
+        </div>
+        <div class = "center_item">
+            <h4 class="label">First Name</h4>
+            <input class="fieldbox" bind:value={first} />
+        </div>
+        <div class = "center_item">
+            <h4 class="label">Last Name</h4>
+            <input class="fieldbox" bind:value={last} />
+        </div>
+    
         <div class="center_item">
             <h4 class="label">Email Address</h4>
             <input class="fieldbox" bind:value={email} />

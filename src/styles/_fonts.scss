@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap');
+
+h1 {
+    font-family: 'Saol Display';
+    src: url('src/assets/SaolDisplay-Regular.woff2') format('woff2');
+    font-size: 3.125rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+h2 {
+    font-family: 'Saol Display';
+    src: url('src/assets/neuemontreal-italic.woff') format('woff');
+    font-size: 1.875rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.1875rem;
+    text-transform: capitalize;
+    padding: 0.5rem;
+}
+
+h3 {
+    font-family: 'Nothing You Could Do';
+    font-size: 1.625rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 3%;
+}
+
+h4 {
+    font-family: 'Neue Montreal';
+    src: url('src/assets/neuemontreal-thin.woff') format('woff');
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    letter-spacing: 0.06875rem;
+    text-transform: uppercase;
+    padding: 2% 0% 0% 0%;
+}
