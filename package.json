@@ -10,10 +10,12 @@
         "prepare": "husky",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-        "format": "prettier --write . && eslint --fix .",
+        "format": "prettier --write .",
         "lint": "prettier --check . && eslint .",
-        "test:unit": "vitest",
-        "test": "vitest run"
+        "type-check": "prettier --write . && eslint --fix.",
+        "test:client": "vitest --workspace client",
+        "test:server": "vitest --workspace server",
+        "test": "vitest"
     },
     "devDependencies": {
         "@eslint/compat": "^1.2.5",

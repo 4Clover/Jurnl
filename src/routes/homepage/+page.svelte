@@ -3,7 +3,7 @@
     let { data }: PageProps = $props();
 </script>
 
-<div class="container mx-auto p-4">
+<main class="center-container">
     {#if data.user}
         <h1 class="text-2xl font-bold">Dashboard</h1>
         <p class="mt-2">Hello, {data.user.username}!</p>
@@ -21,4 +21,4 @@
     {:else}
         <p>You need to be logged in to see the dashboard.</p>
     {/if}
-</div>
+</main>

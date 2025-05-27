@@ -2,12 +2,12 @@
 
 button {
     border: none;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     cursor: pointer;
 }
 
 @mixin primary {
-    background: var(--Sage, #999F85);
+    background: var(--Sage, #999f85);
     display: flex;
     padding: 1rem 2rem;
     justify-content: center;
@@ -28,22 +28,21 @@ button {
     }
 }
 
-
 .button-sm {
-  padding: 1rem 1rem;
-  font-size: 1rem;
+    padding: 1rem 1rem;
+    font-size: 1rem;
 }
 
 .button-md {
-  padding: 0.5rem 1rem;
-  font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
 }
 
 .button-lg {
-  padding: 0.75rem 1.5rem;
-  font-size: 2rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 2rem;
 }
 
 .primary-button {
-  @include primary;
+    @include primary;
 }

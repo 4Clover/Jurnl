@@ -10,7 +10,7 @@ declare global {
         interface Error {
             message: string; // default svelte
             code?: string; // custom error codes
-            stack?: string;
+            stack?: string; // stack dump for error logs
         }
         interface Locals {
             user: SerializableUser | null;

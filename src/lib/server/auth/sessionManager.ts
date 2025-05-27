@@ -76,9 +76,7 @@ export async function createSession(
  * @param clientToken The token from the client's cookie.
  * @returns A promise resolving to the user and session if valid, otherwise nulls.
  */
-export async function validateClientSessionToken(
-    clientToken: string
-): Promise<{
+export async function validateClientSessionToken(clientToken: string): Promise<{
     user: SerializableUser | null;
     session: SerializableSession | null;
 }> {
