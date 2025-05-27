@@ -3,7 +3,7 @@ import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/enco
 import { sha256 } from '@oslojs/crypto/sha2';
 import type { Types } from 'mongoose';
 import { Session, User } from '$lib/server/database/schemas';
-import type { IUser, SerializableSession, SerializableUser } from '$lib/server/database/schemas';
+import type { SerializableSession, SerializableUser } from '$lib/server/database/schemas';
 
 
 const SESSION_LIFESPAN_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -45,13 +45,13 @@ export async function hashTokenForSessionId(clientToken: string): Promise<string
  * @param userId The ObjectId of the user.
  * @returns A promise resolving to an object containing the clientToken and the session's expiresAt date.
  */
-export async function createSession(
-    userId: Types.ObjectId,
-): Promise<{ clientToken: string; sessionId: string; expiresAt: Date }> {
+export async function createSession(userId: Types.ObjectId,):
+    Promise<{ clientToken: string; sessionId: string; expiresAt: Date }>
+{
     const clientToken = generateClientSessionToken();
     const sessionId = await hashTokenForSessionId(clientToken);
     const expiresAt = new Date(Date.now() + SESSION_LIFESPAN_MS);
-    // delete any old session with same id
+    // delete any old session with same id (highly improbable but safe to keep)
     await Session.findByIdAndDelete(sessionId).exec();
 
     const newSession = new Session({
@@ -69,37 +69,64 @@ export async function createSession(
  * @param clientToken The token from the client's cookie.
  * @returns A promise resolving to the user and session if valid, otherwise nulls.
  */
-export async function validateClientSessionToken(
-    clientToken: string
-): Promise<{ user: IUser | null; session: SerializableSession | null }> { // Return SerializableSession
+export async function validateClientSessionToken(clientToken: string):
+    Promise<{ user: SerializableUser | null; session: SerializableSession | null }>
+{
     if (!clientToken) return { user: null, session: null };
 
     const sessionId = await hashTokenForSessionId(clientToken);
     const sessionDoc = await Session.findById(sessionId).exec(); // don't populate user yet
 
+    // validate session
     if (!sessionDoc || sessionDoc.expiresAt.getTime() < Date.now()) {
-        if (sessionDoc) await Session.findByIdAndDelete(sessionId).exec();
+        if (sessionDoc) {
+            console.warn(
+                `Deleting expired/invalid session: ${sessionId}`
+            );
+            await Session.findByIdAndDelete(sessionId).exec();
+        } else {
+            console.log(
+                `Session not found for token (potentially already invalidated): 
+                ${sessionId.substring(0, 10)}...`
+            );
+        }
         return { user: null, session: null };
     }
 
-    //  Mongoose document.
-    const user = await User.findById(sessionDoc.userId).exec();
+    //  Mongoose document now fetched given session is valid
+    const userDoc = await User.findById(sessionDoc.userId).exec();
 
-    if (!user) {
-        await Session.findByIdAndDelete(sessionId).exec(); // data integrity issue
+
+    if (!userDoc) { // data integrity issue found, delete session
+        console.error(
+            `CRITICAL: Session ${sessionId} found but 
+            associated user ${sessionDoc.userId} not found. 
+            Deleting orphaned session.`
+        );
+        await Session.findByIdAndDelete(sessionId).exec();
         return { user: null, session: null };
     }
+
+    // serializable User
+    const safeUser: SerializableUser = {
+        _id: userDoc._id.toString(),
+        username: userDoc.username,
+        email: userDoc.email,
+        avatarUrl: userDoc.avatarUrl,
+        createdAt: userDoc.createdAt.toISOString(),
+        updatedAt: userDoc.updatedAt.toISOString(),
+    };
 
     // serializable session
     const serializableSessionData: SerializableSession = {
         _id: sessionDoc._id, // string
-        userId: user._id.toString(), //  user ObjectId to string
+        userId: userDoc._id.toString(), //  user ObjectId to string
         expiresAt: sessionDoc.expiresAt.toISOString(), // Date to ISO string
     };
 
     return {
-        user, // full Mongoose user document
-        session: serializableSessionData, // prepared session
+        user : safeUser, // prepped User data
+        session: serializableSessionData, // prepped Session data
     };
 }
 

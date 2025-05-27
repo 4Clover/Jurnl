@@ -2,13 +2,17 @@
     import type { PageProps } from './$types';
     import { enhance } from '$app/forms';
     
-    let { form, data } : PageProps = $props();
+    let { form, data } : PageProps  = $props();
+    
+    // used for repopulating the form
     let username = $state(form?.data?.username ?? '');
     let password = $state('')
-
-    const usernameError = $derived(form?.errors);
-    const passwordError = $derived(form?.errors?.form);
-    const generalFormError = $derived(form?.errors?.form);
+    
+    // client side error showing
+    const errors = $derived(form?.errors as { username?: string; password?: string; form?: string } | undefined);
+    const usernameFieldError = $derived(errors?.username);
+    const passwordFieldError = $derived(errors?.password);
+    const generalFormError = $derived(errors?.form);
     
 </script>
 
@@ -28,7 +32,13 @@
             </div>
         {/if}
         
-        <form method="POST" use:enhance class="space-y-6">
+        <form method="POST"
+              use:enhance={() => {
+                return async ({ update }) => {
+                    await update();
+                };}}
+              class="space-y-6"
+        >
             {#if data.redirectTo}
                 <input type="hidden" name="redirectTo" value={data.redirectTo} />
             {/if}
@@ -43,14 +53,14 @@
                     name="username"
                     bind:value={username}
                     required
-                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm {usernameError
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm {usernameFieldError
                         ? 'border-red-500'
                         : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200'}"
-                    aria-describedby={usernameError ? 'username-error' : undefined}
+                    aria-describedby={usernameFieldError ? 'username-error' : undefined}
                 />
-                {#if usernameError}
+                {#if usernameFieldError}
                     <p id="username-error" class="mt-2 text-sm text-red-600 dark:text-red-400">
-                        {usernameError}
+                        {usernameFieldError}
                     </p>
                 {/if}
             </div>
@@ -65,14 +75,14 @@
                     name="password"
                     bind:value={password}
                     required
-                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm {passwordError
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm {passwordFieldError
                         ? 'border-red-500'
                         : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200'}"
-                    aria-describedby={passwordError ? 'password-error' : undefined}
+                    aria-describedby={passwordFieldError ? 'password-error' : undefined}
                 />
-                {#if passwordError}
+                {#if passwordFieldError}
                     <p id="password-error" class="mt-2 text-sm text-red-600 dark:text-red-400">
-                        {passwordError}
+                        {passwordFieldError}
                     </p>
                 {/if}
                     </div>

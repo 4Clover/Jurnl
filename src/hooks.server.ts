@@ -3,11 +3,12 @@ import {dev} from '$app/environment';
 import connectToDatabase from '$lib/server/database';
 import {validateClientSessionToken} from '$lib/server/auth/sessionManager';
 import {SESSION_COOKIE_NAME, setSessionCookie} from '$lib/server/auth/cookies';
-import type {IUser} from '$lib/server/database/schemas';
+
 /**
- * Handles session validation for incoming requests.
+ * Handles session validation for incoming requests and populates event.locals.
  */
 export const handle: Handle = async ({ event, resolve }) => {
+    // standard DB try -- perform in any request, efficient given cached DB instance
     try {
         await connectToDatabase();
     } catch (error) {
@@ -15,51 +16,61 @@ export const handle: Handle = async ({ event, resolve }) => {
     }
 
     const clientToken = event.cookies.get(SESSION_COOKIE_NAME);
-    let fullUserDocument: IUser | null = null; // To hold the Mongoose document internally
 
     if (clientToken) {
-        // validateClientSessionToken now returns { user: MongooseDoc | null, session: SerializableSession | null }
-        const { user, session: serializableSessionData } = await validateClientSessionToken(clientToken);
+        const validationResult = await validateClientSessionToken(clientToken);
 
-        if (user && serializableSessionData) {
-            fullUserDocument = user; // full Mongoose doc for server-side use before serialization
-            event.locals.session = serializableSessionData;
+        if (validationResult.user && validationResult.session) {
+            // assign the serializable user and session data to locals
+            event.locals.user = validationResult.user;
+            event.locals.session = validationResult.session;
 
-            event.locals.user = user.toJSON() as App.Locals['user'];
-
-            setSessionCookie(event, clientToken, new Date(serializableSessionData.expiresAt));
+            // refresh session cookie
+            setSessionCookie(event, clientToken, new Date(validationResult.session.expiresAt));
         } else {
+            // invalid or expired token so clear locals
             event.locals.user = null;
             event.locals.session = null;
         }
     } else {
+        // no client token found
         event.locals.user = null;
         event.locals.session = null;
     }
 
-    return resolve(event);
+    return resolve(event); // finally, resolve the request
 };
 
 /**
- *  error handling for server-side errors
+ * Error handling for server-side errors.
  */
-export const handleError: HandleServerError = ({ error, event }) => {
-    const errorId = crypto.randomUUID(); // unique ID for this error instance
+export const handleError: HandleServerError = ({ error , event }) => {
+    // generate unique id for error -- useful if saved to a log file
+    const errorId = crypto.randomUUID();
 
-    // --- SERVER ---
+    // log error to the server console
+    console.error(`--------------------------------`);
     console.error(`Error ID: ${errorId}`);
-    console.error('Error caught in handleError hook:');
-    console.error('Event:', event);
-    console.error(error); // full error object
+    console.error(`Timestamp: ${new Date().toISOString()}`);
+    console.error(`Route ID: ${event.route.id}`);
+    console.error(`URL: ${event.url.pathname}${event.url.search}`);
+    console.error('Error Object:', error); // object and stack
+    if (error instanceof Error && error.cause) { console.error('Error Cause:', error.cause);}
+    console.error(`--------------------------------`);
 
-    // --- CLIENT ---
-    const message = (error instanceof Error) ? error.message : 'An unexpected server error occurred.';
-    const code = (error instanceof Error && 'code' in error) ? String(error.code) : undefined;
-
-
-    return {
-        message: `Something went wrong on our end. Error ID: ${errorId}. ${dev ? message : ''}`,
-        code: dev ? code : undefined, // send code in dev
-        stack: dev && error instanceof Error ? error.stack : undefined // send stack in dev
+    // prep error object for client viewing
+    const clientError: App.Error = {
+        message: `An unexpected error occurred. Please try again.`,
+        code: errorId
     };
+
+    if (dev) { // in dev: more details
+        clientError.message = (error instanceof Error ? error.message : String(error)) + ` (Ref: ${errorId})`;
+        if (error instanceof Error && 'code' in error && error.code) {
+            clientError.code = error.code as string;
+        }
+        clientError.stack = error instanceof Error ? error.stack : undefined;
+    }
+
+    return clientError;
 };

@@ -51,6 +51,12 @@ const UserSchema = new Schema<IUser>({
             ret._id = ret._id.toString(); // ensure _id is string
             delete ret.hashedPassword;    // explicitly delete again
             delete ret.__v;               // remove version key
+            if (ret.createdAt instanceof Date) {
+                ret.createdAt = ret.createdAt.toISOString();
+            }
+            if (ret.updatedAt instanceof Date) {
+                ret.updatedAt = ret.updatedAt.toISOString();
+            }
             return ret;
         }
     }

@@ -1,7 +1,7 @@
 ﻿import mongoose, { Schema, Types, Document } from 'mongoose';
 
 export interface ISession extends Document {
-    _id: string; // hashed
+    _id: string; // hashed token instead of Mongoose generated _id
     userId: Types.ObjectId; // ref to User._id
     expiresAt: Date;
     userAgent?: string;
@@ -23,10 +23,15 @@ const SessionSchema = new Schema<ISession>({
     ipAddress: { type: String },
 }, {
     timestamps: { createdAt: true, updatedAt: false },
-    _id: false, // hashed
+    _id: false, // hashed token instead of Mongoose generated _id
     toJSON: {
         transform: function (doc, ret) {
-            ret.userId = ret.userId.toString();
+            if (ret.userId && typeof ret.userId.toString === 'function') { // Defensive check
+                ret.userId = ret.userId.toString();
+            }
+            if (ret.expiresAt instanceof Date) {
+                ret.expiresAt = ret.expiresAt.toISOString();
+            }
             delete ret.__v;
             return ret;
         }

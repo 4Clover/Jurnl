@@ -1,12 +1,12 @@
-﻿import { fail, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+﻿import {fail, isRedirect, redirect} from '@sveltejs/kit';
+import type {Actions, PageServerLoad} from './$types';
 import connectToDatabase from '$lib/server/database';
-import { User } from '$lib/server/database/schemas';
-import { verifyPassword } from '$lib/server/auth/password';
-import { createSession, hashTokenForSessionId } from '$lib/server/auth/sessionManager';
-import { setSessionCookie } from '$lib/server/auth/cookies';
-import { z } from 'zod'; // validation
-import { fromZodError } from 'zod-validation-error';
+import {User} from '$lib/server/database/schemas';
+import {verifyPassword} from '$lib/server/auth/password';
+import {createSession} from '$lib/server/auth/sessionManager';
+import {setSessionCookie} from '$lib/server/auth/cookies';
+import {z} from 'zod';
+import {fromZodError} from 'zod-validation-error';
 
 // Zod schema for login form validation
 const loginSchema = z.object({
@@ -16,66 +16,78 @@ const loginSchema = z.object({
 
 export const load: PageServerLoad = async ({ locals, url }) => {
     if (locals.user) {
-        redirect(303, '/homepage');
+        const intendedRedirect = url.searchParams.get('redirectTo') || '/homepage';
+        redirect(303, intendedRedirect);
     }
-    return {
-        redirectTo: url.searchParams.get('redirectTo')
-    };
+    return { redirectTo: url.searchParams.get('redirectTo') };
 };
 
 export const actions: Actions = {
     default: async (event) => {
-        const { request, url } = event;
-        await connectToDatabase();
-
+        const { request, url, locals } = event;
         const formData = await request.formData();
         const rawData = Object.fromEntries(formData);
+        const submittedUsername = rawData.username as string | undefined;
+
+        let redirectToPath: string | null = '/homepage';
+        let loginSuccess = false;
 
         try {
+            await connectToDatabase(); // DB check as always
+
             const parsedData = loginSchema.parse({
                 username: rawData.username,
                 password: rawData.password
             });
             const { username, password } = parsedData;
 
-            const user = await User.findOne({ username }).exec();
+            const userDoc = await User.findOne({ username }).select('+hashedPassword').exec();
 
-            if (!user || !user.hashedPassword) {
+            // --- LOGIN SUCCESSFUL (set cookies, locals, redirect) ---
+            if (userDoc && userDoc.hashedPassword && await verifyPassword(userDoc.hashedPassword, password)) {
+                // create session
+                const sessionDetails = await createSession(userDoc._id);
+                // set cookie given success
+                setSessionCookie(event, sessionDetails.clientToken, sessionDetails.expiresAt);
+                // update locals
+                locals.user = {
+                    _id: userDoc._id.toString(),
+                    username: userDoc.username,
+                    email: userDoc.email,
+                    avatarUrl: userDoc.avatarUrl,
+                    createdAt: userDoc.createdAt.toISOString(),
+                    updatedAt: userDoc.updatedAt.toISOString(),
+                };
+                locals.session = {
+                    _id: sessionDetails.sessionId,
+                    userId: userDoc._id.toString(),
+                    expiresAt: sessionDetails.expiresAt.toISOString(),
+                };
+                // set the redirect path
+                redirectToPath = (rawData.redirectTo as string | undefined)
+                    || url.searchParams.get('redirectTo')
+                    || '/homepage';
+                loginSuccess = true;
+
+            } else {
+                // credentials invalid
                 return fail(400, {
-                    data: { username },
-                    errors: { form: 'Invalid username or password.' }
+                    data: { username: submittedUsername }, // repopulating form
+                    errors: { // displaying errors
+                        username: "Username is too short.", // Zod field-specific
+                        password: "Password is required.",  // Zod field-specific
+                        form: "General form issue."
+                    }
                 });
             }
 
-            const passwordMatch = await verifyPassword(user.hashedPassword, password);
-            if (!passwordMatch) {
-                return fail(400, {
-                    data: { username },
-                    errors: { form: 'Invalid username or password.' }
-                });
+        } catch (error: any) { // ZodErrors and unexpected errors
+            // should never be hit
+            if (isRedirect(error)) {
+                console.warn("Registration: A SvelteKit redirect was caught unexpectedly. Redirecting again:", error);
+                redirect(303, redirectToPath);
             }
 
-            // password is correct, create a new session
-            const { clientToken, expiresAt } = await createSession(
-                user._id,
-            );
-
-            setSessionCookie(event, clientToken, expiresAt);
-
-            // update locals for the current request
-            event.locals.user = user.toJSON() as App.Locals['user']; // Serialize for locals
-            event.locals.session = { // serializable session for locals
-                _id: await hashTokenForSessionId(clientToken),
-                userId: user._id.toString(),
-                expiresAt: Date.toString(),
-            };
-
-
-            const redirectTo = (rawData.redirectTo as string | undefined) || url.searchParams.get('redirectTo') || '/dashboard';
-            redirect(303, redirectTo);
-
-        } catch (error) {
-            const submittedUsername = rawData.username as string | undefined;
             if (error instanceof z.ZodError) {
                 const validationErrors = fromZodError(error);
                 console.warn('Login validation error:', validationErrors.toString());
@@ -90,11 +102,24 @@ export const actions: Actions = {
                 });
             }
 
-            console.error('Login action error:', error);
+            // other unexpected errors (e.g., DB issues during createSession, etc.)
+            console.error("Login action - Unexpected error:", error);
             return fail(500, {
                 data: { username: submittedUsername },
                 errors: { form: 'An unexpected server error occurred. Please try again.' }
             });
         }
+
+        // ---- SUCCESSFUL LOGIN CONDITIONS MET, REDIRECT WITHOUT CATCH ----
+        if (loginSuccess && redirectToPath) {
+            console.log('Login successful, redirecting to:', redirectToPath);
+            throw redirect(303, redirectToPath);
+        }
+
+        console.warn("Login fallback reached, unhandled logic likely exists.");
+        return fail(500, {
+            data: { username: submittedUsername },
+            errors: { form: 'Login process did not complete as expected.' }
+        });
     }
-};
+} satisfies Actions;

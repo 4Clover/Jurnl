@@ -2,13 +2,18 @@
     import type { PageProps } from './$types';
     import { enhance } from '$app/forms';
 
-    let { form, data } : PageProps = $props();
+    let { form } : PageProps  = $props();
+
+    // used for repopulating the form
     let username = $state(form?.data?.username ?? '');
     let password = $state('')
 
-    const usernameError = $derived(form?.errors?.username);
-    const passwordError = $derived(form?.errors?.password);
-    const generalFormError = $derived(form?.errors?.form);
+    // client side error showing
+    const errors = $derived(form?.errors as { username?: string; password?: string; form?: string } | undefined);
+    const usernameFieldError = $derived(errors?.username);
+    const passwordFieldError = $derived(errors?.password);
+    const generalFormError = $derived(errors?.form);
+    
 </script>
 
 <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900">
@@ -40,14 +45,17 @@
                     required
                     minlength="3"
                     maxlength="30"
-                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm {usernameError
-                        ? 'border-red-500'
-                        : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200'}"
-                    aria-describedby={usernameError ? 'username-error' : undefined}
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm
+                        placeholder-gray-400 focus:outline-none focus:ring-indigo-500
+                        focus:border-indigo-500 sm:text-sm {
+                        usernameFieldError
+                            ? 'border-red-500'
+                            : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200'}"
+                    aria-describedby={usernameFieldError ? 'username-error' : undefined}
                 />
-                {#if usernameError}
+                {#if usernameFieldError}
                     <p id="username-error" class="mt-2 text-sm text-red-600 dark:text-red-400">
-                        {usernameError}
+                        {usernameFieldError}
                     </p>
                 {/if}
             </div>
@@ -62,14 +70,17 @@
                     bind:value={password}
                     required
                     minlength="8"
-                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm {passwordError
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm
+                    placeholder-gray-400 focus:outline-none focus:ring-indigo-500
+                    focus:border-indigo-500 sm:text-sm {
+                    passwordFieldError
                         ? 'border-red-500'
                         : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200'}"
-                    aria-describedby={passwordError ? 'password-error' : undefined}
+                    aria-describedby={passwordFieldError ? 'password-error' : undefined}
                 />
-                {#if passwordError}
+                {#if passwordFieldError}
                     <p id="password-error" class="mt-2 text-sm text-red-600 dark:text-red-400">
-                        {passwordError}
+                        {passwordFieldError}
                     </p>
                 {/if}
             </div>

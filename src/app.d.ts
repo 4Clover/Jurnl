@@ -6,7 +6,8 @@ declare global {
     namespace App {
         interface Error {
             message: string; // default svelte
-            code?: string;    // custom error codes
+            code?: string;// custom error codes
+            stack?: string;
         }
         interface Locals {
             user: SerializableUser | null;
