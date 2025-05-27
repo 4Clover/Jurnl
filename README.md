@@ -2,6 +2,14 @@
 
 Welcome to the ScribblyScraps repository! This project aims to create a rich, interactive web application where users can create and personalize digital journal entries, much like a scrapbook.
 
+## TODO:
+
+1. Vercel docs/deployment information
+    - GitHub actions for checks before push to prod
+    - Configure env secrets so MongoDB can be used
+2. Deal with possible annoying aspects of Prettier and ESlint checks locally and on GitHub
+3.
+
 ## Table of Contents
 
 1.  [Project Overview](#project-overview)

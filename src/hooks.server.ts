@@ -1,25 +1,88 @@
-// Add routes to protected-route folder to check for authentication!
-// SOURCE: https://blog.yuki-dev.com/blogs/x2lxp2szm
+import type { Handle, HandleServerError } from '@sveltejs/kit';
+import { dev } from '$app/environment';
+import connectToDatabase from '$lib/server/database';
+import { validateClientSessionToken } from '$lib/server/auth/sessionManager';
+import {
+    SESSION_COOKIE_NAME,
+    setSessionCookie,
+} from '$lib/server/auth/cookies';
 
-import { redirect, type Handle } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
-
-const authHandle: Handle = async ({ event, resolve }) => {
-    const response = await resolve(event);
-
-    // Grabbing where 'protected-route' would be
-    const rootDir = event.route.id?.split('/')[1] || '';
-    const protectedDir = 'protected-route';
-
-    /* Check if authenticated here! */
-    // Auth tokens and cookies?
-
-    // Checking if it is a protected-route and if user is authenticated
-    if (rootDir === protectedDir /*&& not authenticated*/) {
-        redirect(301, '/login');
+/**
+ * Handles session validation for incoming requests and populates event.locals.
+ */
+export const handle: Handle = async ({ event, resolve }) => {
+    // standard DB try -- perform in any request, efficient given cached DB instance
+    try {
+        await connectToDatabase();
+    } catch (error) {
+        console.error('DB connection failed in handle hook:', error);
     }
 
-    return response;
+    const clientToken = event.cookies.get(SESSION_COOKIE_NAME);
+
+    if (clientToken) {
+        const validationResult = await validateClientSessionToken(clientToken);
+
+        if (validationResult.user && validationResult.session) {
+            // assign the serializable user and session data to locals
+            event.locals.user = validationResult.user;
+            event.locals.session = validationResult.session;
+
+            // refresh session cookie
+            setSessionCookie(
+                event,
+                clientToken,
+                new Date(validationResult.session.expiresAt)
+            );
+        } else {
+            // invalid or expired token so clear locals
+            event.locals.user = null;
+            event.locals.session = null;
+        }
+    } else {
+        // no client token found
+        event.locals.user = null;
+        event.locals.session = null;
+    }
+
+    return resolve(event); // finally, resolve the request
 };
 
-export const handle = sequence(authHandle);
+/**
+ * Error handling for server-side errors.
+ */
+export const handleError: HandleServerError = ({ error, event }) => {
+    // generate unique id for error -- useful if saved to a log file
+    const errorId = crypto.randomUUID();
+
+    // log error to the server console
+    console.error(`--------------------------------`);
+    console.error(`Error ID: ${errorId}`);
+    console.error(`Timestamp: ${new Date().toISOString()}`);
+    console.error(`Route ID: ${event.route.id}`);
+    console.error(`URL: ${event.url.pathname}${event.url.search}`);
+    console.error('Error Object:', error); // object and stack
+    if (error instanceof Error && error.cause) {
+        console.error('Error Cause:', error.cause);
+    }
+    console.error(`--------------------------------`);
+
+    // prep error object for client viewing
+    const clientError: App.Error = {
+        message: `An unexpected error occurred. Please try again.`,
+        code: errorId,
+    };
+
+    if (dev) {
+        // in dev: more details
+        clientError.message =
+            (error instanceof Error ? error.message : String(error)) +
+            ` (Ref: ${errorId})`;
+        if (error instanceof Error && 'code' in error && error.code) {
+            clientError.code = error.code as string;
+        }
+        clientError.stack = error instanceof Error ? error.stack : undefined;
+    }
+
+    return clientError;
+};
