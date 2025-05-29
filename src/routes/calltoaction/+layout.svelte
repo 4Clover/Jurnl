@@ -15,10 +15,10 @@
 
         <div class="navbar__links" id="navbar-links">
             
-            <button class="primary-button button-sm">
+            <button on:click={() => window.location.href = "/auth/login"} class="primary-button button-md">
                 <h3>Log In</h3>
             </button>
-            <button class="secondary-button button-sm">
+            <button on:click={() => window.location.href = "/auth/register"} class="secondary-button button-md">
                 <h3>Sign Up</h3>
             </button>
         </div>
