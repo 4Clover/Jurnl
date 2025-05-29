@@ -41,17 +41,17 @@
   text-align: center;
 }
 
+/* VERY rudimentary, WIP */
 .landing-page {
     padding-inline: 2.5rem;
 }
 
-/* VERY rudimentary, WIP */
 //SOURCE: https://www.w3schools.com/howto/howto_css_menu_horizontal_scroll.asp
 .journal-scroll {
     display: flex;
     overflow: auto;
     white-space: nowrap;
-    padding-block-start: 10px;
+    padding-block-start: 0.5rem;
 }
 
 .journal-preview {
@@ -59,13 +59,13 @@
 }
 
 .journal-cover {
-    width: 150px;
-    height: 225px;
+    width: 13rem;
+    height: 18rem;
 }
 
 .entry-preview {
-    padding: 10px;
-    width: 150px;
-    height: 225px;
+    padding: 0.5rem;
+    width: 13rem;
+    height: 18rem;
     text-wrap: wrap;
 }
