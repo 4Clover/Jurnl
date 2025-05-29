@@ -1,4 +1,3 @@
-
 <nav class="navbar">
     <div class="navbar__container">
         <!-- <button>
@@ -19,7 +18,3 @@
 
     </div>
 </nav>
-
-<main>
-    <h1>Welcome to Jurnl.</h1>
-</main>

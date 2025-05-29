@@ -26,6 +26,7 @@
             <h2>Welcome to Jurnl!</h2>
             <h2>Let's get started.</h2>
         </div>
+        <div class="spacing"></div>
         <!-- <div class="center-item">
             <h4 class="label">First Name</h4>
             <input class="fieldbox" bind:value={first} />
@@ -99,7 +100,7 @@
         </form>
         <div class="center-item">
             <span class="aside">
-            Already have an account? <a href="/auth/register"><u>Log In</u></a> instead!
+            Already have an account? <a href="/auth/login"><u>Log In</u></a> instead!
         </span>
         <div class="spacing"></div>
         </div>

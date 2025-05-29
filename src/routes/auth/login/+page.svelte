@@ -90,7 +90,7 @@
         </form>
         <div class="center-item">
             <span class="aside">
-            Don't have an account yet?<a href="/auth/register"><u>Log In</u></a> instead!
+            Don't have an account yet? <a href="/auth/register"><u>Sign Up</u></a> instead!
             </span>
             <div class="spacing"></div>
         </div>
