@@ -1,28 +1,26 @@
 <script lang="ts">
-    import '../app.css';
     import type { LayoutProps } from './$types';
     import { enhance } from '$app/forms';
     import { redirect } from '@sveltejs/kit';
     let { data, children }: LayoutProps = $props();
 </script>
 
-
-
 <nav class="navbar">
     <div class="navbar__container">
-        <button>
+        <!-- <button>
             <div class="pajamas--hamburger"></div>
-        </button>
+        </button> -->
         <h1 class="navbar__logo">Jurnl</h1>
         <!-- <div class="navbar__toggle" id="menu-toggle"></div> -->
 
         <div class="navbar__links" id="navbar-links">
-            <a href="/">Home</a>
-            <a href="/auth/login">Login</a>
-            <a href="/auth/register">Sign Up</a>
-            <a href="/landing">Landing</a>
-            <a href="/journals">Journals</a>
-            <a href="/feed">Friends' Feed</a>
+            
+            <button class="primary-button button-sm">
+                <h3>Log In</h3>
+            </button>
+            <button class="secondary-button button-sm">
+                <h3>Sign Up</h3>
+            </button>
         </div>
 
     </div>

@@ -7,8 +7,10 @@ button {
 }
 
 @mixin primary {
-    background: var(--Sage, #999f85);
+    background: variables.$olive;
     display: flex;
+    min-width: 10rem;
+    flex: 1;
     padding: 1rem 2rem;
     justify-content: center;
     align-items: center;
@@ -16,17 +18,42 @@ button {
     flex-shrink: 0;
     border: 3px solid white;
     color: variables.$off-white;
-    margin: 3rem;
+    margin: 1rem;
 
     &:hover {
-        border: 3px solid variables.$sage;
+        border: 3px solid variables.$olive;
     }
 
     &:active {
-        border: 3px solid variables.$sage;
+        border: 3px solid variables.$olive;
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     }
 }
+
+@mixin secondary {
+    background: variables.$off-white;
+    display: flex;
+    min-width: 10rem;
+    flex: 1;
+    padding: 1rem 2rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    flex-shrink: 0;
+    border: 3px solid white;
+    color: variables.$olive;
+    margin: 1rem;
+
+    &:hover {
+        border: 3px solid variables.$off-white;
+    }
+
+    &:active {
+        border: 3px solid variables.$off-white;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+}
+
 
 .button-sm {
     padding: 1rem 1rem;

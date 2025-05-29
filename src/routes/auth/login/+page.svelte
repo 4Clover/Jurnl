@@ -1,5 +1,5 @@
-﻿<script lang="ts">
-    import type { PageProps } from './$types';
+<script lang="ts">
+    import type { PageProps } from '../../login/$types';
     import { enhance } from '$app/forms';
 
     let { form, data }: PageProps = $props();
@@ -19,28 +19,16 @@
     const generalFormError = $derived(errors?.form);
 </script>
 
-<div
-    class="flex min-h-screen flex-col items-center justify-center bg-gray-100 dark:bg-gray-900"
->
-    <div
-        class="w-full max-w-md rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800"
-    >
-        <h1
-            class="mb-6 text-center text-3xl font-bold text-gray-800 dark:text-gray-100"
-        >
-            Log In
-        </h1>
-
+<main class="center-container">
+    <div class="login-box">
+        <div class="spacing"></div>
+        <h2 class="center-item title">Log In to View Your Journal</h2>
+        <div class="spacing"></div>
         {#if generalFormError}
-            <div
-                class="relative mb-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
-                role="alert"
-            >
-                <strong class="font-bold">Error:</strong>
+            <div> Error: 
                 <span class="block sm:inline">{generalFormError}</span>
             </div>
         {/if}
-
         <form
             method="POST"
             use:enhance={() => {
@@ -48,7 +36,6 @@
                     await update();
                 };
             }}
-            class="space-y-6"
         >
             {#if data.redirectTo}
                 <input
@@ -58,50 +45,30 @@
                 />
             {/if}
 
-            <div>
-                <label
-                    for="username"
-                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >Username</label
-                >
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    bind:value={username}
-                    required
-                    class="mt-1 block w-full rounded-md border px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none sm:text-sm {usernameFieldError
-                        ? 'border-red-500'
-                        : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200'}"
-                    aria-describedby={usernameFieldError
+            <div class="center-item">
+                <h4 class="label">Username</h4>
+                <input type="text" id="username" class="fieldbox" bind:value={username} required aria-describedby={usernameFieldError
                         ? 'username-error'
                         : undefined}
-                />
+                /> 
+                <!-- figure out how to make it red if wrong -->
                 {#if usernameFieldError}
                     <p
                         id="username-error"
-                        class="mt-2 text-sm text-red-600 dark:text-red-400"
+                        class="error-text"
                     >
                         {usernameFieldError}
                     </p>
                 {/if}
             </div>
-
-            <div>
-                <label
-                    for="password"
-                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >Password</label
-                >
+            <div class="center-item">
+                <h4 class="label">Password</h4>
                 <input
                     type="password"
                     id="password"
                     name="password"
+                    class="fieldbox"
                     bind:value={password}
-                    required
-                    class="mt-1 block w-full rounded-md border px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none sm:text-sm {passwordFieldError
-                        ? 'border-red-500'
-                        : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200'}"
                     aria-describedby={passwordFieldError
                         ? 'password-error'
                         : undefined}
@@ -109,31 +76,23 @@
                 {#if passwordFieldError}
                     <p
                         id="password-error"
-                        class="mt-2 text-sm text-red-600 dark:text-red-400"
+                        class="error-text"
                     >
                         {passwordFieldError}
                     </p>
                 {/if}
             </div>
-
-            <div>
-                <button
-                    type="submit"
-                    class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none dark:focus:ring-offset-gray-800"
-                >
-                    Log In
+            <div class="center-item">
+                <button type="submit" class="primary-button button-sm">
+                    <h3>Log In</h3>
                 </button>
             </div>
         </form>
-
-        <p class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-            Don't have an account?
-            <a
-                href="/auth/register"
-                class="font-medium text-indigo-600 hover:text-indigo-500 dark:hover:text-indigo-400"
-            >
-                Register
-            </a>
-        </p>
+        <div class="center-item">
+            <span class="aside">
+            Don't have an account yet?<a href="/auth/register"><u>Log In</u></a> instead!
+            </span>
+            <div class="spacing"></div>
+        </div>
     </div>
-</div>
+</main>
