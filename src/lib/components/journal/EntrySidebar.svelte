@@ -21,4 +21,12 @@
     <EntrySidebarItem
         title="my second entry! ^o^"
     />
+
+        <EntrySidebarItem
+        title="my third entry! ^o^"
+    />
+
+    <EntrySidebarItem
+        title="my fourth entry! ^o^"
+    />
 </section>

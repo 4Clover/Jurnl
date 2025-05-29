@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import EntrySidebar from '$lib/components/journal/EntrySidebar.svelte';
-    import JournalBook from '$lib/components/journal/JournalBook.svelte';
+    import JournalCover from '$lib/components/journal/JournalCover.svelte';
 </script>
 
 <!-- <h1>Journal</h1> -->
@@ -10,6 +10,6 @@
 </pre> -->
 <section class="journal-page-content">
 <EntrySidebar/>
-<JournalBook/>
+<JournalCover/>
 </section>
 

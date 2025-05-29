@@ -3,6 +3,6 @@
 
 </script>
 
-<div class="journal-book">
+<div class="journal-book-cover">
     <JournalMenu/>
 </div>
