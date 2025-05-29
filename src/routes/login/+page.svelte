@@ -1,6 +1,22 @@
 <script lang="ts">
-    let email = $state('');
+    import type { PageProps } from './$types';
+    import { enhance } from '$app/forms';
+
+    let { form, data }: PageProps = $props();
+
+    // used for repopulating the form
+    let username = $state(form?.data?.username ?? '');
     let password = $state('');
+
+    // client side error showing
+    const errors = $derived(
+        form?.errors as
+            | { username?: string; password?: string; form?: string }
+            | undefined
+    );
+    const usernameFieldError = $derived(errors?.username);
+    const passwordFieldError = $derived(errors?.password);
+    const generalFormError = $derived(errors?.form);
 </script>
 
 <main class="center-container">
@@ -21,6 +37,11 @@
                 bind:value={password}
             />
         </div>
+        {#if generalFormError}
+            <div> Error: 
+                <span class="block sm:inline">{generalFormError}</span>
+            </div>
+        {/if}
         <div class="center_item">
             <button class="primary-button button-sm"> Continue </button>
         </div>

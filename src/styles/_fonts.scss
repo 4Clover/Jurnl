@@ -1,8 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap');
 
+@font-face {
+  font-family: "Saol Display";
+  src:
+    local("Saol Display"),
+    url('src/assets/SaolDisplay-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "Neue Montreal italic";
+  src:
+    local("Neue Montreal"),
+    url('src/assets/neuemontreal-italic.woff') format('woff');
+}
+
+@font-face {
+  font-family: "Neue Montreal thin";
+  src:
+    local("Neue Montreal"),
+    url('src/assets/neuemontreal-thin.woff') format('woff');
+}
+
 h1 {
     font-family: 'Saol Display';
-    src: url('src/assets/SaolDisplay-Regular.woff2') format('woff2');
     font-size: 3.125rem;
     font-style: normal;
     font-weight: 300;
@@ -10,8 +30,7 @@ h1 {
 }
 
 h2 {
-    font-family: 'Saol Display';
-    src: url('src/assets/neuemontreal-italic.woff') format('woff');
+    font-family: 'Neue montreal italic';
     font-size: 1.875rem;
     font-style: italic;
     font-weight: 400;
