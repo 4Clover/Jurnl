@@ -40,3 +40,31 @@
 .title {
   text-align: center;
 }
+.landing-page {
+    padding: 10px;
+}
+
+/* VERY rudimentary, WIP */
+//SOURCE: https://www.w3schools.com/howto/howto_css_menu_horizontal_scroll.asp
+.journal-scroll {
+    display: flex;
+    overflow: auto;
+    white-space: nowrap;
+    padding-block-start: 10px;
+}
+
+.journal-preview {
+    display: flex;
+}
+
+.journal-cover {
+    width: 150px;
+    height: 225px;
+}
+
+.entry-preview {
+    padding: 10px;
+    width: 150px;
+    height: 225px;
+    text-wrap: wrap;
+}
