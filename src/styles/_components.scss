@@ -70,7 +70,24 @@
 }
 
 .journal-book {
+    width: 29rem;
+    height: 38.313rem;
+    background-image: url(../assets/journal_book.png);
     margin-left: 25rem;
+}
+
+.journal-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: variables.$off-white;
+    width: 18.75rem;
+    height: 7.313rem;
+    padding: 0.188rem;
+    position: absolute;
+    top: 25rem;
+    left: 52rem;
+    margin: auto;
+    z-index: 20;
 }
 
 .entry-preview {
