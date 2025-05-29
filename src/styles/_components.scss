@@ -63,9 +63,36 @@
     height: 18rem;
 }
 
+.journal-page-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.journal-book {
+    margin-left: 25rem;
+}
+
 .entry-preview {
     padding: 0.5rem;
     width: 13rem;
     height: 18rem;
     text-wrap: wrap;
+}
+
+.entry-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 51rem;
+    width: 21.875rem;
+    padding-top: 4.25rem;
+    gap: 1.75rem;
+    background-color: variables.$beige;
+}
+
+.entry-sidebar-item {
+    width: 18.75rem;
+    height: 3.563rem;
+    background-color: variables.$baby-blue
 }

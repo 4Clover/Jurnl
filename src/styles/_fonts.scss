@@ -4,21 +4,21 @@
   font-family: "Saol Display";
   src:
     local("Saol Display"),
-    url('src/assets/SaolDisplay-Regular.woff2') format('woff2');
+    url('../assets/SaolDisplay-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: "Neue Montreal italic";
   src:
     local("Neue Montreal"),
-    url('src/assets/neuemontreal-italic.woff') format('woff');
+    url('../assets/neuemontreal-italic.woff') format('woff');
 }
 
 @font-face {
   font-family: "Neue Montreal thin";
   src:
     local("Neue Montreal"),
-    url('src/assets/neuemontreal-thin.woff') format('woff');
+    url('../assets/neuemontreal-thin.woff') format('woff');
 }
 
 h1 {
@@ -51,7 +51,7 @@ h3 {
 
 h4 {
     font-family: 'Neue Montreal';
-    src: url('src/assets/neuemontreal-thin.woff') format('woff');
+    src: url('../assets/neuemontreal-thin.woff') format('woff');
     font-size: 1.375rem;
     font-style: normal;
     font-weight: 300;
