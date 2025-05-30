@@ -63,9 +63,75 @@
     height: 18rem;
 }
 
+.journal-page-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.journal-book-cover {
+    width: 29rem;
+    height: 38.313rem;
+    background-image: url(../assets/journal_book.png);
+    margin-left: 25rem;
+}
+
+.journal-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    background-color: variables.$off-white;
+    width: 18.8rem;
+    height: 7.31rem;
+    padding: 0.188rem;
+    position: absolute;
+    top: 25rem;
+    left: 52rem;
+    margin: auto;
+    z-index: 20;
+}
+
+.journal-title-box {
+    width: 18.5rem;
+    height: 3.5rem;
+    background-color: variables.$brown;
+}
+
+.journal-title-box > h3 {
+    color: variables.$off-white;
+    text-align: center;
+}
+
+.journal-menu-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 18.5rem;
+    height: 3.5rem;
+}
+
 .entry-preview {
     padding: 0.5rem;
     width: 13rem;
     height: 18rem;
     text-wrap: wrap;
+}
+
+.entry-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 51rem;
+    width: 21.875rem;
+    padding-top: 4.25rem;
+    gap: 1.75rem;
+    background-color: variables.$beige;
+}
+
+.entry-sidebar-item {
+    width: 18.75rem;
+    height: 3.563rem;
+    background-color: variables.$baby-blue
 }
