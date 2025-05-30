@@ -1,24 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap');
 
 @font-face {
-  font-family: "Saol Display";
-  src:
-    local("Saol Display"),
-    url('../assets/SaolDisplay-Regular.woff2') format('woff2');
+    font-family: 'Saol Display';
+    src:
+        local('Saol Display'),
+        url('../assets/SaolDisplay-Regular.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: "Neue Montreal italic";
-  src:
-    local("Neue Montreal"),
-    url('../assets/ppneuemontreal-italic.woff') format('woff');
+    font-family: 'Neue Montreal italic';
+    src:
+        local('Neue Montreal'),
+        url('../assets/ppneuemontreal-italic.woff') format('woff');
 }
 
 @font-face {
-  font-family: "Neue Montreal thin";
-  src:
-    local("Neue Montreal"),
-    url('../assets/neuemontreal-thin.woff') format('woff');
+    font-family: 'Neue Montreal thin';
+    src:
+        local('Neue Montreal'),
+        url('../assets/neuemontreal-thin.woff') format('woff');
 }
 
 h1 {
@@ -62,10 +62,19 @@ h4 {
 }
 
 p {
-    font-family: "Neue Montreal thin";
+    font-family: 'Neue Montreal thin';
     font-size: 18px;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
     letter-spacing: 0.9px;
+}
+
+.logButton {
+    font-family: 'Nothing You Could Do';
+    font-size: 1.625rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 3%;
 }

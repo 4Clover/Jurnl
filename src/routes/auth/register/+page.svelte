@@ -37,10 +37,7 @@
         </div> -->
 
         {#if generalFormError}
-            <div
-                class="error-login"
-                role="alert"
-            >
+            <div class="error-login" role="alert">
                 <strong class="font-bold">Error:</strong>
                 <span class="block sm:inline">{generalFormError}</span>
             </div>
@@ -48,23 +45,21 @@
         <form method="POST" use:enhance>
             <div class="center-item">
                 <h4 class="label">Username</h4>
-                <input  type="text"
+                <input
+                    type="text"
                     id="username"
                     name="username"
                     bind:value={username}
                     required
                     minlength="3"
-                    maxlength="30" 
+                    maxlength="30"
                     class="fieldbox"
                     aria-describedby={usernameFieldError
                         ? 'username-error'
                         : undefined}
                 />
                 {#if usernameFieldError}
-                    <p
-                        id="username-error"
-                        class="error-login"
-                    >
+                    <p id="username-error" class="error-login">
                         {usernameFieldError}
                     </p>
                 {/if}
@@ -84,10 +79,7 @@
                         : undefined}
                 />
                 {#if passwordFieldError}
-                    <p
-                        id="password-error"
-                        class="error-login"
-                    >
+                    <p id="password-error" class="error-login">
                         {passwordFieldError}
                     </p>
                 {/if}
@@ -100,9 +92,10 @@
         </form>
         <div class="center-item">
             <span class="aside">
-            Already have an account? <a href="/auth/login"><u>Log In</u></a> instead!
-        </span>
-        <div class="spacing"></div>
+                Already have an account? <a href="/auth/login"><u>Log In</u></a>
+                instead!
+            </span>
+            <div class="spacing"></div>
         </div>
     </div>
 </main>

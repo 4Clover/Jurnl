@@ -52,7 +52,6 @@ button {
     }
 }
 
-
 .button-sm {
     padding: 0.5rem 0.5rem;
     font-size: 1rem;
@@ -74,4 +73,17 @@ button {
 
 .secondary-button {
     @include secondary;
+}
+
+.logout-button {
+    @include primary;
+    font-size: 1.5rem;
+    display: inline-block;
+    width: min-content;
+    text-wrap: nowrap;
+    overflow: hidden;
+    position: relative;
+    justify-self: right;
+    margin-right: 0;
+    padding: 0.5rem 0 0.5rem 1rem;
 }
