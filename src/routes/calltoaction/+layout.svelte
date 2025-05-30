@@ -14,15 +14,19 @@
         <!-- <div class="navbar__toggle" id="menu-toggle"></div> -->
 
         <div class="navbar__links" id="navbar-links">
-            
-            <button on:click={() => window.location.href = "/auth/login"} class="primary-button button-md">
+            <button
+                on:click={() => (window.location.href = '/auth/login')}
+                class="primary-button button-md"
+            >
                 <h3>Log In</h3>
             </button>
-            <button on:click={() => window.location.href = "/auth/register"} class="secondary-button button-md">
+            <button
+                on:click={() => (window.location.href = '/auth/register')}
+                class="secondary-button button-md"
+            >
                 <h3>Sign Up</h3>
             </button>
         </div>
-
     </div>
 </nav>
 
