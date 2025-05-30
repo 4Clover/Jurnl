@@ -1,6 +1,6 @@
-<script lang="ts">
-    import type { PageProps } from '../../login/$types';
-    import { enhance } from '$app/forms';
+<script lang="ts" >
+    import type {PageProps} from './$types';
+    import {enhance} from '$app/forms';
 
     let { form, data }: PageProps = $props();
 
@@ -25,7 +25,8 @@
         <h2 class="center-item title">Log In to View Your Journal</h2>
         <div class="spacing"></div>
         {#if generalFormError}
-            <div> Error: 
+            <div>
+                Error:
                 <span class="block sm:inline">{generalFormError}</span>
             </div>
         {/if}
@@ -47,16 +48,20 @@
 
             <div class="center-item">
                 <h4 class="label">Username</h4>
-                <input type="text" id="username" class="fieldbox" bind:value={username} required aria-describedby={usernameFieldError
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="fieldbox"
+                    bind:value={username}
+                    required
+                    aria-describedby={usernameFieldError
                         ? 'username-error'
                         : undefined}
-                /> 
+                />
                 <!-- figure out how to make it red if wrong -->
                 {#if usernameFieldError}
-                    <p
-                        id="username-error"
-                        class="error-text"
-                    >
+                    <p id="username-error" class="error-text">
                         {usernameFieldError}
                     </p>
                 {/if}
@@ -74,10 +79,7 @@
                         : undefined}
                 />
                 {#if passwordFieldError}
-                    <p
-                        id="password-error"
-                        class="error-text"
-                    >
+                    <p id="password-error" class="error-text">
                         {passwordFieldError}
                     </p>
                 {/if}
@@ -90,7 +92,9 @@
         </form>
         <div class="center-item">
             <span class="aside">
-            Don't have an account yet?<a href="/auth/register"><u>Log In</u></a> instead!
+                Don't have an account yet? <a href="/auth/register"
+                    ><u>Sign Up</u></a
+                > instead!
             </span>
             <div class="spacing"></div>
         </div>
