@@ -41,9 +41,8 @@
     text-align: center;
 }
 
-/* VERY rudimentary, WIP */
 .landing-page {
-    padding-inline: 2.5rem;
+    padding: 2.5rem;
 }
 
 //SOURCE: https://www.w3schools.com/howto/howto_css_menu_horizontal_scroll.asp
@@ -115,9 +114,19 @@
 .entry-previews {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem;
     width: 13rem;
     height: 18rem;
+}
+
+.entry-preview-button {
+    width: 10.25rem;
+    height: 1.3rem;
+    flex-shrink: 0;
+    background-color: variables.$gray;
+    text-align: start;
 }
 
 .entry-sidebar {

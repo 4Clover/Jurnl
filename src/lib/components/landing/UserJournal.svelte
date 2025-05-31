@@ -9,7 +9,7 @@
     <div class= journal-preview>
         <img class = "journal-cover" src= {journalCoverUrl} alt="User uploaded image.">
         {#each latestJournalEntries as entry, i}
-            <button href={insert entry link here}>
+            <button class = "entry-preview-button" href={/*insert entry link here*/}>
                 `Entry {i}`
             </button>
         {/each}
