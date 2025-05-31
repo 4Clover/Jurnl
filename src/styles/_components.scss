@@ -112,11 +112,12 @@
     height: 3.5rem;
 }
 
-.entry-preview {
+.entry-previews {
+    display: flex;
+    flex-direction: column;
     padding: 0.5rem;
     width: 13rem;
     height: 18rem;
-    text-wrap: wrap;
 }
 
 .entry-sidebar {

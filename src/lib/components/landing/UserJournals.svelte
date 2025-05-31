@@ -1,115 +1,88 @@
+<script lang="ts">
+    import type { UserJournalsProps } from "$lib/types/landing.types";
+
+    let { journalList } : UserJournalsProps = $props();
+</script>
+
 <h4>My Journals</h4>
-<div class="journal-scroll">
-    <div class="user-journal">
+<div class = "journal-scroll">
+    <!--
+    {#each journalList as journal}
+        <UserJournal 
+            journalTitle={journal.title}
+            journalCoverUrl={journal.coverImageUrl}
+            latestJournalEntries={}
+        />
+    {/each}
+    -->
+    <div class = "user-journal">
         <p>Journal #1</p>
-        <div class="journal-preview">
+        <div class= journal-preview>
             <!-- Photo by Arina Krasnikova: https://www.pexels.com/photo/a-notebooks-and-pen-5712455/-->
-            <img
-                class="journal-cover"
-                src="/src/assets/journal-cover-ex.jpg"
-                alt="A stack of three journals and a pen on top of a brown blanket."
-            />
-            <p class="entry-preview">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim...
-            </p>
+            <img class = "journal-cover" src= "/src/assets/journal-cover-ex.jpg" alt= "A stack of three journals and a pen on top of a brown blanket.">
+            <div class = "entry-previews">
+                <button>Entry1</button>
+                <button>Entry2</button>
+                <button>Entry3</button>
+                <button>Entry4</button>
+                <button>Entry5</button>
+            </div>
         </div>
     </div>
-    <div class="user-journal">
-        <p>Journal #2</p>
-        <div class="journal-preview">
+    <div class = "user-journal">
+        <p>Journal #1</p>
+        <div class= journal-preview>
             <!-- Photo by Arina Krasnikova: https://www.pexels.com/photo/a-notebooks-and-pen-5712455/-->
-            <img
-                class="journal-cover"
-                src="/src/assets/journal-cover-ex.jpg"
-                alt="A stack of three journals and a pen on top of a brown blanket."
-            />
-            <p class="entry-preview">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim...
-            </p>
+            <img class = "journal-cover" src= "/src/assets/journal-cover-ex.jpg" alt= "A stack of three journals and a pen on top of a brown blanket.">
+            <div class = "entry-previews">
+                <button>Entry1</button>
+                <button>Entry2</button>
+                <button>Entry3</button>
+                <button>Entry4</button>
+                <button>Entry5</button>
+            </div>
         </div>
     </div>
-    <div class="user-journal">
-        <p>Journal #3</p>
-        <div class="journal-preview">
+    <div class = "user-journal">
+        <p>Journal #1</p>
+        <div class= journal-preview>
             <!-- Photo by Arina Krasnikova: https://www.pexels.com/photo/a-notebooks-and-pen-5712455/-->
-            <img
-                class="journal-cover"
-                src="/src/assets/journal-cover-ex.jpg"
-                alt="A stack of three journals and a pen on top of a brown blanket."
-            />
-            <p class="entry-preview">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim...
-            </p>
+            <img class = "journal-cover" src= "/src/assets/journal-cover-ex.jpg" alt= "A stack of three journals and a pen on top of a brown blanket.">
+            <div class = "entry-previews">
+                <button>Entry1</button>
+                <button>Entry2</button>
+                <button>Entry3</button>
+                <button>Entry4</button>
+                <button>Entry5</button>
+            </div>
         </div>
     </div>
-    <div class="user-journal">
-        <p>Journal #4</p>
-        <div class="journal-preview">
+    <div class = "user-journal">
+        <p>Journal #1</p>
+        <div class= journal-preview>
             <!-- Photo by Arina Krasnikova: https://www.pexels.com/photo/a-notebooks-and-pen-5712455/-->
-            <img
-                class="journal-cover"
-                src="/src/assets/journal-cover-ex.jpg"
-                alt="A stack of three journals and a pen on top of a brown blanket."
-            />
-            <p class="entry-preview">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim...
-            </p>
+            <img class = "journal-cover" src= "/src/assets/journal-cover-ex.jpg" alt= "A stack of three journals and a pen on top of a brown blanket.">
+            <div class = "entry-previews">
+                <button>Entry1</button>
+                <button>Entry2</button>
+                <button>Entry3</button>
+                <button>Entry4</button>
+                <button>Entry5</button>
+            </div>
         </div>
     </div>
-    <div class="user-journal">
-        <p>Journal #5</p>
-        <div class="journal-preview">
+    <div class = "user-journal">
+        <p>Journal #1</p>
+        <div class= journal-preview>
             <!-- Photo by Arina Krasnikova: https://www.pexels.com/photo/a-notebooks-and-pen-5712455/-->
-            <img
-                class="journal-cover"
-                src="/src/assets/journal-cover-ex.jpg"
-                alt="A stack of three journals and a pen on top of a brown blanket."
-            />
-            <p class="entry-preview">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim...
-            </p>
-        </div>
-    </div>
-    <div class="user-journal">
-        <p>Journal #6</p>
-        <div class="journal-preview">
-            <!-- Photo by Arina Krasnikova: https://www.pexels.com/photo/a-notebooks-and-pen-5712455/-->
-            <img
-                class="journal-cover"
-                src="/src/assets/journal-cover-ex.jpg"
-                alt="A stack of three journals and a pen on top of a brown blanket."
-            />
-            <p class="entry-preview">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim...
-            </p>
-        </div>
-    </div>
-    <div class="user-journal">
-        <p>Journal #7</p>
-        <div class="journal-preview">
-            <!-- Photo by Arina Krasnikova: https://www.pexels.com/photo/a-notebooks-and-pen-5712455/-->
-            <img
-                class="journal-cover"
-                src="/src/assets/journal-cover-ex.jpg"
-                alt="A stack of three journals and a pen on top of a brown blanket."
-            />
-            <p class="entry-preview">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim...
-            </p>
+            <img class = "journal-cover" src= "/src/assets/journal-cover-ex.jpg" alt= "A stack of three journals and a pen on top of a brown blanket.">
+            <div class = "entry-previews">
+                <button>Entry1</button>
+                <button>Entry2</button>
+                <button>Entry3</button>
+                <button>Entry4</button>
+                <button>Entry5</button>
+            </div>
         </div>
     </div>
 </div>
