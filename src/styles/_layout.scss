@@ -1,12 +1,12 @@
 @use 'variables';
 
 .layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 
     &__content {
-        flex: 1; 
+        flex: 1;
         padding: 4rem;
     }
 
@@ -25,13 +25,13 @@
             width: 30%;
             text-align: left;
             .item {
-                padding: 0.5rem 0rem 0.5rem 0rem
+                padding: 0.5rem 0rem 0.5rem 0rem;
             }
             .header {
-                padding: 1rem 0 1rem 0rem
+                padding: 1rem 0 1rem 0rem;
             }
         }
-  }
+    }
 }
 
 .cta-section {
@@ -51,7 +51,6 @@
     &__text {
         width: 40%;
     }
-
 }
 
 .cta-title {
@@ -60,4 +59,20 @@
     text-align: center;
     align-items: center;
     padding: 3rem;
+}
+
+.journals-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    &__modal {
+        display: block;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
 }
