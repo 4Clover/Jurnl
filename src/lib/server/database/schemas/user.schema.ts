@@ -12,7 +12,7 @@ export interface IUser extends Document {
     canViewFriends: Array<Types.ObjectId>;
 }
 export interface SerializableUser {
-    _id: Types.ObjectId;
+    _id: string;
     username: string;
     email?: string;
     avatarUrl?: string;
