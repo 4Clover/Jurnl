@@ -4,7 +4,7 @@
     let { journalList } : UserJournalsProps = $props();
 </script>
 
-<h4>My Journals</h4>
+<h2>My Journals</h2>
 <div class = "journal-scroll">
     <!--
     {#each journalList as journal}
