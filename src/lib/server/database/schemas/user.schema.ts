@@ -2,6 +2,7 @@
 
 export interface IUser extends Document {
     _id: Types.ObjectId;
+    googleId: string;
     username: string;
     email?: string;
     hashedPassword?: string;
