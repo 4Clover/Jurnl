@@ -147,8 +147,8 @@
     background-color: variables.$baby-blue
 }
 
-.user-profile {
-    padding-block: 2.5rem;
+.user-profile, .user-close-friends, .user-public-entries {
+    padding-block-start: 2.5rem;
 }
 
 .user-profile-image {
@@ -180,6 +180,39 @@
 
 .delete-friend-button {
     color: variables.$red;
+}
+
+.public-entry-journal {
+    padding-block-end: 2rem;
+    display: flex;
+}
+
+.public-entry-times {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-inline-start: 1.37rem;
+}
+
+.public-entry-time {
+    width: 13.57rem;
+    padding: 0.67rem;
+    flex-shrink: 0;
+    background-color: variables.$gray;
+}
+
+.public-entry-previews {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-inline-start: 1.37rem;
+}
+
+.public-entry-preview {
+    width: 57rem;
+    padding: 0.67rem;
+    flex-shrink: 0;
+    background-color: variables.$gray;
 }
 
 @media screen and (min-width: variables.$user-profile-breakpoint) {

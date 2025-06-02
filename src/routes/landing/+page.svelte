@@ -16,7 +16,7 @@
     <section class="user-close-friends">
         <UserCloseFriends />
     </section>
-    <section class="public-entries">
-        <!--<UserPublicEntries />-->
+    <section class="user-public-entries">
+        <UserPublicEntries />
     </section>
 </main>
