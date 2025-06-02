@@ -116,7 +116,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding-inline: 0.5rem;
     width: 13rem;
     height: 18rem;
 }
@@ -124,6 +124,7 @@
 .entry-preview-button {
     width: 10.25rem;
     height: 1.3rem;
+    padding-inline: 0.25rem;
     flex-shrink: 0;
     background-color: variables.$gray;
     text-align: start;
@@ -144,4 +145,48 @@
     width: 18.75rem;
     height: 3.563rem;
     background-color: variables.$baby-blue
+}
+
+.user-profile {
+    padding-block: 2.5rem;
+}
+
+.user-profile-image {
+    max-width: 31.25rem;
+    max-height: 23.5rem;
+    width: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.manage-friends {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.manage-friend {
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: variables.$beige;
+    padding: 1.5rem;
+    min-width: 23.75rem;
+    height: 5.13rem;
+}
+
+.delete-friend-button {
+    color: variables.$red;
+}
+
+@media screen and (min-width: variables.$user-profile-breakpoint) {
+    .user-profile-contents {
+        display: flex;
+    }
+    .user-profile-description {
+        padding-inline: 2.5rem;
+    }
 }
