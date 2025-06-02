@@ -1,15 +1,15 @@
 <script lang="ts">
+    import { date } from "zod";
     import type { UserProfileProps } from "$lib/types/landing.types";
 
-    let { userInfo } : UserProfileProps = $props();
+    let { data, profilePhotoUrl, profileDescription } : UserProfileProps = $props();
 </script>
 
-<h2>[Username]</h2>
-<!--<h2>{userInfo.username}</h2>-->
+<h2>{data.user.username}</h2>
 <div class="user-profile-contents">
     <!--
-    <img class = "user-profile-image" src= {userInfo.bio_image_url} alt="An image of the user." width="500" height="372">
-    <p class="user-profile-description">{userInfo.bio_text}</p>
+    <img class = "user-profile-image" src= {profilePhotoUrl} alt="An image of the user." width="500" height="372">
+    <p class="user-profile-description">{profileDescription}</p>
     -->
     
     <!-- IMG CREDS: Photo by Julia Iskova: https://www.pexels.com/photo/moody-portrait-of-a-woman-in-profile-view-30528308/-->
