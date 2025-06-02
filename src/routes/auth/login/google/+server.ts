@@ -1,3 +1,5 @@
+// FOLLOWING TUTORIAL CODE: https://lucia-auth.com/tutorials/google-oauth/sveltekit
+
 import { generateState, generateCodeVerifier } from "arctic";
 import { google } from "$lib/server/oauth";
 
