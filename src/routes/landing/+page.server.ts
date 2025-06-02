@@ -1,5 +1,5 @@
-﻿import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
+import type { PageServerLoad } from '../landing/$types';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
     if (!locals.user) {
@@ -14,7 +14,6 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
     //logged in, allow access and pass user data to the page
     return {
-        user: locals.user,
-        dashboardData: `Welcome to your dashboard, ${locals.user.username}!`,
+        user: locals.user
     };
 };

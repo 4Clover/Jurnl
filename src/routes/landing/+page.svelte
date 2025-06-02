@@ -4,6 +4,8 @@
     import UserProfile from '$lib/components/landing/UserProfile.svelte';
     import UserCloseFriends from '$lib/components/landing/UserCloseFriends.svelte';
     import UserPublicEntries from '$lib/components/landing/UserPublicEntries.svelte';
+    import type { PageProps } from './$types';
+    let { data }: PageProps = $props();
 </script>
 
 <main class="landing-page">
@@ -11,7 +13,7 @@
         <UserJournals />
     </section>
     <section class="user-profile">
-        <UserProfile />
+        <UserProfile data={data}/>
     </section>
     <section class="user-close-friends">
         <UserCloseFriends />

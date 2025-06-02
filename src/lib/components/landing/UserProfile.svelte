@@ -1,8 +1,10 @@
 <script lang="ts">
+    import { date } from "zod";
 
+    let { data }: PageProps = $props();
 </script>
 
-<h2>My Profile</h2>
+<h2>{data.user.username}</h2>
 <div class="user-profile-contents">
     <!-- IMG CREDS: Photo by Julia Iskova: https://www.pexels.com/photo/moody-portrait-of-a-woman-in-profile-view-30528308/-->
     <img class="user-profile-image" src="src/assets/user-profile-ex.jpg" alt="An image of the user." width="500" height="372">
