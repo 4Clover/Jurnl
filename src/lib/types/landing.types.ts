@@ -14,4 +14,8 @@ export interface UserJournalProps {
 
 export interface UserProfileProps {
     userInfo: SerializableUser;
+    profileDescription?: string;
+}
+
+export interface UserFriendsProps {
 }
