@@ -1,4 +1,5 @@
 @use 'variables';
+@use 'fonts';
 
 button {
     border: none;
@@ -9,15 +10,15 @@ button {
 @mixin primary {
     background: variables.$olive;
     display: flex;
-    min-width: 11rem;
-    flex: 1;
+    min-width: 7rem;
+    max-width: none;
     padding: 0.5rem 2rem;
     justify-content: center;
     align-items: center;
-    gap: 0.625rem;
     border: 3px solid white;
     color: variables.$off-white;
     margin: 1rem;
+    white-space: nowrap;
 
     &:hover {
         border: 3px solid variables.$olive;
@@ -32,15 +33,15 @@ button {
 @mixin secondary {
     background: variables.$off-white;
     display: flex;
-    min-width: 11rem;
+    min-width: 7rem;
     flex: 1;
     padding: 0.5rem 2rem;
     justify-content: center;
     align-items: center;
-    gap: 0.625rem;
     border: 3px solid variables.$sage;
     color: variables.$olive;
     margin: 1rem;
+    white-space: nowrap;
 
     &:hover {
         border: 3px solid variables.$sage;
@@ -76,8 +77,8 @@ button {
 }
 
 .logout-button {
-    @include primary;
-    font-size: 1.5rem;
+    @include secondary;
+    font-size: 1rem;
     display: inline-block;
     width: min-content;
     text-wrap: nowrap;
@@ -85,5 +86,5 @@ button {
     position: relative;
     justify-self: right;
     margin-right: 0;
-    padding: 0.5rem 0 0.5rem 1rem;
+    padding: 0.5rem 0 0.5rem 0rem;
 }

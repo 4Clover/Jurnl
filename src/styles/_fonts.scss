@@ -8,14 +8,14 @@
 }
 
 @font-face {
-    font-family: 'Neue Montreal italic';
+    font-family: 'Neue Montreal';
     src:
         local('Neue Montreal'),
         url('../assets/ppneuemontreal-italic.woff') format('woff');
 }
 
 @font-face {
-    font-family: 'Neue Montreal thin';
+    font-family: 'Neue Montreal';
     src:
         local('Neue Montreal'),
         url('../assets/neuemontreal-thin.woff') format('woff');
@@ -30,14 +30,15 @@ h1 {
 }
 
 h2 {
-    font-family: 'Neue montreal italic';
+    font-family: 'Neue montreal';
     font-size: 1.875rem;
     font-style: italic;
     font-weight: 400;
     line-height: normal;
     letter-spacing: 0.1875rem;
     text-transform: capitalize;
-    padding: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 h3 {
@@ -50,7 +51,7 @@ h3 {
 }
 
 h4 {
-    font-family: 'Neue Montreal thin';
+    font-family: 'Neue Montreal';
     font-size: 1.375rem;
     font-style: normal;
     font-weight: 300;
@@ -61,7 +62,7 @@ h4 {
 }
 
 p, .entry-preview-button {
-    font-family: 'Neue Montreal thin';
+    font-family: 'Neue Montreal';
     font-size: 1.1rem;
     font-style: normal;
     font-weight: 300;
@@ -71,7 +72,7 @@ p, .entry-preview-button {
 
 .logButton {
     font-family: 'Nothing You Could Do';
-    font-size: 1.625rem;
+    font-size: 1rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
