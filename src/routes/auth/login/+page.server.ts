@@ -17,7 +17,7 @@ const loginSchema = z.object({
 export const load: PageServerLoad = async ({ locals, url }) => {
     if (locals.user) {
         const intendedRedirect =
-            url.searchParams.get('redirectTo') || '/homepage';
+            url.searchParams.get('redirectTo') || '/landing';
         redirect(303, intendedRedirect);
     }
     return { redirectTo: url.searchParams.get('redirectTo') };
@@ -30,7 +30,7 @@ export const actions: Actions = {
         const rawData = Object.fromEntries(formData);
         const submittedUsername = rawData.username as string | undefined;
 
-        let redirectToPath: string | null = '/homepage';
+        let redirectToPath: string | null = '/landing';
         let loginSuccess = false;
 
         try {
@@ -78,7 +78,7 @@ export const actions: Actions = {
                 redirectToPath =
                     (rawData.redirectTo as string | undefined) ||
                     url.searchParams.get('redirectTo') ||
-                    '/homepage';
+                    '/landing';
                 loginSuccess = true;
             } else {
                 // credentials invalid
