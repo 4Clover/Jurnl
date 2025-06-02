@@ -62,7 +62,7 @@ export async function createSession(
     await Session.findByIdAndDelete(sessionId).exec();
 
     const newSession = new Session({
-        _id: sessionId,
+        _id: sessionId.toString(),
         userId,
         expiresAt,
     });
@@ -115,7 +115,7 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
 
     // serializable User
     const safeUser: SerializableUser = {
-        _id: userDoc._id,
+        _id: userDoc._id.toString(),
         username: userDoc.username,
         email: userDoc.email,
         avatarUrl: userDoc.avatarUrl,
@@ -125,7 +125,7 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
 
     // serializable session
     const serializableSessionData: SerializableSession = {
-        _id: sessionDoc._id, // string
+        _id: sessionDoc._id.toString(), // string
         userId: userDoc._id, //  user ObjectId to string
         expiresAt: sessionDoc.expiresAt.toISOString(), // Date to ISO string
     };
