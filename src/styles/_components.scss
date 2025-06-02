@@ -186,7 +186,7 @@
     margin-bottom: 0.5rem;
 }
 .user-profile {
-    padding-block: 2.5rem;
+    padding-block-start: 2.5rem;
 }
 
 .user-profile-image {
@@ -195,6 +195,10 @@
     width: 100%;
     object-fit: cover;
     flex-shrink: 0;
+}
+
+.user-close-friends {
+    padding-block-start: 2.5rem;
 }
 
 .manage-friends {
@@ -220,6 +224,10 @@
     color: variables.$red;
 }
 
+.user-public-entries {
+    padding-block-start: 2.5rem;
+}
+
 .public-entry-journal {
     padding-block-end: 2rem;
     display: flex;
@@ -242,12 +250,12 @@
 .public-entry-previews {
     display: flex;
     flex-direction: column;
+    width: 100%;
     gap: 1.5rem;
     padding-inline-start: 1.37rem;
 }
 
 .public-entry-preview {
-    width: 57rem;
     padding: 0.67rem;
     flex-shrink: 0;
     background-color: variables.$gray;
