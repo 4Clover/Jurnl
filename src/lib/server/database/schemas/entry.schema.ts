@@ -69,6 +69,7 @@ export interface IEntryAttachment extends Types.Subdocument {
 export interface IEntry extends Document {
     journalId: Types.ObjectId; // ref to Journal._id
     userId: Types.ObjectId | string; // denormalized ref to User._id
+    friendsCanView: boolean;
     entryDate: Date; // set by user or default to time of creation
     title?: string;
     // CHANGE TO HTML OR STRING IF YOU WANT TO TEST BEFORE KONVA IMPLEMENTATION/READING THE DOCS
@@ -116,6 +117,7 @@ const EntrySchema = new Schema<IEntry>(
             required: true,
             index: true,
         },
+        friendsCanView: { type: Boolean, required: true, index: true },
         entryDate: { type: Date, default: Date.now, index: true },
         title: { type: String, trim: true },
         content: { type: [Schema.Types.Mixed], default: [] }, // array of mixed objects, Svelte code will verify they are Konva blocks

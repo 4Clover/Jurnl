@@ -115,7 +115,7 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
 
     // serializable User
     const safeUser: SerializableUser = {
-        _id: userDoc._id.toString(),
+        _id: userDoc._id,
         username: userDoc.username,
         email: userDoc.email,
         avatarUrl: userDoc.avatarUrl,
@@ -126,7 +126,7 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
     // serializable session
     const serializableSessionData: SerializableSession = {
         _id: sessionDoc._id, // string
-        userId: userDoc._id.toString(), //  user ObjectId to string
+        userId: userDoc._id, //  user ObjectId to string
         expiresAt: sessionDoc.expiresAt.toISOString(), // Date to ISO string
     };
 

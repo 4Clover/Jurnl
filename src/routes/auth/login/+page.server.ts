@@ -62,7 +62,7 @@ export const actions: Actions = {
                 );
                 // update locals
                 locals.user = {
-                    _id: userDoc._id.toString(),
+                    _id: userDoc._id,
                     username: userDoc.username,
                     email: userDoc.email,
                     avatarUrl: userDoc.avatarUrl,
@@ -71,7 +71,7 @@ export const actions: Actions = {
                 };
                 locals.session = {
                     _id: sessionDetails.sessionId,
-                    userId: userDoc._id.toString(),
+                    userId: userDoc._id,
                     expiresAt: sessionDetails.expiresAt.toISOString(),
                 };
                 // set the redirect path

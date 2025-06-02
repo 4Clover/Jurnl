@@ -8,14 +8,18 @@ export interface IUser extends Document {
     avatarUrl?: string;
     createdAt: Date;
     updatedAt: Date;
+    closeFriends: Array<Types.ObjectId>;
+    canViewFriends: Array<Types.ObjectId>;
 }
 export interface SerializableUser {
-    _id: string;
+    _id: Types.ObjectId;
     username: string;
     email?: string;
     avatarUrl?: string;
     createdAt: string;
     updatedAt: string;
+    closeFriends: Array<string>;
+    canViewFriends: Array<string>;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -44,6 +48,20 @@ const UserSchema = new Schema<IUser>(
         avatarUrl: {
             type: String,
         },
+        myCloseFriends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+                default: [],
+            },
+        ],
+        viewAccessFriends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+                default: [],
+            },
+        ],
     },
     {
         timestamps: true, // adds createdAt, updatedAt (as Date objects)
