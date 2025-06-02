@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { redirect } from '@sveltejs/kit';
+//import { redirect } from '@sveltejs/kit';
 import connectToDatabase from '$lib/server/database';
-import mongoose, { Types } from 'mongoose';
+import mongoose from 'mongoose';
 import { Entry } from '$lib/server/database/schemas';
 
 export const GET: RequestHandler = async (event) => {

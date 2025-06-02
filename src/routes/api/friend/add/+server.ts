@@ -1,5 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import connectToDatabase from '$lib/server/database';
 //import mongoose, { Types } from 'mongoose';
 import { User } from '$lib/server/database/schemas';
