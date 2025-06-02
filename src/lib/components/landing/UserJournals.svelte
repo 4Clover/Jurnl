@@ -15,6 +15,7 @@
         />
     {/each}
     -->
+    
     <div class = "user-journal">
         <p>Journal #1</p>
         <div class= journal-preview>

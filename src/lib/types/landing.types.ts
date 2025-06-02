@@ -10,3 +10,8 @@ export interface UserJournalProps {
     journalCoverUrl: string;
     latestJournalEntries: IEntry[];
 }
+
+export interface UserProfileProps {
+    profilePhotoUrl: string;
+    profileDescription: string;
+}
