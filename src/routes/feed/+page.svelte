@@ -1,1 +1,7 @@
-<h1>Friends' feed</h1>
+<script>
+    import FeedItem from "$lib/components/friends/FeedItem.svelte";
+
+</script>
+<h1>Friends' Feed</h1>
+
+<FeedItem />

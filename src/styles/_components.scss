@@ -21,6 +21,13 @@
     margin-bottom: 3rem;
 }
 
+.fieldbox {
+    width: 50%;
+    height: 4rem;
+    background: variables.$off-white;
+    border: none;
+}
+
 .center-container {
     display: flex;
     justify-content: center;
@@ -147,8 +154,43 @@
     background-color: variables.$baby-blue
 }
 
-.user-profile, .user-close-friends, .user-public-entries {
-    padding-block-start: 2.5rem;
+.feed-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    img {
+        max-height: 21rem;
+        min-height: 18rem;
+        width: 30%;
+        object-fit: cover;
+    }
+    &__desc {
+        width: 70%;
+    }
+}
+
+.feed-title {
+    display: flex;
+    align-items: center;
+    &__name {
+        width: 60%;
+    }
+    &__button {
+        width: 40%;
+        margin:0;
+
+    }
+}
+
+.feed-entry {
+    background-color: variables.$beige;
+    padding: 1rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.user-profile {
+    padding-block: 2.5rem;
 }
 
 .user-profile-image {
