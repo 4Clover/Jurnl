@@ -26,8 +26,15 @@ export const PUT: RequestHandler = async (event) => {
                 },
             });
         }
-        // add friend to local user
-        locals.user?.closeFriends.push(friend._id.toString());
+        // remove friend from local user
+        const idx = locals.user?.closeFriends.indexOf(friend._id.toString());
+        if (idx != undefined) {
+            locals.user?.closeFriends = locals.user?.closeFriends.splice(
+                idx,
+                1
+            );
+        }
+
         // removing id from user in db
         try {
             const modifiedUser = await User.findByIdAndUpdate(
