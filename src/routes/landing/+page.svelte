@@ -6,6 +6,8 @@
     import UserPublicEntries from '$lib/components/landing/UserPublicEntries.svelte';
     import type { PageProps } from './$types';
     let { data }: PageProps = $props();
+    import {testApiRoutes} from "$lib/test-api";
+    import { unknown } from 'zod';
 </script>
 
 <main class="landing-page">
