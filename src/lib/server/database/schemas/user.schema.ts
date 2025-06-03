@@ -1,5 +1,3 @@
-﻿// Schema by Dillon - copying and pasting what he forgot to commit
-
 import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 
 export interface IUser extends Document {
@@ -7,15 +5,15 @@ export interface IUser extends Document {
 
     // OAuth Fields
     email: string;
-    google_id?: string;
+    google_id: string;
 
     // Display Fields
     username: string;
     username_display: string;
 
     // Authentication
-    password: string; // Optional for OAuth users
-    auth_provider: 'password';
+    password?: string; // Optional for OAuth users
+    auth_provider: 'google' | 'password';
 
     // Profile Fields
     avatar_url?: string;
@@ -53,7 +51,7 @@ const UserSchema = new Schema<IUser>(
         // OAuth Fields
         email: {
             type: String,
-            required: false,
+            required: true,
             unique: true,
             lowercase: true,
             trim: true,
@@ -67,7 +65,7 @@ const UserSchema = new Schema<IUser>(
         },
         google_id: {
             type: String,
-            required: false,
+            required: true,
             unique: true,
             index: true,
         },
@@ -87,7 +85,7 @@ const UserSchema = new Schema<IUser>(
         },
         username_display: {
             type: String,
-            required: false,
+            required: true,
             default: function (this: IUser) {
                 return this.username;
             },
@@ -96,7 +94,7 @@ const UserSchema = new Schema<IUser>(
         // Authentication
         password: {
             type: String,
-            required: true,
+            required: false,
             select: false,
         },
         auth_provider: {

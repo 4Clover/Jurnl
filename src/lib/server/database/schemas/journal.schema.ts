@@ -52,7 +52,7 @@ const JournalSchema = new Schema<IJournal>(
 );
 
 JournalSchema.set('toJSON', {
-    transform: function (_doc, ret, _options) {
+    transform: function (doc, ret, options) {
         // Convert ObjectIds to strings for client-side use
         ret._id = ret._id.toString();
         ret.user = ret.user.toString();
