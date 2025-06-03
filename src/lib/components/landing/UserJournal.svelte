@@ -6,7 +6,8 @@
 
 <div class = "user-journal">
     <p>{journalTitle}</p>
-    <div class = "journal-cover" style = "background-color:{journalColor};"></div>
+    <div class= journal-preview>
+        <!--Need to mock up new journal covers (colors now instead of images), will use journalColor -->
         {#each latestJournalEntries as entry}
             <button class = "entry-preview-button" href={/*insert entry link here*/}>
                 {entry.title}
