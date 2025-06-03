@@ -12,11 +12,11 @@ https://svelte.dev/docs/svelte/bind
 </script>
 
 <section class="entry-sidebar">
-    <!-- {#each entries as entry}
+    <!-- {#each entries as entry (entry._id)}
         <EntrySidebarItem
-            entryDate={entry.entryDate}
-            createdAt={entry.createdAt}
-            updatedAt={entry.updatedAt}
+            title={entry.title}
+            journalID={entry.journal}
+            entryID={entry._id}
         />
     {/each} -->
 
