@@ -158,6 +158,7 @@
     display: flex;
     gap: 1rem;
     align-items: center;
+    margin: 1rem;
     img {
         max-height: 21rem;
         min-height: 18rem;
@@ -270,6 +271,8 @@
         display: flex;
     }
     .user-profile-description {
+        display: flex;
         padding-inline: 2.5rem;
+        align-items: center;
     }
 }

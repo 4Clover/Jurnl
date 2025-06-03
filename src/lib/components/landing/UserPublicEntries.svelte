@@ -1,31 +1,59 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+
+    const props = $props();
+
+    const defaultJournals = [
+        {
+            title: 'Default Journal',
+            entries: [
+                { name: 'Paris Arrival', date: '2024-04-15' },
+                { name: 'Louvre Visit', date: '2024-04-16' },
+                { name: 'Train to Nice', date: '2024-04-18' },
+            ],
+        },
+        {
+            title: 'Daily Thoughts',
+            entries: [
+                { name: 'Monday Motivation', date: '2025-06-02' },
+                { name: 'Tuesday Blues', date: '2025-06-03' },
+            ],
+        },
+        {
+            title: 'Project Notes',
+            entries: [
+                { name: 'Kickoff Meeting', date: '2025-05-10' },
+                { name: 'First Prototype', date: '2025-05-18' },
+                { name: 'Feedback Round', date: '2025-05-25' },
+            ],
+        }
+    ];
+
+    const journalList = props.journalList ?? defaultJournals;
+
+    onMount(() => {
+        
+        console.log('friendJournals value:', journalList);
+
+    });
     
 </script>
 
 <h2>Public Entries</h2>
-<div class= public-entry-journal>
-    <div class = "journal-cover" style = "background-color:#a2aec6;"></div>
-    <div class = "public-entry-times">
-        <p class = "public-entry-time" >DATE, YEAR, TIME</p>
-        <p class = "public-entry-time" >DATE, YEAR, TIME</p>
-        <p class = "public-entry-time" >DATE, YEAR, TIME</p>
+
+{#each journalList as journal}
+    <h4>{journal.title}</h4>
+    <div class="public-entry-journal">
+        <div class="journal-cover" style="background-color:#a2aec6;"></div>
+        <div class="public-entry-times">
+            {#each journal.entries as entry}
+                <p class="public-entry-time">{entry.date}</p>
+            {/each}
+        </div>
+        <div class="public-entry-previews">
+            {#each journal.entries as entry}
+                <p class="public-entry-preview">{entry.name}</p>
+            {/each}
+        </div>
     </div>
-    <div class = "public-entry-previews">
-        <p class = "public-entry-preview" >Latest Entry</p>
-        <p class = "public-entry-preview" >2nd Latest Entry</p>
-        <p class = "public-entry-preview" >3rd Latest Entry</p>
-    </div>
-</div>
-<div class= public-entry-journal>
-    <div class = "journal-cover" style = "background-color:#a2aec6;"></div>
-    <div class = "public-entry-times">
-        <p class = "public-entry-time" >DATE, YEAR, TIME</p>
-        <p class = "public-entry-time" >DATE, YEAR, TIME</p>
-        <p class = "public-entry-time" >DATE, YEAR, TIME</p>
-    </div> 
-    <div class = "public-entry-previews">
-        <p class = "public-entry-preview" >Latest Entry</p>
-        <p class = "public-entry-preview" >2nd Latest Entry</p>
-        <p class = "public-entry-preview" >3rd Latest Entry</p>
-    </div>
-</div>
+{/each}
