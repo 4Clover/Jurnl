@@ -13,10 +13,10 @@
         <UserJournals />
     </section>
     <section class="user-profile">
-        <UserProfile />
+        <UserProfile userInfo={data.user} />
     </section>
     <section class="user-close-friends">
-        <UserCloseFriends />
+        <UserCloseFriends userInfo={data.user} />
     </section>
     <section class="user-public-entries">
         <UserPublicEntries />

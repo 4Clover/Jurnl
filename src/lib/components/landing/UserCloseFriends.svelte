@@ -1,10 +1,17 @@
 <script lang="ts">
-    import type { UserFriendsProps } from "$lib/types/landing.types";
+    //import type { UserFriendsProps } from '$lib/types/landing.types';
 
-    let { closeFriendsList } : UserFriendsProps = $props();
+    //let { closeFriendsList }: UserFriendsProps = $props();
+    let { userInfo }: UserProfileProps = $props();
 </script>
 
 <h2>My Close Friends</h2>
+
+<form id="friendForm">
+    <input type="text" name="username" />
+    <button type="submit">Add</button>
+</form>
+
 <div class="manage-friends">
     <!--
     {#each closeFriendsList as closeFriend}
@@ -14,7 +21,7 @@
         </div>
     {/each}
     -->
-    
+
     <div class="manage-friend">
         <p>Friend 1</p>
         <button class="delete-friend-button">DELETE</button>

@@ -58,7 +58,7 @@ export const actions: Actions = {
                 setSessionCookie(
                     event,
                     sessionDetails.clientToken,
-                    sessionDetails.expiresAt
+                    sessionDetails.expiresAt,
                 );
                 // update locals
                 locals.user = {
@@ -68,6 +68,8 @@ export const actions: Actions = {
                     avatarUrl: userDoc.avatarUrl,
                     createdAt: userDoc.createdAt.toISOString(),
                     updatedAt: userDoc.updatedAt.toISOString(),
+                    close_friends: userDoc.close_friends,
+                    can_view_friends: userDoc.can_view_friends,
                 };
                 locals.session = {
                     _id: sessionDetails.sessionId,
@@ -98,7 +100,7 @@ export const actions: Actions = {
             if (isRedirect(error)) {
                 console.warn(
                     'Registration: A SvelteKit redirect was caught unexpectedly. Redirecting again:',
-                    error
+                    error,
                 );
                 redirect(303, redirectToPath);
             }
@@ -107,7 +109,7 @@ export const actions: Actions = {
                 const validationErrors = fromZodError(error);
                 console.warn(
                     'Login validation error:',
-                    validationErrors.toString()
+                    validationErrors.toString(),
                 );
                 return fail(400, {
                     data: { username: submittedUsername },
@@ -118,7 +120,7 @@ export const actions: Actions = {
                             }
                             return acc;
                         },
-                        {} as Record<string, string>
+                        {} as Record<string, string>,
                     ),
                 });
             }
