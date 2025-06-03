@@ -7,6 +7,7 @@
 <h2>[Username]</h2>
 <!--<h2>{userInfo.username}</h2>-->
 <div class="user-profile-contents">
+    
     <!--
     <img class = "user-profile-image" src= {userInfo.bio_image_url} alt="An image of the user." width="500" height="372">
     <p class="user-profile-description">{userInfo.bio_text}</p>
