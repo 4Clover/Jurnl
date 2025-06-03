@@ -1,8 +1,8 @@
-﻿import mongoose, { Schema, Types, Document } from 'mongoose';
+﻿import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 
 export interface ISession extends Document {
-    _id: string; // hashed token instead of Mongoose generated _id
-    userId: Types.ObjectId; // ref to User._id
+    _id: string; // Hashed token
+    userId: Types.ObjectId;
     expiresAt: Date;
     userAgent?: string;
     ipAddress?: string;
@@ -17,36 +17,39 @@ export interface SerializableSession {
 
 const SessionSchema = new Schema<ISession>(
     {
-        _id: { type: String, required: true },
+        _id: {
+            type: String,
+            required: [true, 'Session ID (hashed token) is required.'],
+        },
         userId: {
             type: Schema.Types.ObjectId,
             ref: 'User',
-            required: true,
+            required: [true, 'User ID is required for the session.'],
             index: true,
         },
-        expiresAt: { type: Date, required: true, index: { expires: '1s' } }, // TTL index
-        userAgent: { type: String },
-        ipAddress: { type: String },
+        expiresAt: {
+            type: Date,
+            required: [true, 'Session expiration date is required.'],
+            index: { expires: '1s' }, // TTL index for automatic deletion
+        },
+        userAgent: { type: String, trim: true },
+        ipAddress: { type: String, trim: true },
     },
     {
         timestamps: { createdAt: true, updatedAt: false },
-        _id: false, // hashed token instead of Mongoose generated _id
+        _id: false,
         toJSON: {
-            transform: function (doc, ret) {
-                if (ret.userId && typeof ret.userId.toString === 'function') {
-                    // Defensive check
-                    ret.userId = ret.userId.toString();
-                }
-                if (ret.expiresAt instanceof Date) {
-                    ret.expiresAt = ret.expiresAt.toISOString();
-                }
-                delete ret.__v;
-                return ret;
+            transform: function (doc: ISession): SerializableSession {
+                return {
+                    _id: doc._id,
+                    userId: doc.userId.toString(),
+                    expiresAt: doc.expiresAt.toISOString(),
+                };
             },
         },
-    }
+    },
 );
 
-export const Session =
-    mongoose.models.Session ||
+export const Session: Model<ISession> =
+    (mongoose.models.Session as Model<ISession>) ||
     mongoose.model<ISession>('Session', SessionSchema);

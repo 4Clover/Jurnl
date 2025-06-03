@@ -1,205 +1,266 @@
-import mongoose, { Schema, Types, Document } from 'mongoose';
-import type { IJournal } from './journal.schema';
-
-// https://konvajs.org/api/Konva.Node.html
-// https://mongoosejs.com/docs/guide.html
-
-// --- Definitions for Konva Block Configurations ---
-interface KonvaNodeConfigBase {
-    id: string; // unique ID for the Konva node, also key in arrays
-    x: number;
-    y: number;
-    width?: number;
-    height?: number;
-    scaleX?: number;
-    scaleY?: number;
-    rotation?: number; // degrees
-    draggable?: boolean; // Konva property
-    opacity?: number;
-    // IMPORTANT: array order for initial z-indexing on load -- will change later
-}
-
-export interface KonvaTextConfig extends KonvaNodeConfigBase {
-    type: 'Text';
-    text: string;
-    fontSize?: number;
-    fontFamily?: string;
-    fill?: string;
-    // Konva.Text specific properties
-}
-
-export interface KonvaImageConfig extends KonvaNodeConfigBase {
-    type: 'Image';
-    attachmentId: string; // ref to IEntryAttachment._id
-    src: string; // denormalized URL for Konva.Image
-    width: number;
-    height: number;
-    // Konva.Image specific properties
-}
-
-export interface KonvaRectConfig extends KonvaNodeConfigBase {
-    type: 'Rect';
-    width: number;
-    height: number;
-    fill?: string;
-    stroke?: string;
-    strokeWidth?: number;
-    //Konva.Rect specific properties
-}
-
-// OTHER SHAPE CONFIGS GO HERE: KonvaCircleConfig, KonvaLineConfig, etc.
-
-export type EntryBlockKonva =
-    | KonvaTextConfig
-    | KonvaImageConfig
-    | KonvaRectConfig; // <=== ADD NEW TYPES HERE
-
-// Represents a single entry i.e, a page, within a journal
-export interface IEntryAttachment extends Types.Subdocument {
-    _id: Types.ObjectId;
-    type: 'image' | 'audio' | 'video' | 'file';
-    url: string;
-    filename?: string; // user system file name upon import
-    mimetype?: string;
-    size?: number; // bytes
-    storageKey?: string;
-    caption?: string;
-}
+import mongoose, { Document, Model, Schema, Types } from 'mongoose';
+import type { IJournal } from '$schemas';
 
 export interface IEntry extends Document {
-    journalId: Types.ObjectId; // ref to Journal._id
-    userId: Types.ObjectId | string; // denormalized ref to User._id
-    entryDate: Date; // set by user or default to time of creation
-    title?: string;
-    // CHANGE TO HTML OR STRING IF YOU WANT TO TEST BEFORE KONVA IMPLEMENTATION/READING THE DOCS
-    content: EntryBlockKonva[]; // only Konva blocks exist in our pages, not raw text
-    attachments: Types.DocumentArray<IEntryAttachment>; // metadata
-    tags: string[];
-    mood?: string; // mood reaction?
-    location?: {
-        name?: string;
-        coordinates?: [number, number];
+    journal: Types.ObjectId;
+    user: Types.ObjectId;
+    shared_with_friends: Types.ObjectId[];
+    entry_date: Date;
+    title: string;
+    content_zones: {
+        picture_text: {
+            image: {
+                url: string | null;
+                alt: string;
+                caption: string;
+            };
+            text: string;
+        };
+        list: {
+            items: Array<{
+                text: string;
+                checked: boolean;
+            }>;
+        };
+        text_right: {
+            content: string;
+        };
     };
-    customFields?: Map<string, unknown>; // user fields -- possibly unneeded
+    free_form_content: string;
+    attachments: Array<{
+        type: 'image' | 'sticker';
+        id: string;
+        url?: string;
+        caption?: string;
+        metadata: Map<string, any>;
+    }>;
     createdAt: Date;
     updatedAt: Date;
 }
 
-const EntryAttachmentSchema = new Schema<IEntryAttachment>(
-    {
-        type: {
-            type: String,
-            enum: ['image', 'audio', 'video', 'file'],
-            required: true,
-        },
-        url: { type: String, required: true },
-        filename: { type: String },
-        mimetype: { type: String },
-        size: { type: Number },
-        storageKey: { type: String }, // supposedly important for cloud storage? unsure if cluster will handle this
-        caption: { type: String },
-    },
-    { _id: true }
-); // enables _id of subdocuments for referencing
+// Serializable version for client-side use
+export interface IEntrySerializable {
+    _id: string;
+    journal: string;
+    user: string;
+    shared_with_friends: string[];
+    entry_date: string;
+    title: string;
+    content_zones: {
+        picture_text: {
+            image: {
+                url: string | null;
+                alt: string;
+                caption: string;
+            };
+            text: string;
+        };
+        list: {
+            items: Array<{
+                text: string;
+                checked: boolean;
+            }>;
+        };
+        text_right: {
+            content: string;
+        };
+    };
+    free_form_content: string;
+    attachments: Array<{
+        type: 'image' | 'sticker';
+        id: string;
+        url?: string;
+        caption?: string;
+        metadata: Record<string, any>;
+    }>;
+    createdAt: string;
+    updatedAt: string;
+}
 
 const EntrySchema = new Schema<IEntry>(
     {
-        journalId: {
+        journal: {
             type: Schema.Types.ObjectId,
             ref: 'Journal',
             required: true,
-            index: true,
         },
-        userId: {
+        user: {
             type: Schema.Types.ObjectId,
             ref: 'User',
             required: true,
-            index: true,
         },
-        entryDate: { type: Date, default: Date.now, index: true },
-        title: { type: String, trim: true },
-        content: { type: [Schema.Types.Mixed], default: [] }, // array of mixed objects, Svelte code will verify they are Konva blocks
-        attachments: [EntryAttachmentSchema], // array of attachments
-        tags: [{ type: String, trim: true, lowercase: true, index: true }],
-        mood: { type: String, trim: true },
-        location: {
-            name: { type: String },
-            coordinates: { type: [Number], index: '2dsphere' }, // for queries
+        shared_with_friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
+        entry_date: {
+            type: Date,
+            default: Date.now,
         },
-        customFields: { type: Map, of: Schema.Types.Mixed }, // user fields, temp mongoose any (Mixed) while building out skeleton
+        title: {
+            type: String,
+            required: true,
+            maxlength: 200,
+        },
+        content_zones: {
+            picture_text: {
+                image: {
+                    url: {
+                        type: String,
+                        default: null,
+                    },
+                    alt: {
+                        type: String,
+                        default: '',
+                    },
+                    caption: {
+                        type: String,
+                        default: '',
+                    },
+                },
+                text: {
+                    type: String,
+                    default: '',
+                },
+            },
+            list: {
+                items: [
+                    {
+                        text: {
+                            type: String,
+                            required: true,
+                        },
+                        checked: {
+                            type: Boolean,
+                            default: false,
+                        },
+                    },
+                ],
+            },
+            text_right: {
+                content: {
+                    type: String,
+                    default: '',
+                },
+            },
+        },
+        free_form_content: {
+            type: String,
+            default: '',
+        },
+        attachments: [
+            {
+                type: {
+                    type: String,
+                    enum: ['image', 'sticker'],
+                    required: true,
+                },
+                id: {
+                    type: String,
+                    required: true,
+                },
+                url: String,
+                caption: String,
+                metadata: {
+                    type: Map,
+                    of: Schema.Types.Mixed,
+                },
+            },
+        ],
     },
     { timestamps: true }
 );
 
-// hook to update Journal's entryCount and lastEntryAt
-EntrySchema.post<IEntry>('save', async function (doc, next) {
-    if (typeof doc?.journalId === 'undefined') {
-        if (next)
-            next(
-                new Error(
-                    'Document or journalId is undefined in post-save hook'
-                )
-            );
-        return;
-    }
+// Add toJSON method for proper serialization
+EntrySchema.set('toJSON', {
+    transform: function (_doc, ret, _options) {
+        // Convert ObjectIds to strings for client-side use
+        ret._id = ret._id.toString();
+        ret.journal = ret.journal.toString();
+        ret.user = ret.user.toString();
+        ret.shared_with_friends = ret.shared_with_friends.map(
+            (id: Types.ObjectId) => id.toString()
+        );
+        ret.entry_date = ret.entry_date.toISOString();
+        ret.createdAt = ret.createdAt.toISOString();
+        ret.updatedAt = ret.updatedAt.toISOString();
 
-    const JournalModel = mongoose.model<IJournal>('Journal');
-    const EntryModel = mongoose.model<IEntry>('Entry');
-
-    try {
-        const journal = await JournalModel.findById(doc.journalId);
-        if (journal) {
-            journal.entryCount = await EntryModel.countDocuments({
-                journalId: doc.journalId,
-            });
-            const latestEntry = await EntryModel.findOne({
-                journalId: doc.journalId,
-            }).sort({ entryDate: -1, createdAt: -1 });
-            if (latestEntry) {
-                journal.lastEntryAt = latestEntry.entryDate;
-            } else {
-                journal.lastEntryAt = undefined;
-            }
-            await journal.save();
+        // Convert Map to a plain object for metadata in attachments
+        if (ret.attachments && Array.isArray(ret.attachments)) {
+            ret.attachments = ret.attachments.map((attachment: any) => ({
+                ...attachment,
+                metadata: attachment.metadata
+                    ? Object.fromEntries(attachment.metadata)
+                    : {},
+            }));
         }
-        if (next) next();
-    } catch (error) {
-        if (next) next(error as Error); // pass error to next middleware
+
+        delete ret.__v;
+        return ret;
+    },
+});
+
+// --- Hooks ---
+EntrySchema.post<IEntry>('save', async function (doc, next) {
+    const JournalModel =
+        (mongoose.models.Journal as Model<IJournal>) ||
+        mongoose.model<IJournal>('Journal');
+    if (!doc.journal) {
+        console.error(
+            'Entry saved without journal reference, cannot update journal.',
+            doc._id
+        );
+        return next();
+    }
+    try {
+        await JournalModel.findByIdAndUpdate(doc.journal, {
+            $addToSet: { entries: doc._id as Types.ObjectId },
+        }).exec();
+        next();
+    } catch (err: any) {
+        console.error(
+            `Error in Entry post-save hook for entry ${doc._id} (updating journal ${doc.journal}):`,
+            err
+        );
+        next();
     }
 });
 
-// hook for update after deletion
-EntrySchema.post<IEntry | null>(
+EntrySchema.post<IEntry>(
     'findOneAndDelete',
-    async function (doc: IEntry, next) {
-        if (typeof doc?.journalId !== 'undefined') {
-            // if doc has journalId
-            const JournalModel = mongoose.model<IJournal>('Journal');
-            const EntryModel = mongoose.model<IEntry>('Entry');
-
+    async function (doc: IEntry | null, next) {
+        if (doc?.journal) {
+            const JournalModel =
+                (mongoose.models.Journal as Model<IJournal>) ||
+                mongoose.model<IJournal>('Journal');
             try {
-                const journal = await JournalModel.findById(doc.journalId);
-                if (journal) {
-                    journal.entryCount = await EntryModel.countDocuments({
-                        journalId: doc.journalId,
-                    });
-                    const latestEntry = await EntryModel.findOne({
-                        journalId: doc.journalId,
-                    }).sort({ entryDate: -1, createdAt: -1 });
-                    journal.lastEntryAt = latestEntry
-                        ? latestEntry.entryDate
-                        : undefined;
-                    await journal.save();
-                }
-                if (next) next();
-            } catch (error) {
-                if (next) next(error as Error);
+                await JournalModel.findByIdAndUpdate(doc.journal, {
+                    $pull: { entries: doc._id as Types.ObjectId },
+                }).exec();
+                next();
+            } catch (err: any) {
+                console.error(
+                    `Error in Entry post-findOneAndDelete hook for entry ${doc._id} (updating journal ${doc.journal}):`,
+                    err
+                );
+                next();
             }
         } else {
-            next?.(); // fixes operation hang
+            if (!doc) {
+                // This means the findOneAndDelete operation didn't find/delete any document.
+                // console.log('Entry post-findOneAndDelete hook: No document was deleted.');
+            } else if (doc && !doc.journal) {
+                console.warn(
+                    `Entry post-findOneAndDelete hook: Deleted entry ${doc._id} had no journal reference.`
+                );
+            }
+            next();
         }
     }
 );
 
-export const Entry =
-    mongoose.models.Entry || mongoose.model<IEntry>('Entry', EntrySchema);
+export const Entry: Model<IEntry> =
+    (mongoose.models.Entry as Model<IEntry>) ||
+    mongoose.model<IEntry>('Entry', EntrySchema);
