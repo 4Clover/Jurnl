@@ -7,11 +7,13 @@ https://svelte.dev/docs/svelte/bind
     import type { EntrySidebarProps } from '$lib/types/journal.types';
     import EntrySidebarItem from './EntrySidebarItem.svelte';
     import { page } from '$app/stores';
+    import CreateJournalEntryButton from '../buttons/CreateJournalEntryButton.svelte';
 
     // let { entries }: EntrySidebarProps = $props();
 </script>
 
 <section class="entry-sidebar">
+    <CreateJournalEntryButton/>
     <!-- {#each entries as entry (entry._id)}
         <EntrySidebarItem
             title={entry.title}
