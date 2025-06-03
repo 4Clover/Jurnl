@@ -4,8 +4,7 @@
 
 <h2>Public Entries</h2>
 <div class= public-entry-journal>
-    <!-- Photo by Arina Krasnikova: https://www.pexels.com/photo/a-notebooks-and-pen-5712455/-->
-    <img class = "journal-cover" src= "/src/assets/journal-cover-ex.jpg" alt= "A stack of three journals and a pen on top of a brown blanket.">
+    <div class = "journal-cover" style = "background-color:#a2aec6;"></div>
     <div class = "public-entry-times">
         <p class = "public-entry-time" >DATE, YEAR, TIME</p>
         <p class = "public-entry-time" >DATE, YEAR, TIME</p>
@@ -18,8 +17,7 @@
     </div>
 </div>
 <div class= public-entry-journal>
-    <!-- Photo by Arina Krasnikova: https://www.pexels.com/photo/a-notebooks-and-pen-5712455/-->
-    <img class = "journal-cover" src= "/src/assets/journal-cover-ex.jpg" alt= "A stack of three journals and a pen on top of a brown blanket.">
+    <div class = "journal-cover" style = "background-color:#a2aec6;"></div>
     <div class = "public-entry-times">
         <p class = "public-entry-time" >DATE, YEAR, TIME</p>
         <p class = "public-entry-time" >DATE, YEAR, TIME</p>
