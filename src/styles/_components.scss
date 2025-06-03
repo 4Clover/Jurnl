@@ -154,6 +154,16 @@
     background-color: variables.$baby-blue;
 }
 
+.entry-toolbar {
+    width: 100%;
+    height: 3.06rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: variables.$light-brown;
+}
+
 .feed-item {
     display: flex;
     gap: 1rem;

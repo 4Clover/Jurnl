@@ -1,9 +1,13 @@
 <script lang="ts">
     import { page } from '$app/stores';
+    import EntryToolbar from '$lib/components/entry/EntryToolbar.svelte';
     import '../../../../../styles/main.scss';
 </script>
 
-<h1>Entry</h1>
+
 <pre>
     {JSON.stringify($page, null, 2)}
-</pre>
+</pre> 
+
+
+<!-- <EntryToolbar/> -->
