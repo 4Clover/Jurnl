@@ -23,7 +23,7 @@ export const GET: RequestHandler = async ({ cookies }) => {
 	const client = new OAuth2Client(
 		GOOGLE_CLIENT_ID,
 		GOOGLE_CLIENT_SECRET,
-		"http://localhost:5173/auth/google/callback"
+		"http://localhost:3000/auth/google/callback"
 	);
 
 	const authURL = client.generateAuthUrl({

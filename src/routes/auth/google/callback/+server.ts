@@ -9,7 +9,6 @@ import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "$env/static/private";
 
 import { User } from "$lib/server/database/schemas";
 import  connectToDatabase  from "$lib/server/database";
-import { L } from "vitest/dist/chunks/reporters.d.C-cu31ET.js";
 
 
 
@@ -69,7 +68,7 @@ export const GET: RequestHandler = async (event) => {
 		const client = new OAuth2Client(
 			GOOGLE_CLIENT_ID,	
 			GOOGLE_CLIENT_SECRET,
-			"http://localhost:5173/auth/google/callback"
+			"http://localhost:3000/auth/google/callback"
 		);
 		
 		const { tokens } = await client.getToken(code);

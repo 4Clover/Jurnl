@@ -25,7 +25,7 @@
         <h2 class="center-item title">Log In to View Your Journal</h2>
         <div class="spacing"></div>
 
-        <button onclick="/auth/google">Sign In with Google</button>
+        <button onclick={()=> window.location.href='/auth/google'}>Sign In with Google</button>
 
         {#if generalFormError}
             <div>
