@@ -4,8 +4,8 @@
     "version": "0.0.1",
     "type": "module",
     "scripts": {
-        "dev": "vite dev --host 127.0.0.1 --port 3000",
-        "dev:fast": "vite dev --host 127.0.0.1 --port 3000 --force",
+        "dev": "vite dev --port 3000",
+        "dev:fast": "vite dev --port 3000 --force",
         "build": "vite build",
         "build:fast": "vite build --mode development",
         "preview": "vite preview --host 127.0.0.1",
