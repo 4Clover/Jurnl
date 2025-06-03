@@ -1,50 +1,69 @@
-﻿import mongoose, { Schema, /*Types,*/ Document } from 'mongoose';
+﻿import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 
-// TODO: Uncomment {userId, primary, secondary, Public, Archived} after OAuth is implemented
 export interface IJournal extends Document {
-    // userId: Types.ObjectId | string; // ref to User._id
     title: string;
-    description?: string;
-    coverImageUrl?: string;
-    themeSettings: {
-        paper?: string; // e.g., 'lined', 'dotted', 'custom-texture.png', '#FFFFFF'
-        fontFamily?: string; //
-        // primaryColor?: string; // accents within the journal
-        // secondaryColor?: string;
-    };
-    // Konva Canvas -- Default width and height of the visible page frame for entries
-    defaultEntryWidth?: number;
-    defaultEntryHeight?: number;
-    // isPublic: boolean; // home page public journals view?
-    // isArchived: boolean;
-    entryCount: number; // updates via Svelte
-    lastEntryAt?: Date;
+    user: Types.ObjectId; // Reference to User who owns this journal
+    cover_color: string; // Hex color for the journal cover
+    entries: Types.ObjectId[]; // Array of Entry references
     createdAt: Date;
     updatedAt: Date;
+}
+// Serializable version for client-side use
+export interface IJournalSerializable {
+    _id: string;
+    title: string;
+    user: string; // ObjectId as string
+    cover_color: string;
+    entries: string[]; // Array of ObjectId strings
+    createdAt: string | Date;
+    updatedAt: string | Date;
 }
 
 const JournalSchema = new Schema<IJournal>(
     {
-        // userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
-        title: { type: String, required: true, trim: true },
-        description: { type: String, trim: true },
-        coverImageUrl: { type: String },
-        themeSettings: {
-            paper: { type: String, default: 'default-lined' },
-            fontFamily: { type: String, default: 'Arial' },
-            // primaryColor: { type: String },
-            // secondaryColor: { type: String },
+        title: {
+            type: String,
+            required: true,
+            maxlength: 100,
         },
-        defaultEntryWidth: { type: Number, default: 500 },
-        defaultEntryHeight: { type: Number, default: 500 },
-        // isPublic: { type: Boolean, default: false, index: true },
-        // isArchived: { type: Boolean, default: false },
-        entryCount: { type: Number, default: 0 },
-        lastEntryAt: { type: Date, index: true },
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
+        cover_color: {
+            type: String,
+            default: '#4B5563',
+            validate: {
+                validator: function (v: string) {
+                    return /^#[0-9A-F]{6}$/i.test(v);
+                },
+                message: 'Cover color must be a valid hex color.',
+            },
+        },
+        entries: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Entry',
+            },
+        ],
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 
-export const Journal =
-    mongoose.models.Journal ??
+JournalSchema.set('toJSON', {
+    transform: function (doc, ret, options) {
+        // Convert ObjectIds to strings for client-side use
+        ret._id = ret._id.toString();
+        ret.user = ret.user.toString();
+        ret.entries = ret.entries.map((entry: Types.ObjectId) =>
+            entry.toString(),
+        );
+        delete ret.__v;
+        return ret;
+    },
+});
+
+export const Journal: Model<IJournal> =
+    (mongoose.models.Journal as Model<IJournal>) ||
     mongoose.model<IJournal>('Journal', JournalSchema);
