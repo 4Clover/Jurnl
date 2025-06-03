@@ -1,19 +1,33 @@
 {
+    // TODO: SITE CONFIG WEBSITES
     "extends": "./.svelte-kit/tsconfig.json",
     "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "isolatedModules": true,
         "allowJs": true,
-        "checkJs": true,
+        "checkJs": false, // Disable for faster builds in dev
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "sourceMap": true,
+        "skipLibCheck": true, // Faster type checking
+        "sourceMap": false, // Disable in production
         "strict": true,
-        "moduleResolution": "bundler"
+        "customConditions": ["svelte"],
+        "moduleDetection": "force",
+        "verbatimModuleSyntax": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "noEmit": true,
+        "moduleResolution": "bundler",
+
+        // Performance optimizations
+        "incremental": true,
+        "tsBuildInfoFile": ".svelte-kit/tsconfig.tsbuildinfo",
+        "preserveWatchOutput": true
+    },
+    "ts-node": {
+        "esm": true,
+        "transpileOnly": true // Skip type checking for faster builds
     }
-    // Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
-    // except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
-    //
-    // If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
-    // from the referenced tsconfig.json - TypeScript does not merge them in
 }

@@ -1,28 +1,24 @@
-﻿// ---- Journal Model ----
-// https://mongoosejs.com/docs/guide.html
+﻿// ---- Core Models ----
 import { Journal as JournalModel } from './journal.schema';
-export const Journal = JournalModel;
-export type { IJournal } from './journal.schema';
-
-// ---- Entry Model ----
 import { Entry as EntryModel } from './entry.schema';
-export const Entry = EntryModel;
-export type {
-    IEntry,
-    IEntryAttachment,
-    EntryBlockKonva, // union type: use to confirm an object is for Konva
-    KonvaTextConfig,
-    KonvaImageConfig,
-    KonvaRectConfig,
-    // other Konva types here
-} from './entry.schema';
-
-// ---- User Model ----
 import { User as UserModel } from './user.schema';
+import { Session as SessionModel } from './session.schema';
+
+export const Journal = JournalModel;
+export const Entry = EntryModel;
 export const User = UserModel;
+export const Session = SessionModel;
+
+// ---- Type Exports ----
+
+// User types
 export type { IUser, SerializableUser } from './user.schema';
 
-// ---- Session Model ----
-import { Session as SessionModel } from './session.schema';
-export const Session = SessionModel;
+// Session types
 export type { ISession, SerializableSession } from './session.schema';
+
+// Journal types
+export type { IJournal, IJournalSerializable } from './journal.schema';
+
+// Entry types
+export type { IEntry, IEntrySerializable } from './entry.schema';
