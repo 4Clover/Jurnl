@@ -16,7 +16,7 @@
         <UserProfile userInfo={data.user} />
     </section>
     <section class="user-close-friends">
-        <UserCloseFriends userInfo={data.user} />
+        <UserCloseFriends userInfo={data.user}/>
     </section>
     <section class="user-public-entries">
         <UserPublicEntries />

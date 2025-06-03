@@ -1,25 +1,40 @@
 import type { RequestHandler } from '@sveltejs/kit';
-//import { redirect } from '@sveltejs/kit';
+import { json, fail } from '@sveltejs/kit';
 import connectToDatabase from '$lib/server/database';
 //import mongoose, { Types } from 'mongoose';
 import { User } from '$lib/server/database/schemas';
 
-export const GET: RequestHandler = async (event) => {
-    const { locals } = event;
-
+export const GET: RequestHandler = async ({ locals }) => {
     try {
         await connectToDatabase();
     } catch (dbError) {
         console.error('DB connection error during adding friend', dbError);
+        return fail(500, { error: 'db connection failed' });
     }
 
     try {
-        const usernames = await User.find(
-            { _id: { $in: locals.user?.closeFriends } },
-            { username: 1 }
-        );
-        return { result: usernames };
+        const temp = await User.findById(locals.user._id);
+        if (temp) {
+            const usernames: string[] = [];
+            for (const id of temp.close_friends) {
+                try {
+                    const friend = await User.findById(id).select('username');
+                    if (friend) {
+                        usernames.push(friend.username);
+                    }
+                } catch (error) {
+                    console.error(
+                        'Could not get viewable entries from a friend',
+                        error,
+                    );
+                    return fail(500, { error: 'unable to find a friend' });
+                }
+            }
+            return json({ result: usernames });
+        }
+        return fail(500, { error: 'unable to find friends' });
     } catch (error) {
         console.error('Could not get viewable entries from friend', error);
+        return fail(500, { error: 'unable to find friends' });
     }
 };
