@@ -23,7 +23,7 @@ const registerSchema = z.object({
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
-        redirect(303, '/homepage');
+        redirect(303, '/');
     }
     return {};
 };
@@ -40,7 +40,7 @@ export const actions: Actions = {
         };
 
         let registrationSuccess = false;
-        const redirectToPath: string | null = '/homepage';
+        const redirectToPath: string | null = '/';
 
         try {
             await connectToDatabase();
