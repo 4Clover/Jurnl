@@ -1,32 +1,37 @@
 // FOLLOWING TUTORIAL CODE: https://lucia-auth.com/tutorials/google-oauth/sveltekit
 
-import { generateState, generateCodeVerifier } from "arctic";
-import { google } from "$lib/server/oauth";
+import type { RequestHandler } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 
-import type { RequestEvent } from "@sveltejs/kit";
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "$env/static/private";
+import { dev } from "$app/environment";
+import { OAuth2Client } from "google-auth-library";
 
-export async function GET(event: RequestEvent): Promise<Response> {
-	const state = generateState();
-	const codeVerifier = generateCodeVerifier();
-	const url = google.createAuthorizationURL(state, codeVerifier, ["openid", "profile"]);
+export const GET: RequestHandler = async ({ cookies }) => {
+	
+	// Generate a unique state
+	const state = crypto.randomUUID // from Node js
 
-	event.cookies.set("google_oauth_state", state, {
-		path: "/",
+	cookies.set('oauth_state', state, {
+		path: '/',
 		httpOnly: true,
-		maxAge: 60 * 10, // 10 minutes
-		sameSite: "lax"
-	});
-	event.cookies.set("google_code_verifier", codeVerifier, {
-		path: "/",
-		httpOnly: true,
-		maxAge: 60 * 10, // 10 minutes
-		sameSite: "lax"
+		secure: dev,
+		sameSite: 'lax',
+		maxAge: 60 * 10 
 	});
 
-	return new Response(null, {
-		status: 302,
-		headers: {
-			Location: url.toString()
-		}
+	const client = new OAuth2Client(
+		GOOGLE_CLIENT_ID,
+		GOOGLE_CLIENT_SECRET,
+		"http://localhost:5173/auth/google/callback"
+	);
+
+	const authURL = client.generateAuthUrl({
+		access_type: 'offline',
+		scope: ['profile', 'email'],
+		state: state
 	});
+
+	throw redirect(303, authURL);
+
 }

@@ -54,23 +54,23 @@ export const GET: RequestHandler = async (event) => {
 	try{
 		const code = url.searchParams.get('code');
 		if(!code) {
-			throw error(400, "Invalid authorization code.");
+			error(400, "Invalid authorization code.");
 		}
 		const state = url.searchParams.get('state');
 		if(!state) {
-			throw error(400, "Invalid state parameter.");
+			error(400, "Invalid state parameter.");
 		}
 		const cookieState = cookies.get('state');
 		if(!cookieState || cookieState !== state)
 		{
-			throw error(400, 'Invalid stored state parameter.')
+			error(400, 'Invalid stored state parameter.');
 		}
 
 		const client = new OAuth2Client(
 			GOOGLE_CLIENT_ID,	
 			GOOGLE_CLIENT_SECRET,
-			"http://localhost:5173/login/google/callback"
-		)
+			"http://localhost:5173/auth/google/callback"
+		);
 		
 		const { tokens } = await client.getToken(code);
 		client.setCredentials(tokens);
@@ -156,8 +156,7 @@ export const GET: RequestHandler = async (event) => {
 		redirectTo = isNewUser && !user.bio_text ? '/profile' : '/journals';
 
 
-	} catch(error)
-	{
+	} catch(error){
 		console.error('Callback error:', error);
 		throw error(500, 'Failure to authenticated, please try again later.');
 	} finally{
