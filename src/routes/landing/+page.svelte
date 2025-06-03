@@ -13,7 +13,7 @@
         <UserJournals />
     </section>
     <section class="user-profile">
-        <UserProfile data={data}/>
+        <UserProfile />
     </section>
     <section class="user-close-friends">
         <UserCloseFriends />

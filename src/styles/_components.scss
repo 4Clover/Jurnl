@@ -61,8 +61,12 @@
 }
 
 .journal-cover {
-    width: 13rem;
-    height: 18rem;
+    min-width: 13rem;
+    min-height: 18rem;
+    border-bottom-style: inset;
+    border-right-style: inset;
+    border-width: 0.5rem;
+    border-color: variables.$beige;
 }
 
 .journal-page-content {
@@ -258,7 +262,6 @@
 
 .public-entry-preview {
     padding: 0.67rem;
-    flex-shrink: 0;
     background-color: variables.$gray;
 }
 

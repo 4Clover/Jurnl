@@ -1,4 +1,4 @@
-{
+﻿{
     "printWidth": 80,
     "tabWidth": 4,
     "useTabs": false,
@@ -6,17 +6,48 @@
     "singleQuote": true,
     "quoteProps": "as-needed",
     "jsxSingleQuote": false,
-    "trailingComma": "es5",
+    "trailingComma": "all",
     "bracketSpacing": true,
     "bracketSameLine": false,
     "arrowParens": "always",
     "endOfLine": "lf",
-    "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+    "svelteSortOrder": "options-scripts-markup-styles",
+    "svelteStrictMode": false,
+    "svelteAllowShorthand": true,
+    "svelteIndentScriptAndStyle": true,
+    "plugins": ["prettier-plugin-svelte"],
     "overrides": [
         {
             "files": "*.svelte",
             "options": {
-                "parser": "svelte"
+                "parser": "svelte",
+                "svelteIndentScriptAndStyle": true,
+                "svelteSortOrder": "options-styles-scripts-markup"
+            }
+        },
+        {
+            "files": ["*.ts", "*.js"],
+            "options": {
+                "parser": "typescript"
+            }
+        },
+        {
+            "files": "*.scss",
+            "options": {
+                "parser": "scss"
+            }
+        },
+        {
+            "files": "*.json",
+            "options": {
+                "parser": "json"
+            }
+        },
+        {
+            "files": "*.md",
+            "options": {
+                "parser": "markdown",
+                "proseWrap": "preserve"
             }
         }
     ]

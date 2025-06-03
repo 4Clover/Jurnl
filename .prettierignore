@@ -1,6 +1,44 @@
 # Package Managers
 package-lock.json
 pnpm-lock.yaml
-yarn.lock
 bun.lock
 bun.lockb
+
+# Standard ignores
+node_modules
+.DS_Store
+
+# Build artifacts
+/build/
+/dist/
+/.svelte-kit/
+/package/
+
+# Generated files (example)
+*.generated.ts
+*.generated.js
+
+# Test coverage
+coverage/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.*
+
+# No want format
+.idea
+!.github/workflows/*
+.github
+.static
+
+# Static assets that should not be formatted (if any)
+# e.g., if src/assets/ contains binary files or complex SVGs you don't want touched.
+src/assets/**/*.svg
+
+# Docker-specific (if any files are generated into the project by Docker runs)
+# .docker/
