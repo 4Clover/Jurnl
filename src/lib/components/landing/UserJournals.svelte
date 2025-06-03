@@ -10,12 +10,12 @@
     {#each journalList as journal}
         <UserJournal 
             journalTitle={journal.title}
-            journalCoverUrl={journal.coverImageUrl}
-            latestJournalEntries={}
+            journalCoverUrl={journal.cover_color}
+            latestJournalEntries={/*not sure how this will be done yet*/}
         />
     {/each}
     -->
-    
+
     <div class = "user-journal">
         <p>Journal #1</p>
         <div class= journal-preview>

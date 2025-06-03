@@ -8,14 +8,10 @@ export interface UserJournalsProps {
 
 export interface UserJournalProps {
     journalTitle: string;
-    journalCoverUrl: string;
+    journalColor: string;
     latestJournalEntries: IEntry[];
 }
 
 export interface UserProfileProps {
     userInfo: SerializableUser;
-    profileDescription?: string;
-}
-
-export interface UserFriendsProps {
 }

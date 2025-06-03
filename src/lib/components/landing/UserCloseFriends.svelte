@@ -1,5 +1,5 @@
 <script lang="ts">
-    
+    import type { UserFriendsProps } from "$lib/types/landing.types";
 </script>
 
 <h2>My Close Friends</h2>

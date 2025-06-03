@@ -1,15 +1,16 @@
 <script lang="ts">
     import type { UserProfileProps } from "$lib/types/landing.types";
 
-    let { userInfo, profileDescription} : UserProfileProps = $props();
+    let { userInfo } : UserProfileProps = $props();
 </script>
 
 <h2>[Username]</h2>
 <!--<h2>{userInfo.username}</h2>-->
 <div class="user-profile-contents">
+    
     <!--
-    <img class = "user-profile-image" src= {userInfo.avatarUrl} alt="An image of the user." width="500" height="372">
-    <p class="user-profile-description">{profileDescription}</p>
+    <img class = "user-profile-image" src= {userInfo.bio_image_url} alt="An image of the user." width="500" height="372">
+    <p class="user-profile-description">{userInfo.bio_text}</p>
     -->
     
     <!-- IMG CREDS: Photo by Julia Iskova: https://www.pexels.com/photo/moody-portrait-of-a-woman-in-profile-view-30528308/-->
