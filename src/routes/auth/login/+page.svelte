@@ -24,6 +24,9 @@
         <div class="spacing"></div>
         <h2 class="center-item title">Log In to View Your Journal</h2>
         <div class="spacing"></div>
+
+        <button onclick="/auth/google">Sign In with Google</button>
+
         {#if generalFormError}
             <div>
                 Error:
@@ -97,6 +100,7 @@
                 > instead!
             </span>
             <div class="spacing"></div>
+            
         </div>
     </div>
 </main>

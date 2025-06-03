@@ -8,7 +8,7 @@ import { createSession } from "$lib/server/auth/sessionManager";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "$env/static/private";
 
 import { User } from "$lib/server/database/schemas";
-import { connectToDatabase } from "$lib/server/database";
+import  connectToDatabase  from "$lib/server/database";
 import { L } from "vitest/dist/chunks/reporters.d.C-cu31ET.js";
 
 
