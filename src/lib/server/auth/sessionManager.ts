@@ -107,7 +107,7 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         console.error(
             `CRITICAL: Session ${sessionId} found but 
             associated user ${sessionDoc.userId} not found. 
-            Deleting orphaned session.`
+            Deleting orphaned session.`,
         );
         await Session.findByIdAndDelete(sessionId).exec();
         return { user: null, session: null };
@@ -115,12 +115,15 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
 
     // serializable User
     const safeUser: SerializableUser = {
-        _id: userDoc._id.toString(),
+        id: userDoc._id.toString(),
         username: userDoc.username,
         email: userDoc.email,
-        avatarUrl: userDoc.avatarUrl,
+        avatar_url: userDoc.avatar_url,
         createdAt: userDoc.createdAt.toISOString(),
-        updatedAt: userDoc.updatedAt.toISOString(),
+        username_display: userDoc.username_display,
+        bio_text: userDoc.bio_text,
+        bio_image_url: userDoc.bio_image_url,
+        auth_provider: 'google',
     };
 
     // serializable session

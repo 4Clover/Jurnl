@@ -1,6 +1,8 @@
 import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
 // TODO: SITE CONFIG WEBSITES
+
 /** @type {import('@sveltejs/kit').Config} */
 export default {
     // Preprocessor configuration
@@ -42,6 +44,7 @@ export default {
             $schemas: 'src/lib/server/database/schemas',
             $styles: 'src/styles',
             $assets: 'src/assets',
+            $api: 'src/lib/server/api',
         },
     },
 
