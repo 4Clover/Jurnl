@@ -1,5 +1,6 @@
 <script lang="ts">
-    import type { LayoutProps } from './$types';
+    import PrimaryButton from '$lib/components/buttons/PrimaryButton.svelte';
+import type { LayoutProps } from './$types';
 
     let { data, children }: LayoutProps = $props();
 </script>
@@ -10,10 +11,7 @@
         <div class="cta-section__text">
             <h2>Inspiring Meaningful Connection Through Writing</h2>
             <p>With Jurnl, you can share journal entries with trusted friends — turning personal reflection into shared understanding and connection.</p>
-            <button class="primary-button button-lg">
-                <h3>Get Started</h3>
-            </button> 
-
+            <PrimaryButton text="Get Started" onClick={() => (window.location.href = '/auth/register')} />
         </div>
     </div>
     <div class="cta-section">
@@ -26,8 +24,6 @@
     <h1 class="cta-title">Get Writing Today</h1>
     
     <div class="cta-title">
-        <button class="primary-button button-lg">
-            <h3>Sign Up for an Account</h3>
-        </button> 
+        <PrimaryButton text="Sign Up for an Account" onClick={() => (window.location.href = '/auth/register')} />
     </div>
 </main>

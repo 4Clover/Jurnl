@@ -10,7 +10,7 @@
             <h2 class="feed-title__name">
                 Username
             </h2>
-            <button class="feed-title__button primary-button button-lg"> 
+            <button class="feed-title__button primary-button button-lg" onclick={() => (window.location.href = '/feed/friend')}> 
                 <h3>Visit</h3>
             </button>
         </div>
