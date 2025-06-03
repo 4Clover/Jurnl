@@ -17,7 +17,7 @@
         <UserProfile userInfo={{ username: data.user.username }} />
     </section>
     <section class="user-close-friends">
-        <UserCloseFriends />
+        <UserCloseFriends userInfo={data.user}/>
     </section>
     <section class="user-public-entries">
         <UserPublicEntries />

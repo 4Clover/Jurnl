@@ -1,6 +1,5 @@
 <script lang="ts">
     import type { UserProfileProps } from '$lib/types/landing.types';
-
     const props = $props();
 
     const userInfo = props.userInfo ?? {
