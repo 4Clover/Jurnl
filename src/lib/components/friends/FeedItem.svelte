@@ -1,5 +1,5 @@
 <script lang="ts">
-    
+    let { friend } = $props();
 </script>
 
 
@@ -8,16 +8,16 @@
     <div class="feed-item__desc">
         <div class="feed-title">
             <h2 class="feed-title__name">
-                Username
+                {friend.username}
             </h2>
             <button class="feed-title__button primary-button button-lg" onclick={() => (window.location.href = '/feed/friend')}> 
                 <h3>Visit</h3>
             </button>
         </div>
         <!-- three entry in an array, fill in entry name and each is a button -->
-        {#each Array(3) as _, i}
+        {#each friend.entries as entry}
             <button class="feed-entry">
-                <h4>Entry {i+1}</h4>
+                <h4>{entry}</h4>
             </button>
         {/each}
         
