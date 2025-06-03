@@ -4,6 +4,6 @@
 </script>
 
 <h1>Entry</h1>
-<!-- <pre>
+<pre>
     {JSON.stringify($page, null, 2)}
-</pre> -->
+</pre>
