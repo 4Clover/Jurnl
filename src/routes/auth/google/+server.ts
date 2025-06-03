@@ -10,13 +10,13 @@ import { OAuth2Client } from "google-auth-library";
 export const GET: RequestHandler = async ({ cookies }) => {
 	
 	// Generate a unique state
-	const state = crypto.randomUUID // from Node js
+	const state = crypto.randomUUID(); // from Node js
 
 	cookies.set('oauth_state', state, {
 		path: '/',
 		httpOnly: true,
-		secure: dev,
 		sameSite: 'lax',
+		secure: dev,
 		maxAge: 60 * 10 
 	});
 
@@ -34,4 +34,4 @@ export const GET: RequestHandler = async ({ cookies }) => {
 
 	throw redirect(303, authURL);
 
-}
+};

@@ -59,7 +59,7 @@ export const GET: RequestHandler = async (event) => {
 		if(!state) {
 			error(400, "Invalid state parameter.");
 		}
-		const cookieState = cookies.get('state');
+		const cookieState = cookies.get('oauth_state');
 		if(!cookieState || cookieState !== state)
 		{
 			error(400, 'Invalid stored state parameter.');
