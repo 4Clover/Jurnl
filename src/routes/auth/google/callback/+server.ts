@@ -1,164 +1,197 @@
-// FOLLOWING TUTORIAL CODE: https://lucia-auth.com/tutorials/google-oauth/sveltekit
-
-import {error, redirect} from "@sveltejs/kit";
-import type { RequestHandler } from "@sveltejs/kit";
-import type { OAuth2Client } from "google-auth-library";
-import { setSessionCookie } from "$lib/server/auth/cookies";
-import { createSession } from "$lib/server/auth/sessionManager";
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "$env/static/private";
-
-import { User } from "$lib/server/database/schemas";
-import  connectToDatabase  from "$lib/server/database";
+import type { RequestHandler } from './$types';
+import { OAuth2Client } from 'google-auth-library';
+import { error, redirect } from '@sveltejs/kit';
+// @ts-ignore
+import {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL,} from '$env/static/private';
+import { User } from '$schemas';
+import { createSession } from '$auth/sessionManager';
+import { setSessionCookie } from '$auth/cookies';
+import connectToDatabase from '$database';
 
 
+async function generateUniqueUsername(email: string): Promise<string> {
+    await connectToDatabase();
 
-async function createUsername(email: string): Promise<string> {
-	try {
-		await connectToDatabase();
-	}
-	catch (error) {
-		console.error("Database connection failed:", error);
-		throw error;
-	}
-	let defaultUsername = email
-		.split('@')[0]
-		.toLowerCase()
-		.replace(/[^a-z0-9]/g, '') // No illegal characters
-		.substring(0,16); 
-	
-	// defaulUsername = email of user, but if shorter than 3 characters = User
-	if (defaultUsername.length < 3) {
-		defaultUsername = "User";
-	}
+    // Extract base username from email
+    // @ts-ignore
+    let baseUsername = email
+        .split('@')[0]
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/g, '') // Remove invalid characters
+        .substring(0, 16); // Leave room for numbers
 
-	let tempUsername = defaultUsername;
-	let count = 1;
-	// Check if username is already taken
-	while (await User.exists({ username: tempUsername }))
-	{
-		tempUsername = `${defaultUsername}${count}`;
-		count++;
-		
-		if (count > 100) {
-			throw new Error("Too many users with similar usernames, please try again later.");
-		}
-	}
-	return tempUsername;
+    if (baseUsername.length < 3) {
+        baseUsername = 'user';
+    }
+
+    // base username is available
+    let username = baseUsername;
+    let counter = 1;
+
+    while (await User.exists({ username })) {
+        username = `${baseUsername}${counter}`;
+        counter++;
+
+        if (counter > 9999) {
+            throw new Error('Unable to generate unique username');
+        }
+    }
+
+    return username;
 }
 
-export const GET: RequestHandler = async (event) => {
-	const { url, cookies, locals } = event;
-	let redirectTo : string = "";
+export const GET: (event: any) => Promise<any> = async (event) => {
+    const { url, cookies, locals } = event;
 
-	try{
-		const code = url.searchParams.get('code');
-		if(!code) {
-			error(400, "Invalid authorization code.");
-		}
-		const state = url.searchParams.get('state');
-		if(!state) {
-			error(400, "Invalid state parameter.");
-		}
-		const cookieState = cookies.get('oauth_state');
-		if(!cookieState || cookieState !== state)
-		{
-			error(400, 'Invalid stored state parameter.');
-		}
+    let redirectPath: string = '/login?error=oauth_failed';
 
-		const client = new OAuth2Client(
-			GOOGLE_CLIENT_ID,	
-			GOOGLE_CLIENT_SECRET,
-			"http://localhost:3000/auth/google/callback"
-		);
-		
-		const { tokens } = await client.getToken(code);
-		client.setCredentials(tokens);
+    console.log('🔄 Processing OAuth callback...');
+    console.log('📋 URL params:', Object.fromEntries(url.searchParams));
 
-		const ticket = await client.verifyIdToken({
-			idToken: tokens.id_token!,
-			audience: GOOGLE_CLIENT_ID,
-		});
+    try {
+        // fill local code and state variables from query
+        const code = url.searchParams.get('code');
+        const state = url.searchParams.get('state');
 
-		const payload = ticket.getPayload();
-		if(!payload)
-		{
-			error(500, "Unable to get Google user information.");
-		} 
+        if (!code || !state) {
+            console.error('❌ Missing code or state:', {
+                hasCode: !!code,
+                hasState: !!state,
+            });
+            redirectPath = '/login?error=missing_params';
+            return;
+        }
 
-		const { sub: google_id, email, name, picture } = payload;
+        // 🔧 FIX: Check for 'oauth_state' not 'state'
+        const storedState = cookies.get('oauth_state');
+        if (!storedState || storedState !== state) {
+            console.error('❌ State mismatch:', {
+                stored: storedState,
+                received: state,
+            });
+            redirectPath = '/login?error=invalid_state';
+            return;
+        }
 
-		if(!email)
-		{
-			error(400, "Unable to find Google email.");
-		}
-		try{
-			await connectToDatabase();
-		}
-		catch(error)
-		{
-			console.error("Error connecting to the database: ", error);
-		}
+        console.log('✅ State validation passed');
 
-		let user = await User.findOne({ google_id });
-		let isNewUser = false;
+        const client = new OAuth2Client(
+            GOOGLE_CLIENT_ID,
+            GOOGLE_CLIENT_SECRET,
+            `${BASE_URL}/auth/google/callback`,
+        );
 
-		if(!user){
-			user = await User.findOne({ email: email.toLowerCase() });
-			if(!user){
-				isNewUser = true;
-				const username = await createUsername(email);
-				user = new User({
-					email: email.toLowerCase(),
-					google_id,
-					username,
-					username_display: name || email.split('@'[0]),
-					avatar_url: picture || null,
-					auth_provider: 'google',
-					bio_text: '',
-					journals: [],
-					close_friends: [],
-					can_view_friends: [],
-				});
-			}
-			else{
-				user.google_id = google_id;
-				user.auth_provider = 'google';
-				if(!user.avatar_url && picture){
-					user.avatar_url = picture;
-				}
-			}
-		}
+        console.log('🔄 Exchanging code for tokens...');
+        const { tokens } = await client.getToken(code);
+        client.setCredentials(tokens);
 
-		user.last_login = new Date();
-		await user.save();
+        console.log('🔄 Verifying ID token...');
+        const ticket = await client.verifyIdToken({
+            idToken: tokens.id_token!,
+            audience: GOOGLE_CLIENT_ID,
+        });
 
-		const sessionDetails = await createSession(user._id);
-		setSessionCookie(event, sessionDetails.clientToken, sessionDetails.expiresAt);
-		
-		locals.user = {
-			id: user._id.toString(),
-			username: user.username,
-			email: user.email,
-			avatarUrl: user.createdAt.toISOString(),
-			createdAt: user.updatedAt.toISOString(),
-		};
-		
-		locals.session = {
-			_id: sessionDetails.sessionId,
-			userId: user._id.toString(),
-			expiresAt: sessionDetails.expiresAt.toISOString(),
-		};
+        const payload = ticket.getPayload();
+        if (!payload) {
+            console.error('❌ No payload from Google');
+            redirectPath = '/login?error=no_payload';
+            return;
+        }
 
-		// Clean up
-		cookies.delete('oauth_state', { path: '/' });
+        const { sub: google_id, email, name, picture } = payload;
 
-		redirectTo = isNewUser && !user.bio_text ? '/profile' : '/journals';
+        if (!email) {
+            console.error('❌ No email from Google');
+            redirectPath = '/login?error=no_email';
+            return;
+        }
 
+        console.log('✅ Google user info received:', {
+            email,
+            name: name || 'N/A',
+        });
 
-	} catch(error){
-		console.error('Callback error:', error);
-		throw error(500, 'Failure to authenticated, please try again later.');
-	} finally{
-		redirect(303, redirectTo);
-	}
-}
+        await connectToDatabase();
+        let user = await User.findOne({ google_id });
+        let isNewUser = false;
+
+        if (!user) {
+            user = await User.findOne({ email: email.toLowerCase() });
+            if (user) {
+                user.google_id = google_id;
+                user.auth_provider = 'google';
+                if (!user.avatar_url && picture) {
+                    user.avatar_url = picture;
+                }
+                console.log('🔗 Linked existing user account');
+            } else {
+                // NEW USER
+                isNewUser = true;
+                const username = await generateUniqueUsername(email);
+                user = new User({
+                    email: email.toLowerCase(),
+                    google_id,
+                    username,
+                    username_display: name || email.split('@')[0],
+                    avatar_url: picture || null,
+                    auth_provider: 'google',
+                    bio_text: '',
+                    journals: [],
+                    close_friends: [],
+                    can_view_friends: [],
+                });
+                console.log('👤 Created new user:', username);
+            }
+        } else {
+            console.log('👋 Existing Google user found');
+        }
+
+        // Update last login
+        user.last_login = new Date();
+        await user.save();
+
+        console.log('🔄 Creating session...');
+        const sessionDetails = await createSession(user._id);
+        setSessionCookie(
+            event,
+            sessionDetails.clientToken,
+            sessionDetails.expiresAt,
+        );
+
+        // set locals with new user info
+        locals.user = {
+            id: user._id.toString(),
+            username: user.username,
+            email: user.email,
+            avatar_url: user.avatar_url,
+            createdAt: user.createdAt.toISOString(),
+            username_display: user.username_display,
+            bio_text: '',
+            auth_provider: 'google',
+        };
+        locals.session = {
+            _id: sessionDetails.sessionId,
+            userId: user._id.toString(),
+            expiresAt: sessionDetails.expiresAt.toISOString(),
+        };
+
+        // delete OAuth state cookie
+        cookies.delete('oauth_state', { path: '/' });
+
+        // redirect path for success
+        redirectPath = isNewUser && !user.bio_text ? '/profile' : '/journals';
+
+        console.log('✅ OAuth flow completed successfully');
+        console.log('🔄 Will redirect to:', redirectPath);
+    } catch (err) {
+        console.error('💥 OAuth callback error:', err);
+
+        // clean up partial state
+        cookies.delete('oauth_state', { path: '/' });
+
+        console.log('🔄 Error occurred, will redirect to:', redirectPath);
+    } finally {
+        console.log('🚀 Final redirect to:', redirectPath);
+        redirect(303, redirectPath);
+    }
+};

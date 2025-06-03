@@ -32,7 +32,7 @@ export default defineConfig({
         port: 3000,
         strictPort: false,
         open: false, // Don't auto-open browser (saves startup time)
-        host: '127.0.0.1', // Specific localhost binding (faster than 'true')
+        host: true, // Specific localhost binding (faster than 'true')
         hmr: {
             overlay: true,
             port: 3001, // Separate HMR port
