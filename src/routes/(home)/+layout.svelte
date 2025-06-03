@@ -1,6 +1,6 @@
-<script lang="ts" >
-    import '../app.css';
-    import type {LayoutProps} from './$types';
+<script lang="ts">
+    import '../../app.css';
+    import type { LayoutProps } from './$types';
     import NormalNav from '$lib/components/nav/NormalNav.svelte';
     import InitialUserNav from '$lib/components/nav/InitialUserNav.svelte';
 
@@ -26,9 +26,7 @@
     </main>
 
     <footer class="layout__footer">
-        <h1 class="title">
-            Jurnl
-        </h1>
+        <h1 class="title">Jurnl</h1>
         <div class="column">
             <h4 class="header">Jurnl</h4>
             <p class="item">FAQs</p>
@@ -39,6 +37,5 @@
             <p class="item">Terms and Condition</p>
             <p class="item">Privacy Policies</p>
         </div>
-        
     </footer>
 </div>

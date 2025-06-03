@@ -6,24 +6,43 @@ https://svelte.dev/docs/svelte/bind
 <script lang="ts">
     import type { EntrySidebarProps } from '$lib/types/journal.types';
     import EntrySidebarItem from './EntrySidebarItem.svelte';
+    import { page } from '$app/stores';
+    import CreateJournalEntryButton from '../buttons/CreateJournalEntryButton.svelte';
 
     // let { entries }: EntrySidebarProps = $props();
 </script>
 
 <section class="entry-sidebar">
-    <!-- {#each entries as entry}
+    <CreateJournalEntryButton/>
+    <!-- {#each entries as entry (entry._id)}
         <EntrySidebarItem
-            entryDate={entry.entryDate}
-            createdAt={entry.createdAt}
-            updatedAt={entry.updatedAt}
+            title={entry.title}
+            journalID={entry.journal}
+            entryID={entry._id}
         />
     {/each} -->
 
-    <EntrySidebarItem title="my first entry! ^o^" />
+    <EntrySidebarItem
+        title="my first entry! ^o^"
+        journalID={$page['params']['journal']}
+        entryID="1"
+    />
 
-    <EntrySidebarItem title="my second entry! ^o^" />
+    <EntrySidebarItem
+        title="my second entry! ^o^"
+        journalID={$page['params']['journal']}
+        entryID="2"
+    />
 
-    <EntrySidebarItem title="my third entry! ^o^" />
+    <EntrySidebarItem
+        title="my third entry! ^o^"
+        journalID={$page['params']['journal']}
+        entryID="3"
+    />
 
-    <EntrySidebarItem title="my fourth entry! ^o^" />
+    <EntrySidebarItem
+        title="my fourth entry! ^o^"
+        journalID={$page['params']['journal']}
+        entryID="4"
+    />
 </section>

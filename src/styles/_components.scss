@@ -72,6 +72,7 @@
 .journal-page-content {
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -79,7 +80,8 @@
     width: 29rem;
     height: 38.313rem;
     background-image: url(../assets/journal_book.png);
-    margin-left: 25rem;
+    margin: auto;
+    margin-top: 5rem;
 }
 
 .journal-menu {
@@ -91,10 +93,8 @@
     width: 18.8rem;
     height: 7.31rem;
     padding: 0.188rem;
-    position: absolute;
-    top: 25rem;
-    left: 52rem;
     margin: auto;
+    margin-top: 15rem;
     z-index: 20;
 }
 
@@ -151,7 +151,17 @@
 .entry-sidebar-item {
     width: 18.75rem;
     height: 3.563rem;
-    background-color: variables.$baby-blue
+    background-color: variables.$baby-blue;
+}
+
+.entry-toolbar {
+    width: 100%;
+    height: 3.06rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: variables.$light-brown;
 }
 
 .feed-item {
@@ -178,8 +188,7 @@
     }
     &__button {
         width: 40%;
-        margin:0;
-
+        margin: 0;
     }
 }
 
@@ -216,7 +225,7 @@
 
 .manage-friend {
     display: flex;
-    flex-direction: row; 
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;

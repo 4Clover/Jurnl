@@ -6,7 +6,6 @@ https://svelte.dev/docs/svelte/bind
 
 <script lang="ts">
     import { page } from '$app/stores';
-    import EntrySidebar from '$lib/components/journal/EntrySidebar.svelte';
     import JournalCover from '$lib/components/journal/JournalCover.svelte';
 </script>
 
@@ -15,6 +14,5 @@ https://svelte.dev/docs/svelte/bind
     {JSON.stringify($page, null, 2)}
 </pre> -->
 <section class="journal-page-content">
-    <EntrySidebar />
     <JournalCover />
 </section>
