@@ -13,6 +13,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     }
 
     //logged in, allow access and pass user data to the page
+    // use user data to get bio and stuff
     return {
         user: locals.user
     };
