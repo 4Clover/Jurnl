@@ -1,7 +1,7 @@
 ﻿import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import connectToDatabase from '$lib/server/database';
-import { User } from '$lib/server/database/schemas';
+import { type SerializableUser, User } from '$lib/server/database/schemas';
 import { verifyPassword } from '$lib/server/auth/password';
 import { createSession } from '$lib/server/auth/sessionManager';
 import { setSessionCookie } from '$lib/server/auth/cookies';
@@ -49,8 +49,8 @@ export const actions: Actions = {
             // --- LOGIN SUCCESSFUL (set cookies, locals, redirect) ---
             if (
                 userDoc &&
-                userDoc.hashedPassword &&
-                (await verifyPassword(userDoc.hashedPassword, password))
+                userDoc.password &&
+                (await verifyPassword(userDoc.password, password))
             ) {
                 // create session
                 const sessionDetails = await createSession(userDoc._id);
@@ -58,16 +58,20 @@ export const actions: Actions = {
                 setSessionCookie(
                     event,
                     sessionDetails.clientToken,
-                    sessionDetails.expiresAt
+                    sessionDetails.expiresAt,
                 );
                 // update locals
                 locals.user = {
-                    _id: userDoc._id.toString(),
+                    id: userDoc._id.toString(),
                     username: userDoc.username,
+                    username_display: userDoc.username_display,
                     email: userDoc.email,
-                    avatarUrl: userDoc.avatarUrl,
-                    createdAt: userDoc.createdAt.toISOString(),
-                    updatedAt: userDoc.updatedAt.toISOString(),
+                    avatar_url: userDoc.avatar_url,
+                    close_friends: userDoc.close_friends,
+                    can_view_friends: userDoc.can_view_friends,
+                    bio_text: userDoc.bio_text,
+                    bio_image_url: userDoc.bio_image_url,
+
                 };
                 locals.session = {
                     _id: sessionDetails.sessionId,
@@ -98,7 +102,7 @@ export const actions: Actions = {
             if (isRedirect(error)) {
                 console.warn(
                     'Registration: A SvelteKit redirect was caught unexpectedly. Redirecting again:',
-                    error
+                    error,
                 );
                 redirect(303, redirectToPath);
             }
@@ -107,7 +111,7 @@ export const actions: Actions = {
                 const validationErrors = fromZodError(error);
                 console.warn(
                     'Login validation error:',
-                    validationErrors.toString()
+                    validationErrors.toString(),
                 );
                 return fail(400, {
                     data: { username: submittedUsername },
@@ -118,7 +122,7 @@ export const actions: Actions = {
                             }
                             return acc;
                         },
-                        {} as Record<string, string>
+                        {} as Record<string, string>,
                     ),
                 });
             }

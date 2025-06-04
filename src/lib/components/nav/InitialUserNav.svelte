@@ -2,9 +2,6 @@
     import PrimaryButton from '../buttons/PrimaryButton.svelte';
 </script>
 
-<!-- <button>
-    <div class="pajamas--hamburger"></div>
-</button> -->
 <button onclick={() => (window.location.href = '/')}>
     <h1 class="navbar__logo">Jurnl</h1>
 </button>

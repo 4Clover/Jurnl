@@ -17,7 +17,7 @@ export interface IUser extends Document {
 
     // Profile Fields
     avatar_url?: string;
-    bio_image_url?: string;
+    bio_image_url: string;
     bio_text: string;
 
     // Relationships
@@ -38,11 +38,8 @@ export interface SerializableUser {
     username_display: string;
     avatar_url?: string;
     bio_image_url?: string;
-    bio_text: string;
+    bio_text?: string;
     auth_provider: 'google' | 'password';
-    journals?: string[];
-    close_friends?: string[];
-    can_view_friends?: string[];
     createdAt: string;
 }
 
@@ -65,7 +62,7 @@ const UserSchema = new Schema<IUser>(
         },
         google_id: {
             type: String,
-            required: true,
+            sparse: true, // allows null/undefined for non-Google users
             unique: true,
             index: true,
         },
@@ -100,18 +97,12 @@ const UserSchema = new Schema<IUser>(
         auth_provider: {
             type: String,
             enum: ['google', 'password'],
-            default: 'google',
+            required: true,
         },
 
         // Profile Fields
-        avatar_url: {
-            type: String,
-            default: null,
-        },
-        bio_image_url: {
-            type: String,
-            default: null,
-        },
+        avatar_url: String,
+        bio_image_url: String,
         bio_text: {
             type: String,
             maxlength: 500,
@@ -119,24 +110,18 @@ const UserSchema = new Schema<IUser>(
         },
 
         // Relationships
-        journals: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Journal',
-            },
-        ],
-        close_friends: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-            },
-        ],
-        can_view_friends: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-            },
-        ],
+        journals: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Journal',
+        }],
+        close_friends: [{
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        }],
+        can_view_friends: [{
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        }],
 
         // Metadata
         last_login: {
@@ -157,14 +142,8 @@ const UserSchema = new Schema<IUser>(
                     bio_image_url: doc.bio_image_url,
                     bio_text: doc.bio_text,
                     auth_provider: doc.auth_provider,
-                    journals: doc.journals?.map((id) => id.toString()),
-                    close_friends: doc.close_friends?.map((id) =>
-                        id.toString(),
-                    ),
-                    can_view_friends: doc.can_view_friends?.map((id) =>
-                        id.toString(),
-                    ),
                     createdAt: doc.createdAt.toISOString(),
+                    // Don't include: google_id, password, journals, friends arrays
                 };
             },
         },

@@ -118,12 +118,12 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         id: userDoc._id.toString(),
         username: userDoc.username,
         email: userDoc.email,
-        avatar_url: userDoc.avatar_url,
-        createdAt: userDoc.createdAt.toISOString(),
         username_display: userDoc.username_display,
-        bio_text: userDoc.bio_text,
+        avatar_url: userDoc.avatar_url,
+        bio_text: userDoc.bio_text || '',
         bio_image_url: userDoc.bio_image_url,
-        auth_provider: 'google',
+        auth_provider: userDoc.auth_provider,
+        createdAt: userDoc.createdAt.toISOString()
     };
 
     // serializable session
@@ -159,4 +159,23 @@ export async function invalidateAllUserSessions(
     userId: Types.ObjectId
 ): Promise<void> {
     await Session.deleteMany({ userId }).exec();
+}
+
+export async function refreshSession(
+    sessionId: string,
+    threshold: number = 7 * 24 * 60 * 60 * 1000 // 7 days
+): Promise<Date | null> {
+    const session = await Session.findById(sessionId);
+    if (!session) return null;
+
+    const timeLeft = session.expiresAt.getTime() - Date.now();
+
+    // Only refresh if less than threshold time left
+    if (timeLeft < threshold) {
+        session.expiresAt = new Date(Date.now() + SESSION_LIFESPAN_MS);
+        await session.save();
+        return session.expiresAt;
+    }
+
+    return null;
 }

@@ -41,7 +41,7 @@
 
     // Toggle list item checked state
     function toggleListItem(index: number) {
-        listItems[index] = { ...listItems[index], checked: !listItems[index].checked };
+        listItems[index] = {checked: !listItems[index].checked, ...listItems[index] };
     }
 
     // Handle image upload (placeholder - implement actual upload logic)
