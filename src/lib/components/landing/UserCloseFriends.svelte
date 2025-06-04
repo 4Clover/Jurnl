@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Page from '$routes/+page.svelte';
+    import Page from '$routes/(home)/+page.svelte';
     import { json } from '@sveltejs/kit';
     import { formToJSON } from 'axios';
     import { onMount } from 'svelte';
