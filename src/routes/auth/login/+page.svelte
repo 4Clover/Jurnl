@@ -26,7 +26,7 @@
         <div class="spacing"></div>
         
         <div class="center-item" style="margin-bottom: 20px;">
-            <a href="/auth/google" class="google-login-button button-sm">
+            <a href="/auth/login/google" class="google-login-button button-sm">
                 <img src="/google-logo.svg.webp" alt="Google logo" style="height: 20px; margin-right: 10px; vertical-align: middle;" />
                 Sign in with Google
             </a>

@@ -25,7 +25,7 @@ export const GET: RequestHandler = async ({ cookies }) => {
     const client = new OAuth2Client(
         GOOGLE_CLIENT_ID,
         GOOGLE_CLIENT_SECRET,
-        `${BASE_URL}/auth/google/callback`
+        `${BASE_URL}/auth/login/google/callback`
     );
     
     // Generate auth URL
@@ -36,7 +36,7 @@ export const GET: RequestHandler = async ({ cookies }) => {
     });
 
     console.log('🔗 Initiating OAuth flow with state:', state);
-    console.log('🔗 Redirect URI:', `${BASE_URL}/auth/google/callback`);
+    console.log('🔗 Redirect URI:', `${BASE_URL}/auth/login/google/callback`);
 
     // Redirect to Google auth
     throw redirect(303, authUrl);

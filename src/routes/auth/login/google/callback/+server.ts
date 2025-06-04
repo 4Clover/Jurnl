@@ -76,7 +76,7 @@ export const GET: (event: any) => Promise<any> = async (event) => {
         const client = new OAuth2Client(
             GOOGLE_CLIENT_ID,
             GOOGLE_CLIENT_SECRET,
-            `${BASE_URL}/auth/google/callback`,
+            `${BASE_URL}/auth/login/google/callback`,
         );
 
         console.log('🔄 Exchanging code for tokens...');
