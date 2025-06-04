@@ -88,3 +88,10 @@ button {
     margin-right: 0;
     padding: 0.5rem 0 0.5rem 0rem;
 }
+
+.addfriend-button {
+    @include primary;
+    height: 3.125rem;
+    margin-left: 0;
+    margin-right: 0;
+}

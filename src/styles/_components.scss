@@ -22,10 +22,19 @@
 }
 
 .fieldbox {
+    margin-top: 1rem;
     width: 50%;
-    height: 4rem;
+    height: 3rem;
+    padding: 1rem;
     background: variables.$off-white;
-    border: none;
+    border: 2px solid variables.$beige;
+    border-radius: 5px;
+    &__friend {
+        width: 10rem;
+        height: 3rem;
+        margin-top: 1rem;
+        padding: 1rem;
+    }
 }
 
 .center-container {
@@ -265,6 +274,30 @@
     padding: 0.67rem;
     background-color: variables.$gray;
 }
+
+.addfriend {
+    display: flex;
+}
+
+.friend-title {
+    display: flex;
+	//justify-content: flex-begin;
+    white-space: nowrap;
+	width: 100%;
+}
+
+.friend-error {
+    color: red;
+    display: block;
+    white-space: nowrap;
+	width: 100%;
+}
+
+.friend-func {
+    display: flex;
+	justify-content: flex-end;
+}
+
 
 @media screen and (min-width: variables.$user-profile-breakpoint) {
     .user-profile-contents {
