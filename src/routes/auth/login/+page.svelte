@@ -1,6 +1,6 @@
-<script lang="ts" >
-    import type {PageProps} from './$types';
-    import {enhance} from '$app/forms';
+<script lang="ts">
+    import type { PageProps } from './$types';
+    import { enhance } from '$app/forms';
 
     let { form, data }: PageProps = $props();
 
@@ -12,7 +12,7 @@
     const errors = $derived(
         form?.errors as
             | { username?: string; password?: string; form?: string }
-            | undefined
+            | undefined,
     );
     const usernameFieldError = $derived(errors?.username);
     const passwordFieldError = $derived(errors?.password);

@@ -15,9 +15,9 @@ export class ApiRouter {
         return this;
     }
 
+
     // Register route
     on(method: string, path: string, handler: Function) {
-        const key = `${method}:${path}`;
         if (!this.routes.has(path)) {
             this.routes.set(path, new Map());
         }
@@ -97,11 +97,18 @@ export const api = new ApiRouter()
         }
     })
 
+    .get('test', async () => {
+        return json({
+            message: 'API router test successful!',
+            timestamp: new Date().toISOString()
+        });
+    })
+
     // ===== JOURNALS =====
     .get(
         'journals',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return journalService.list(event, { user: event.locals.user!.id });
         },
@@ -109,7 +116,7 @@ export const api = new ApiRouter()
     .post(
         'journals',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return journalService.create(event);
         },
@@ -117,7 +124,7 @@ export const api = new ApiRouter()
     .get(
         'journals/:id',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return journalService.get(event, event.params.id!);
         },
@@ -125,7 +132,7 @@ export const api = new ApiRouter()
     .put(
         'journals/:id',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return journalService.update(event, event.params.id!);
         },
@@ -133,7 +140,7 @@ export const api = new ApiRouter()
     .delete(
         'journals/:id',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return journalService.delete(event, event.params.id!);
         },
@@ -143,7 +150,7 @@ export const api = new ApiRouter()
     .get(
         'journals/:journalId/entries',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             const journalId = event.params.journalId!;
             return entryService.listByJournal(event, journalId);
@@ -152,7 +159,7 @@ export const api = new ApiRouter()
     .post(
         'journals/:journalId/entries',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             const journalId = event.params.journalId!;
             event.params = { ...event.params, journal: journalId };
@@ -162,7 +169,7 @@ export const api = new ApiRouter()
     .get(
         'journals/:journalId/entries/:entryId',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return entryService.get(event, event.params.entryId!);
         },
@@ -170,7 +177,7 @@ export const api = new ApiRouter()
     .put(
         'journals/:journalId/entries/:entryId',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return entryService.update(event, event.params.entryId!);
         },
@@ -178,7 +185,7 @@ export const api = new ApiRouter()
     .delete(
         'journals/:journalId/entries/:entryId',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return entryService.delete(event, event.params.entryId!);
         },
@@ -188,7 +195,7 @@ export const api = new ApiRouter()
     .get(
         'users/:id',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return userService.get(event, event.params.id!);
         },
@@ -196,12 +203,35 @@ export const api = new ApiRouter()
     .put(
         'users/:id',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             return userService.update(event, event.params.id!);
         },
     )
 
+
+    .get(
+        'stats',
+        async (
+            event: RequestEvent,
+        ) => {
+            // Get the responses
+            const [journalsResponse, entriesResponse] = await Promise.all([
+                journalService.list(event, { user: event.locals.user!.id }),
+                entryService.list(event, { user: event.locals.user!.id }),
+            ]);
+
+            // Parse the JSON from the responses
+            const journals = await journalsResponse.json();
+            const entries = await entriesResponse.json();
+
+            return json({
+                totalJournals: journals.length,
+                totalEntries: entries.length,
+                user: event.locals.user,
+            });
+        },
+    )
 // ============================================
 // USAGE: Create a single catch-all route file
 // ============================================
@@ -270,25 +300,25 @@ journals
     .post(
         '',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => journalService.create(event),
     )
     .get(
         '/:id',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => journalService.get(event, event.params.id!),
     )
     .put(
         '/:id',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => journalService.update(event, event.params.id!),
     )
     .delete(
         '/:id',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => journalService.delete(event, event.params.id!),
     );
 
@@ -298,13 +328,13 @@ entries
     .get(
         '',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => entryService.listByJournal(event, event.params.journalId!),
     )
     .post(
         '',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => {
             event.params.journal = event.params.journalId;
             return entryService.create(event);
@@ -313,18 +343,18 @@ entries
     .get(
         '/:entryId',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => entryService.get(event, event.params.entryId!),
     )
     .put(
         '/:entryId',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => entryService.update(event, event.params.entryId!),
     )
     .delete(
         '/:entryId',
         async (
-            event: RequestEvent<Partial<Record<string, string>>, string | null>,
+            event: RequestEvent,
         ) => entryService.delete(event, event.params.entryId!),
     );

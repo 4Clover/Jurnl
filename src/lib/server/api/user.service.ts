@@ -21,7 +21,7 @@ export const userService = new CrudService<IUser>({
         // Users can read their own profile
         if (user._id.toString() === event.locals.user.id) return true;
 
-        // Check if users are friends (if you implement friend system)
+        // Check if users are friends
         const currentUserId = event.locals.user.id;
         return (
             user.close_friends.some((id) => id.toString() === currentUserId) ||

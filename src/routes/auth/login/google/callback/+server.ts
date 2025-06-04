@@ -1,7 +1,6 @@
-﻿import type { RequestHandler } from './$types';
+﻿import type { RequestHandler } from '@sveltejs/kit';
 import { OAuth2Client } from 'google-auth-library';
 import { error, redirect } from '@sveltejs/kit';
-// @ts-ignore
 import {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL,} from '$env/static/private';
 import { User } from '$schemas';
 import { createSession } from '$auth/sessionManager';
@@ -62,7 +61,6 @@ export const GET: (event: any) => Promise<any> = async (event) => {
             return;
         }
 
-        // 🔧 FIX: Check for 'oauth_state' not 'state'
         const storedState = cookies.get('oauth_state');
         if (!storedState || storedState !== state) {
             console.error('❌ State mismatch:', {
@@ -164,10 +162,11 @@ export const GET: (event: any) => Promise<any> = async (event) => {
             username: user.username,
             email: user.email,
             avatar_url: user.avatar_url,
-            createdAt: user.createdAt.toISOString(),
             username_display: user.username_display,
-            bio_text: '',
+            bio_text: user.bio_text || '',
+            bio_image_url: user.bio_image_url,
             auth_provider: 'google',
+            createdAt: user.createdAt.toISOString()
         };
         locals.session = {
             _id: sessionDetails.sessionId,

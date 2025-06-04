@@ -21,6 +21,10 @@
     margin-right: auto;
 }
 
+.pajamas--hamburger:hover {
+    background-color: #dae0b6;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: variables.$off-white;
@@ -29,7 +33,7 @@ body {
 .navbar {
     background-color: variables.$sage;
     padding: 0.5rem;
-    height: 110px;
+    height: 6.875rem;
 
     &__container {
         max-width: 97%;

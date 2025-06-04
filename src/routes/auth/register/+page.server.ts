@@ -1,7 +1,7 @@
 ﻿import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import connectToDatabase from '$lib/server/database';
-import { User } from '$lib/server/database/schemas';
+import { type SerializableUser, User } from '$lib/server/database/schemas';
 import { hashPassword } from '$lib/server/auth/password';
 import { createSession } from '$lib/server/auth/sessionManager';
 import { setSessionCookie } from '$lib/server/auth/cookies';
@@ -90,17 +90,19 @@ export const actions: Actions = {
             setSessionCookie(
                 event,
                 sessionDetails.clientToken,
-                sessionDetails.expiresAt
+                sessionDetails.expiresAt,
             );
 
             // update locals with new user info
             locals.user = {
-                _id: newUserDoc._id.toString(),
+                id: newUserDoc._id.toString(),
                 username: newUserDoc.username,
                 email: newUserDoc.email, // undefined atp
-                avatarUrl: newUserDoc.avatarUrl, // undefined atp
+                avatar_url: newUserDoc.avatar_url, // undefined atp
                 createdAt: newUserDoc.createdAt.toISOString(),
                 updatedAt: newUserDoc.updatedAt.toISOString(),
+                close_friends: newUserDoc.close_friends,
+                can_view_friends: newUserDoc.can_view_friends,
             };
 
             locals.session = {
@@ -115,7 +117,7 @@ export const actions: Actions = {
                 // should never be hit
                 console.warn(
                     'Registration: A SvelteKit redirect was caught unexpectedly. Redirecting again:',
-                    error
+                    error,
                 );
                 redirect(303, redirectToPath);
             }
@@ -124,7 +126,7 @@ export const actions: Actions = {
                 const validationErrors = fromZodError(error);
                 console.warn(
                     'Registration validation error:',
-                    validationErrors.toString()
+                    validationErrors.toString(),
                 );
                 return fail(400, {
                     // 400 = validation errors
@@ -136,7 +138,7 @@ export const actions: Actions = {
                             }
                             return acc;
                         },
-                        {} as Record<string, string>
+                        {} as Record<string, string>,
                     ),
                 });
             }
@@ -155,13 +157,13 @@ export const actions: Actions = {
         if (registrationSuccess && redirectToPath) {
             console.log(
                 'Registration successful, redirecting to:',
-                redirectToPath
+                redirectToPath,
             );
             throw redirect(303, redirectToPath);
         }
 
         console.warn(
-            'Registration fallback reached, unhandled logic likely exists.'
+            'Registration fallback reached, unhandled logic likely exists.',
         );
         return fail(500, {
             data: submittedDataForRepopulation,

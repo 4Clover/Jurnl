@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from '../landing/$types';
+import type { PageServerLoad } from '../../../.svelte-kit/types/src/routes';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
     if (!locals.user) {
@@ -13,7 +13,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     }
 
     //logged in, allow access and pass user data to the page
+    // use user data to get bio and stuff
     return {
-        user: locals.user
+        user: locals.user,
     };
 };
