@@ -56,7 +56,7 @@
 
         uploadingImage = true;
         try {
-            // TODO: Implement actual image upload to your storage service
+            // TODO: Implement actual image upload to Mongo
             // For now, using a data URL as placeholder
             const reader = new FileReader();
             reader.onload = (e) => {

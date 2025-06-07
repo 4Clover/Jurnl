@@ -139,7 +139,7 @@
     <!-- Create Journal Test -->
     <div style="margin-top: 2rem; text-align: center;">
         <button
-            on:click={createJournal}
+            onclick={createJournal}
             disabled={status.create.loading}
             style="
                 padding: 1rem 2rem;

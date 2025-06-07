@@ -3,9 +3,8 @@
     import { json } from '@sveltejs/kit';
     import { formToJSON } from 'axios';
     import { onMount } from 'svelte';
-
-    //import type { UserFriendsProps } from '$lib/types/landing.types';
-    //let { closeFriendsList }: UserFriendsProps = $props();
+    import type {UserProfileProps} from "$types/landing.types";
+    
     let { userInfo }: UserProfileProps = $props();
     let friends = $state([]);
     let friendUsername = $state('');

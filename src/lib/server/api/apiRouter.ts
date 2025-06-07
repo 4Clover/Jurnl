@@ -2,14 +2,13 @@
 import { error, json } from '@sveltejs/kit';
 import { journalService, entryService, userService } from './index';
 
-// Simple but powerful router implementation
 export class ApiRouter {
     private routes = new Map<string, Map<string, Function>>();
     private middleware: Function[] = [];
 
     constructor(private basePath = '/api') {}
 
-    // Add middleware
+    // Middleware
     use(fn: (event: RequestEvent) => void | Promise<void>) {
         this.middleware.push(fn);
         return this;
@@ -59,7 +58,7 @@ export class ApiRouter {
         throw error(404, 'Route not found');
     }
 
-    // Simple path matching with params
+    // Path matching with params
     private matchPath(actual: string, pattern: string): Record<string, string> | null {
         const actualParts = actual.split('/').filter(Boolean);
         const patternParts = pattern.split('/').filter(Boolean);
