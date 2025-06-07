@@ -36,12 +36,16 @@
 
     // Update list item text
     function updateListItem(index: number, text: string) {
-        listItems[index] = { ...listItems[index], text };
+        listItems = listItems.map((item, i) =>
+            i === index ? { ...item, text } : item
+        );
     }
 
     // Toggle list item checked state
     function toggleListItem(index: number) {
-        listItems[index] = {checked: !listItems[index].checked, ...listItems[index] };
+        listItems = listItems.map((item, i) =>
+            i === index ? { ...item, checked: !item.checked } : item
+        );
     }
 
     // Handle image upload (placeholder - implement actual upload logic)
@@ -67,7 +71,8 @@
     }
 
     // Submit the entry
-    async function handleSubmit() {
+    async function handleSubmit(e: Event) {
+        e.preventDefault();
         if (!title.trim()) {
             error = 'Title is required';
             return;
@@ -116,7 +121,7 @@
             if (onSuccess) {
                 onSuccess(newEntry);
             } else {
-                goto(`/journals/${journalId}/entries/${newEntry._id}`);
+                await goto(`/journals/${journalId}/entries/${newEntry._id}`);
             }
         } catch (err) {
             error = err instanceof Error ? err.message : 'Failed to create entry';
@@ -133,7 +138,7 @@
         </div>
     {/if}
     
-    <form on:submit|preventDefault={handleSubmit}>
+    <form onsubmit={handleSubmit}>
         <!-- Zone 1: Title -->
         <div class="zone zone-title">
             <input
@@ -155,7 +160,7 @@
                         <button
                             type="button"
                             class="remove-image"
-                            on:click={() => pictureUrl = null}
+                            onclick={() => pictureUrl = null}
                             disabled={isSubmitting}
                         >
                             ×
@@ -166,7 +171,7 @@
                         <input
                             type="file"
                             accept="image/*"
-                            on:change={handleImageUpload}
+                            onchange={handleImageUpload}
                             disabled={isSubmitting || uploadingImage}
                         />
                         <div class="upload-placeholder">
@@ -214,7 +219,7 @@
                 <button
                     type="button"
                     class="add-button"
-                    on:click={addListItem}
+                    onclick={addListItem}
                     disabled={isSubmitting}
                 >
                     + Add Item
@@ -232,14 +237,14 @@
                         <input
                             type="text"
                             value={item.text}
-                            on:input={(e) => updateListItem(index, e.currentTarget.value)}
+                            oninput={(e) => updateListItem(index, e.currentTarget.value)}
                             placeholder="List item..."
                             disabled={isSubmitting}
                         />
                         <button
                             type="button"
                             class="remove-button"
-                            on:click={() => removeListItem(index)}
+                            onclick={() => removeListItem(index)}
                             disabled={isSubmitting}
                         >
                             ×
@@ -281,7 +286,7 @@
             <button
                 type="button"
                 class="cancel-button"
-                on:click={() => window.history.back()}
+                onclick={() => window.history.back()}
                 disabled={isSubmitting}
             >
                 Cancel

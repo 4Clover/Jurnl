@@ -12,7 +12,7 @@ export interface IUser extends Document {
     username_display: string;
 
     // Authentication
-    password?: string; // Optional for OAuth users
+    password?: string;
     auth_provider: 'google' | 'password';
 
     // Profile Fields

@@ -1,20 +1,21 @@
 <script lang="ts">
     import type { UserJournalsProps } from "$lib/types/landing.types";
+    import UserJournal from "$lib/components/landing/UserJournal.svelte";
 
     let { journalList } : UserJournalsProps = $props();
 </script>
 
 <h2>My Journals</h2>
 <div class = "journal-scroll">
-    <!--
+
     {#each journalList as journal}
-        <UserJournal 
+        <UserJournal
             journalTitle={journal.title}
             journalColor={journal.cover_color}
-            latestJournalEntries={/*not sure how this will be done yet*/}
+            latestJournalEntries={journal.entries}
         />
     {/each}
-    -->
+
 
     <div class = "user-journal">
         <p>Journal #1</p>

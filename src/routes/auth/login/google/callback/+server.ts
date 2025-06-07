@@ -1,4 +1,3 @@
-import type { RequestHandler } from '@sveltejs/kit';
 import { OAuth2Client } from 'google-auth-library';
 import { error, redirect } from '@sveltejs/kit';
 import {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL,} from '$env/static/private';

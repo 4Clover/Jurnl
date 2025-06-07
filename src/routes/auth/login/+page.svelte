@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { PageProps } from './$types';
     import { enhance } from '$app/forms';
+    import {goto} from "$app/navigation";
 
     let { form, data }: PageProps = $props();
 

@@ -66,8 +66,5 @@
             "prettier --write"
         ],
         "*.{js,ts,svelte,json,md,html,css,yml}": "prettier --write"
-    },
-    "dependencies": {
-        "arctic": "^3.7.0"
     }
 }

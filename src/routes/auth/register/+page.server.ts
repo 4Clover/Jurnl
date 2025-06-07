@@ -97,12 +97,13 @@ export const actions: Actions = {
             locals.user = {
                 id: newUserDoc._id.toString(),
                 username: newUserDoc.username,
-                email: newUserDoc.email, // undefined atp
-                avatar_url: newUserDoc.avatar_url, // undefined atp
+                username_display: newUserDoc.username_display,
+                email: newUserDoc.email,
+                avatar_url: newUserDoc.avatar_url,
+                bio_text: newUserDoc.bio_text,
+                bio_image_url: newUserDoc.bio_image_url,
+                auth_provider: 'password',
                 createdAt: newUserDoc.createdAt.toISOString(),
-                updatedAt: newUserDoc.updatedAt.toISOString(),
-                close_friends: newUserDoc.close_friends,
-                can_view_friends: newUserDoc.can_view_friends,
             };
 
             locals.session = {

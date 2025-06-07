@@ -8,7 +8,7 @@
     let isLoggedIn: boolean = $derived(!!page.data.user);
     // routes
     const logoutActionUrl: string = '/auth/logout';
-    const loginPageUrl: string = '/auth/login';
+    const loginPageUrl: string = 'auth/login';
 
     $effect(() => {
         console.log('LogInOutButton: page.data.user =', page.data.user);
