@@ -68,10 +68,11 @@ export const actions: Actions = {
                     username_display: userDoc.username_display,
                     email: userDoc.email,
                     avatar_url: userDoc.avatar_url,
+                    close_friends: userDoc.close_friends,
+                    can_view_friends: userDoc.can_view_friends,
                     bio_text: userDoc.bio_text,
                     bio_image_url: userDoc.bio_image_url,
-                    auth_provider: 'password',
-                    createdAt: userDoc.createdAt.toISOString(),
+
                 };
                 locals.session = {
                     _id: sessionDetails.sessionId,
@@ -140,7 +141,7 @@ export const actions: Actions = {
         // ---- SUCCESSFUL LOGIN CONDITIONS MET, REDIRECT WITHOUT CATCH ----
         if (loginSuccess && redirectToPath) {
             console.log('Login successful, redirecting to:', redirectToPath);
-            await goto(redirectToPath);
+            throw redirect(303, redirectToPath);
         }
 
         console.warn('Login fallback reached, unhandled logic likely exists.');
