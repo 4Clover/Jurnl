@@ -93,7 +93,8 @@
     }
 </script>
 
-<h2>My Close Friends</h2>
+<div class="feed-title">
+    <h2 class="friend-title">My Close Friends</h2>
 {#if successMessage}
     <div>{successMessage}</div>
 {/if}
@@ -110,15 +111,47 @@
     <button type="submit">Add</button>
 </form>
 
+    <div class="friend-func">
+        <div class="top">
+            <form class="addfriend" id="friendForm" onsubmit={handleSubmit}>
+            <input
+                type="text"
+                name="username"
+                class="fieldbox__friend"
+                bind:value={friendUsername}
+                placeholder="enter username"
+            />
+            <button class="addfriend-button button-sm" type="submit">
+                <h3>Add</h3>
+            </button>
+        </form>
+        </div>
+        
+        {#if successMessage}
+                <div class="friend-error">{successMessage}</div>
+            {/if}
+            {#if errorMessage}
+                <div class="friend-error">{errorMessage}</div>
+            {/if}
+    </div>
+    
+</div>
+
 <div class="manage-friends">
+    {#each friends as closeFriend}
     {#each friends as closeFriend}
         <div class="manage-friend">
             <p>{closeFriend}</p>
             <button
+               
                 class="delete-friend-button"
                 onclick={(event) => handleClick(event, closeFriend)}
+                
+                onclick={(event) => handleClick(event, closeFriend)}
                 >DELETE</button
+            
             >
         </div>
     {/each}
 </div>
+

@@ -1,4 +1,4 @@
-﻿import type { RandomReader } from '@oslojs/crypto/random';
+import type { RandomReader } from '@oslojs/crypto/random';
 import {
     encodeBase32LowerCaseNoPadding,
     encodeHexLowerCase,
@@ -40,7 +40,7 @@ export function generateClientSessionToken(): string {
  * @returns A promise that resolves to the SHA-256 hex encoded hash.
  */
 export async function hashTokenForSessionId(
-    clientToken: string
+    clientToken: string,
 ): Promise<string> {
     const tokenBuffer = new TextEncoder().encode(clientToken);
     const hashedBuffer = sha256(tokenBuffer);
@@ -53,7 +53,7 @@ export async function hashTokenForSessionId(
  * @returns A promise resolving to an object containing the clientToken and the session's expiresAt date.
  */
 export async function createSession(
-    userId: Types.ObjectId
+    userId: Types.ObjectId,
 ): Promise<{ clientToken: string; sessionId: string; expiresAt: Date }> {
     const clientToken = generateClientSessionToken();
     const sessionId = await hashTokenForSessionId(clientToken);
@@ -93,7 +93,7 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         } else {
             console.log(
                 `Session not found for token (potentially already invalidated): 
-                ${sessionId.substring(0, 10)}...`
+                ${sessionId.substring(0, 10)}...`,
             );
         }
         return { user: null, session: null };
@@ -145,7 +145,7 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
  * @param clientToken The client-side session token.
  */
 export async function invalidateSessionByClientToken(
-    clientToken: string
+    clientToken: string,
 ): Promise<void> {
     if (!clientToken) return;
     const sessionId = await hashTokenForSessionId(clientToken);
@@ -157,7 +157,7 @@ export async function invalidateSessionByClientToken(
  * @param userId The ObjectId of the user.
  */
 export async function invalidateAllUserSessions(
-    userId: Types.ObjectId
+    userId: Types.ObjectId,
 ): Promise<void> {
     await Session.deleteMany({ userId }).exec();
 }

@@ -92,3 +92,10 @@ button {
 .text-align-selector:hover {
 background-color: variables.$beige
 }
+
+.addfriend-button {
+    @include primary;
+    height: 3.125rem;
+    margin-left: 0;
+    margin-right: 0;
+}

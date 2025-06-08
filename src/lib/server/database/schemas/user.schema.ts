@@ -1,4 +1,4 @@
-﻿import mongoose, { Document, Model, Schema, Types } from 'mongoose';
+import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 import type { IJournal } from '.';
 
 export interface IUser extends Document {
@@ -30,6 +30,8 @@ export interface IUser extends Document {
     last_login: Date;
     createdAt: Date;
     updatedAt: Date;
+    close_friends: Types.ObjectId[];
+    can_view_friends: Types.ObjectId[];
 }
 
 export interface SerializableUser {
@@ -43,6 +45,9 @@ export interface SerializableUser {
     bio_text?: string;
     auth_provider: 'google' | 'password';
     createdAt: string;
+    updatedAt: string;
+    close_friends: string[];
+    can_view_friends: string[];
 }
 
 const UserSchema = new Schema<IUser>(
@@ -130,6 +135,18 @@ const UserSchema = new Schema<IUser>(
             type: Date,
             default: Date.now,
         },
+        close_friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
+        can_view_friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
     },
     {
         timestamps: true,
@@ -150,6 +167,7 @@ const UserSchema = new Schema<IUser>(
                 };
             },
         },
+    },
     },
 );
 

@@ -1,4 +1,4 @@
-﻿import { fail, isRedirect, redirect } from '@sveltejs/kit';
+import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import connectToDatabase from '$lib/server/database/database';
 import { type SerializableUser, User } from '$lib/server/database/schemas';
@@ -104,6 +104,9 @@ export const actions: Actions = {
                 bio_image_url: newUserDoc.bio_image_url,
                 auth_provider: 'password',
                 createdAt: newUserDoc.createdAt.toISOString(),
+                updatedAt: newUserDoc.updatedAt.toISOString(),
+                close_friends: newUserDoc.close_friends,
+                can_view_friends: newUserDoc.can_view_friends,
             };
 
             locals.session = {
