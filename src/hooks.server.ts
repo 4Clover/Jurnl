@@ -6,7 +6,6 @@ import {
     SESSION_COOKIE_NAME,
     setSessionCookie,
 } from '$lib/server/auth/cookies';
-// Import shutdown handler to register process handlers
 import '$lib/server/database/shutdown';
 
 /**

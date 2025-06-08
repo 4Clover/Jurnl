@@ -1,6 +1,6 @@
 <script lang="ts">
     import PrimaryButton from '../buttons/PrimaryButton.svelte';
-</script>
+</script>   
 
 <button onclick={() => (window.location.href = '/')}>
     <h1 class="navbar__logo">Jurnl</h1>

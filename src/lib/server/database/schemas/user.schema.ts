@@ -30,8 +30,6 @@ export interface IUser extends Document {
     last_login: Date;
     createdAt: Date;
     updatedAt: Date;
-    close_friends: Types.ObjectId[];
-    can_view_friends: Types.ObjectId[];
 }
 
 export interface SerializableUser {
@@ -135,18 +133,6 @@ const UserSchema = new Schema<IUser>(
             type: Date,
             default: Date.now,
         },
-        close_friends: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-            },
-        ],
-        can_view_friends: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-            },
-        ],
     },
     {
         timestamps: true,
@@ -163,11 +149,13 @@ const UserSchema = new Schema<IUser>(
                     auth_provider: doc.auth_provider,
                     createdAt: doc.createdAt.toISOString(),
                     journals: [],
+                    updatedAt: doc.updatedAt.toISOString(),
+                    can_view_friends: doc.can_view_friends.map((friend) => friend.toString()),
+                    close_friends: doc.close_friends.map((friend) => friend.toString()),
                     // Don't include: google_id, password, journals, friends arrays
                 };
             },
         },
-    },
     },
 );
 

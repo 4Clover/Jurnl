@@ -17,7 +17,7 @@
             const response = await fetch('/api/friend/getUsernames');
             if (response.ok) {
                 const data = await response.json();
-                friends = data.result;
+                friends = data.map((friend: any) => friend.username);
             } else {
                 const error = await response.json();
                 let message = error.error;
@@ -39,14 +39,14 @@
             const response = await fetch('/api/friend/add', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                 },
-                body: new URLSearchParams({ username: friendUsername }),
+                body: JSON.stringify({ username: friendUsername }),
             });
             if (response.ok) {
                 const data = await response.json();
                 successMessage = data.message;
-                friends.push(friendUsername);
+                friends.push(friendUsername as never);
                 friendUsername = '';
                 errorMessage = null;
             } else {
@@ -65,11 +65,11 @@
         event.preventDefault();
         try {
             const response = await fetch('/api/friend/delete', {
-                method: 'POST',
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ friendUsername: username }),
+                body: JSON.stringify({ username: username }),
             });
             if (response.ok) {
                 const data = await response.json();
@@ -139,14 +139,11 @@
 
 <div class="manage-friends">
     {#each friends as closeFriend}
-    {#each friends as closeFriend}
         <div class="manage-friend">
             <p>{closeFriend}</p>
             <button
                
                 class="delete-friend-button"
-                onclick={(event) => handleClick(event, closeFriend)}
-                
                 onclick={(event) => handleClick(event, closeFriend)}
                 >DELETE</button
             

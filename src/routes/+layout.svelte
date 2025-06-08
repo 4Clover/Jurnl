@@ -3,6 +3,7 @@
     import type { LayoutProps } from './$types';
     import NormalNav from '$components/nav/NormalNav.svelte';
     import InitialUserNav from '$components/nav/InitialUserNav.svelte';
+    import DevDebugPanel from '$components/debug/DevDebugPanel.svelte';
 
     let { data, children }: LayoutProps = $props();
     let loggedIn = $derived(!!data.user);
@@ -39,3 +40,6 @@
         </div>
     </footer>
 </div>
+
+<!-- Development Debug Panel -->
+<DevDebugPanel />

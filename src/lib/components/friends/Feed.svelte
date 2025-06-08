@@ -5,7 +5,7 @@
     const props = $props();
     let friendlist = $state(props.friendList ?? []);
     let loading = $state(true);
-    let error = $state(null);
+    let error = $state('');
 
     onMount(async () => {
         try {
@@ -13,10 +13,10 @@
             if (response.ok) {
                 const data = await response.json();
                 // transform to proper format
-                friendlist = data.map(friend => ({
+                friendlist = data.map((friend: any) => ({
                     imgurl: friend.bio_image_url || 'https://i.pinimg.com/736x/6c/21/68/6c21684b57384c2d91d6d86ef2cbe2a4.jpg',
                     username: friend.username_display || friend.username,
-                    entries: friend.publicEntries.map(entry => entry.title)
+                    entries: friend.publicEntries.map((entry: any) => entry.title)
                 }));
             } else {
                 console.error('Failed to fetch friends data');

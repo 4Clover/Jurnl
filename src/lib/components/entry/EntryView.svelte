@@ -7,7 +7,6 @@
 
     let { entry }: Props = $props();
 
-    // Format date
     const entryDate = new Date(entry.entry_date).toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
