@@ -31,11 +31,11 @@ export default defineConfig({
     server: {
         port: 3000,
         strictPort: false,
-        open: false, // Don't auto-open browser (saves startup time)
+        open: true, // Don't auto-open browser (saves startup time)
         host: true, // Specific localhost binding (faster than 'true')
         hmr: {
             overlay: true,
-            port: 3001, // Separate HMR port
+            port: 3000, // Separate HMR port
         },
         fs: {
             strict: false, // Allow serving files outside root

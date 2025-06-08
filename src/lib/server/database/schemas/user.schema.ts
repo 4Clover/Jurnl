@@ -1,4 +1,5 @@
 ﻿import mongoose, { Document, Model, Schema, Types } from 'mongoose';
+import type { IJournal } from '.';
 
 export interface IUser extends Document {
     _id: Types.ObjectId;
@@ -32,6 +33,7 @@ export interface IUser extends Document {
 }
 
 export interface SerializableUser {
+    journals: IJournal[];
     id: string;
     email: string;
     username: string;
@@ -143,6 +145,7 @@ const UserSchema = new Schema<IUser>(
                     bio_text: doc.bio_text,
                     auth_provider: doc.auth_provider,
                     createdAt: doc.createdAt.toISOString(),
+                    journals: [],
                     // Don't include: google_id, password, journals, friends arrays
                 };
             },

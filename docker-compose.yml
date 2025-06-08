@@ -1,5 +1,4 @@
-﻿# Fixed docker-compose.yml
-services:
+﻿services:
     mongo:
         image: mongo:latest
         container_name: JurnlDockContainer

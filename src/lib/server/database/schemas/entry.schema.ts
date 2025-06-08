@@ -32,7 +32,7 @@ export interface IEntry extends Document {
         id: string;
         url?: string;
         caption?: string;
-        metadata: Map<string, any>;
+        metadata: Map<string, unknown>;
     }>;
     createdAt: Date;
     updatedAt: Date;
@@ -71,7 +71,7 @@ export interface IEntrySerializable {
         id: string;
         url?: string;
         caption?: string;
-        metadata: Record<string, any>;
+        metadata: Record<string, unknown>;
     }>;
     createdAt: string;
     updatedAt: string;
@@ -175,7 +175,8 @@ const EntrySchema = new Schema<IEntry>(
 
 // Add toJSON method for proper serialization
 EntrySchema.set('toJSON', {
-    transform: function (_doc, ret, _options) {
+    transform: function (_doc, ret) {
+        /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
         // Convert ObjectIds to strings for client-side use
         ret._id = ret._id.toString();
         ret.journal = ret.journal.toString();
@@ -183,22 +184,26 @@ EntrySchema.set('toJSON', {
         ret.shared_with_friends = ret.shared_with_friends.map(
             (id: Types.ObjectId) => id.toString()
         );
-        ret.entry_date = ret.entry_date.toISOString();
-        ret.createdAt = ret.createdAt.toISOString();
-        ret.updatedAt = ret.updatedAt.toISOString();
+        ret.entry_date = ret.entry_date.toISOString() as string;
+        ret.createdAt = ret.createdAt.toISOString() as string;
+        ret.updatedAt = ret.updatedAt.toISOString() as string;
 
         // Convert Map to a plain object for metadata in attachments
         if (ret.attachments && Array.isArray(ret.attachments)) {
-            ret.attachments = ret.attachments.map((attachment: any) => ({
-                ...attachment,
-                metadata: attachment.metadata
+            ret.attachments = ret.attachments.map((attachment: Record<string, unknown>) => ({
+                type: attachment.type,
+                id: attachment.id,
+                url: attachment.url,
+                caption: attachment.caption,
+                metadata: attachment.metadata instanceof Map
                     ? Object.fromEntries(attachment.metadata)
-                    : {},
+                    : attachment.metadata || {},
             }));
         }
 
         delete ret.__v;
         return ret;
+        /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
     },
 });
 
@@ -210,7 +215,7 @@ EntrySchema.post<IEntry>('save', async function (doc, next) {
     if (!doc.journal) {
         console.error(
             'Entry saved without journal reference, cannot update journal.',
-            doc._id
+            String(doc._id)
         );
         return next();
     }
@@ -219,9 +224,9 @@ EntrySchema.post<IEntry>('save', async function (doc, next) {
             $addToSet: { entries: doc._id as Types.ObjectId },
         }).exec();
         next();
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error(
-            `Error in Entry post-save hook for entry ${doc._id} (updating journal ${doc.journal}):`,
+            `Error in Entry post-save hook for entry ${String(doc._id)} (updating journal ${String(doc.journal)}):`,
             err
         );
         next();
@@ -240,9 +245,9 @@ EntrySchema.post<IEntry>(
                     $pull: { entries: doc._id as Types.ObjectId },
                 }).exec();
                 next();
-            } catch (err: any) {
+            } catch (err: unknown) {
                 console.error(
-                    `Error in Entry post-findOneAndDelete hook for entry ${doc._id} (updating journal ${doc.journal}):`,
+                    `Error in Entry post-findOneAndDelete hook for entry ${String(doc._id)} (updating journal ${String(doc.journal)}):`,
                     err
                 );
                 next();
@@ -253,7 +258,7 @@ EntrySchema.post<IEntry>(
                 // console.log('Entry post-findOneAndDelete hook: No document was deleted.');
             } else if (doc && !doc.journal) {
                 console.warn(
-                    `Entry post-findOneAndDelete hook: Deleted entry ${doc._id} had no journal reference.`
+                    `Entry post-findOneAndDelete hook: Deleted entry ${String(doc._id)} had no journal reference.`
                 );
             }
             next();

@@ -45,7 +45,8 @@ export default {
             $styles: 'src/styles',
             $assets: 'src/assets',
             $api: 'src/lib/server/api',
-            $appCss: 'src/app.css'
+            $appCss: 'src/app.css',
+            $utils: 'src/lib/utils',
         },
     },
 

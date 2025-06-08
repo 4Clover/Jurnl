@@ -44,7 +44,7 @@ export async function hashTokenForSessionId(
 ): Promise<string> {
     const tokenBuffer = new TextEncoder().encode(clientToken);
     const hashedBuffer = sha256(tokenBuffer);
-    return encodeHexLowerCase(new Uint8Array(hashedBuffer));
+    return Promise.resolve(encodeHexLowerCase(new Uint8Array(hashedBuffer)));
 }
 
 /**
@@ -106,7 +106,7 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         // data integrity issue found, delete session
         console.error(
             `CRITICAL: Session ${sessionId} found but 
-            associated user ${sessionDoc.userId} not found. 
+            associated user ${sessionDoc.userId.toString()} not found. 
             Deleting orphaned session.`,
         );
         await Session.findByIdAndDelete(sessionId).exec();
@@ -123,7 +123,8 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         bio_text: userDoc.bio_text || '',
         bio_image_url: userDoc.bio_image_url,
         auth_provider: userDoc.auth_provider,
-        createdAt: userDoc.createdAt.toISOString()
+        createdAt: userDoc.createdAt.toISOString(),
+        journals: []
     };
 
     // serializable session

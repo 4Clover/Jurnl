@@ -1,21 +1,26 @@
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { dev } from '$app/environment';
-import connectToDatabase from '$lib/server/database';
+import connectToDatabase, { isDatabaseConnected } from '$lib/server/database/database';
 import { refreshSession, validateClientSessionToken } from '$lib/server/auth/sessionManager';
 import {
     SESSION_COOKIE_NAME,
     setSessionCookie,
 } from '$lib/server/auth/cookies';
+// Import shutdown handler to register process handlers
+import '$lib/server/database/shutdown';
 
 /**
  * Handles session validation for incoming requests and populates event.locals.
  */
 export const handle: Handle = async ({ event, resolve }) => {
-    // standard DB try -- perform in any request, efficient given cached DB instance
     try {
         await connectToDatabase();
     } catch (error) {
         console.error('DB connection failed in handle hook:', error);
+        // locals to null and continue without blocking
+        event.locals.user = null;
+        event.locals.session = null;
+        return resolve(event);
     }
 
     // ======== ROUTE LOGGER =========
@@ -52,6 +57,14 @@ export const handle: Handle = async ({ event, resolve }) => {
     const clientToken = event.cookies.get(SESSION_COOKIE_NAME);
 
     if (clientToken) {
+        // validate session if database is connected
+        if (!isDatabaseConnected()) {
+            console.warn('Database not connected, skipping session validation');
+            event.locals.user = null;
+            event.locals.session = null;
+            return resolve(event);
+        }
+        
         const validationResult = await validateClientSessionToken(clientToken);
 
         if (validationResult.user && validationResult.session) {

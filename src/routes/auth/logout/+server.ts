@@ -5,7 +5,7 @@ import {
     deleteSessionCookie,
     SESSION_COOKIE_NAME,
 } from '$lib/server/auth/cookies';
-import connectToDatabase from '$lib/server/database';
+import connectToDatabase from '$lib/server/database/database';
 
 export const POST: RequestHandler = async (event) => {
     console.log('Logout POST endpoint hit');

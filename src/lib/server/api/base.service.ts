@@ -1,6 +1,6 @@
 ﻿import type { RequestEvent } from '@sveltejs/kit';
 import { error, json } from '@sveltejs/kit';
-import type { Model, Document } from 'mongoose';
+import type { Model, Document, RootFilterQuery } from 'mongoose';
 import { z } from 'zod';
 
 export interface CrudOptions<T extends Document> {
@@ -9,9 +9,9 @@ export interface CrudOptions<T extends Document> {
     validateUpdate?: z.ZodSchema;
     canRead?: (doc: T, event: RequestEvent) => boolean | Promise<boolean>;
     canWrite?: (doc: T, event: RequestEvent) => boolean | Promise<boolean>;
-    beforeCreate?: (data: any, event: RequestEvent) => Promise<any>;
+    beforeCreate?: (data: unknown, event: RequestEvent) => Promise<unknown>;
     afterCreate?: (doc: T, event: RequestEvent) => Promise<void>;
-    beforeUpdate?: (doc: T, data: any, event: RequestEvent) => Promise<any>;
+    beforeUpdate?: (doc: T, data: unknown, event: RequestEvent) => Promise<unknown>;
     afterUpdate?: (doc: T, event: RequestEvent) => Promise<void>;
     beforeDelete?: (doc: T, event: RequestEvent) => Promise<void>;
     afterDelete?: (doc: T, event: RequestEvent) => Promise<void>;
@@ -20,7 +20,7 @@ export interface CrudOptions<T extends Document> {
 export class CrudService<T extends Document> {
     constructor(private options: CrudOptions<T>) {}
 
-    async list(event: RequestEvent, filter: any = {}) {
+    async list(event: RequestEvent, filter: RootFilterQuery<T> = {}) {
         try {
             const docs = await this.options.model.find(filter).lean();
             const readable = [];
@@ -35,7 +35,7 @@ export class CrudService<T extends Document> {
             return json(readable);
         } catch (err) {
             console.error('Error in list:', err);
-            throw error(500, 'Failed to fetch resources');
+            error(500, 'Failed to fetch resources');
         }
     }
 
@@ -52,24 +52,23 @@ export class CrudService<T extends Document> {
             }
 
             return json(doc.toJSON());
-        } catch (err: any) {
-            if (err.status) throw err;
+        } catch (err: unknown) {
+            if (err instanceof Error && 'status' in err) throw err;
             console.error('Error in get:', err);
-            throw error(500, 'Failed to fetch resource');
+            error(500, 'Failed to fetch resource');
         }
     }
 
     async create(event: RequestEvent) {
         try {
-            const body = await event.request.json();
+            const body = await event.request.json() as unknown;
 
             if (this.options.validateCreate) {
                 const result = this.options.validateCreate.safeParse(body);
                 if (!result.success) {
                     error(400, {
                         message: 'Validation failed',
-                        //@ts-ignore
-                        errors: result.error.flatten()
+                        details: { errors: result.error.errors }
                     });
                 }
             }
@@ -86,10 +85,10 @@ export class CrudService<T extends Document> {
             }
 
             return json(doc.toJSON(), { status: 201 });
-        } catch (err: any) {
-            if (err.status) throw err;
+        } catch (err: unknown) {
+            if (err instanceof Error && 'status' in err) throw err;
             console.error('Error in create:', err);
-            throw error(500, 'Failed to create resource');
+            error(500, 'Failed to create resource');
         }
     }
 
@@ -105,15 +104,14 @@ export class CrudService<T extends Document> {
                 error(403, 'Access denied');
             }
 
-            const body = await event.request.json();
+            const body = await event.request.json() as unknown;
 
             if (this.options.validateUpdate) {
                 const result = this.options.validateUpdate.safeParse(body);
                 if (!result.success) {
                     error(400, {
                         message: 'Validation failed',
-                        //@ts-ignore
-                        errors: result.error.flatten()
+                        details: { errors: result.error.errors }
                     });
                 }
             }
@@ -131,10 +129,10 @@ export class CrudService<T extends Document> {
             }
 
             return json(doc.toJSON());
-        } catch (err: any) {
-            if (err.status) throw err;
+        } catch (err: unknown) {
+            if (err instanceof Error && 'status' in err) throw err;
             console.error('Error in update:', err);
-            throw error(500, 'Failed to update resource');
+            error(500, 'Failed to update resource');
         }
     }
 
@@ -161,10 +159,10 @@ export class CrudService<T extends Document> {
             }
 
             return new Response(null, { status: 204 });
-        } catch (err: any) {
-            if (err.status) throw err;
+        } catch (err: unknown) {
+            if (err instanceof Error && 'status' in err) throw err;
             console.error('Error in delete:', err);
-            throw error(500, 'Failed to delete resource');
+            error(500, 'Failed to delete resource');
         }
     }
 }

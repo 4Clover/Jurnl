@@ -30,7 +30,7 @@
                 options.body = JSON.stringify(test.body);
             }
 
-            // For tests with [id], you'll need to replace with actual IDs
+            // For tests with [id], replace with actual IDs
             const url = test.path.includes('[id]')
                 ? test.path.replace('[id]', 'YOUR_JOURNAL_ID_HERE')
                 : test.path;
@@ -50,7 +50,7 @@
                 console.log('   Error:', error);
             }
         } catch (error) {
-            console.log('❌', `${test.method} ${test.path}`, '- Network error');
+            console.log('❌', `${test.method} ${test.path}`, '- Network error', error);
         }
     }
 

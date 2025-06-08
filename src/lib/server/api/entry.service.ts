@@ -48,7 +48,7 @@ export class EntryService extends CrudService<IEntry> {
             validateCreate: createEntrySchema,
             validateUpdate: updateEntrySchema,
 
-            canRead: async (entry, event) => {
+            canRead: (entry, event) => {
                 if (!event.locals.user) return false;
                 const userId = event.locals.user.id;
 
@@ -57,37 +57,37 @@ export class EntryService extends CrudService<IEntry> {
                     entry.shared_with_friends.some(id => id.toString() === userId);
             },
 
-            canWrite: async (entry, event) => {
+            canWrite: (entry, event) => {
                 if (!event.locals.user) return false;
                 return entry.user.toString() === event.locals.user.id;
             },
 
             beforeCreate: async (data, event) => {
                 if (!event.locals.user) {
-                    throw error(401, 'Not authenticated');
+                    error(401, 'Not authenticated');
                 }
 
                 // Ensure we have a journal ID
-                const journalId = event.params?.journal || data.journal;
+                const journalId = event.params?.journal || (data as { journal: string }).journal;
                 if (!journalId) {
-                    throw error(400, 'Journal ID is required');
+                    error(400, 'Journal ID is required');
                 }
 
                 // Verify journal exists and user owns it
                 const journal = await Journal.findById(journalId);
                 if (!journal) {
-                    throw error(404, 'Journal not found');
+                    error(404, 'Journal not found');
                 }
 
                 if (journal.user.toString() !== event.locals.user.id) {
-                    throw error(403, 'You do not own this journal');
+                    error(403, 'You do not own this journal');
                 }
 
                 return {
-                    ...data,
+                    ...(data as { journal: string }),
                     journal: journalId,
                     user: event.locals.user.id,
-                    entry_date: data.entry_date || new Date().toISOString()
+                    entry_date: (data as { entry_date: string }).entry_date || new Date().toISOString()
                 };
             }
         });
@@ -96,17 +96,17 @@ export class EntryService extends CrudService<IEntry> {
     // Additional method to get entries for a specific journal
     async listByJournal(event: RequestEvent, journalId: string) {
         if (!event.locals.user) {
-            throw error(401, 'Not authenticated');
+            error(401, 'Not authenticated');
         }
 
         // Verify user owns the journal
         const journal = await Journal.findById(journalId);
         if (!journal) {
-            throw error(404, 'Journal not found');
+            error(404, 'Journal not found');
         }
 
         if (journal.user.toString() !== event.locals.user.id) {
-            throw error(403, 'Access denied');
+            error(403, 'Access denied');
         }
 
         return this.list(event, {

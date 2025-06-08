@@ -26,6 +26,7 @@ export default tseslint.config(
             'svelte.config.js',
             'postcss.config.js',
             '.gitignore',
+            'scripts/**/*.js', // Ignore script files that don't need type checking
             // Add any other project-specific ignores here (e.g., "*.log", "temp/")
         ],
     },

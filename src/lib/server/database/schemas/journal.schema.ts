@@ -15,8 +15,8 @@ export interface IJournalSerializable {
     user: string; // ObjectId as string
     cover_color: string;
     entries: string[]; // Array of ObjectId strings
-    createdAt: string | Date;
-    updatedAt: string | Date;
+    createdAt: string;
+    updatedAt: string;
 }
 
 const JournalSchema = new Schema<IJournal>(

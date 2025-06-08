@@ -1,6 +1,6 @@
-import type { IJournal } from "$lib/server/database/schemas/journal.schema";
-import type { IEntry } from "$lib/server/database/schemas";
-import type { SerializableUser } from "$lib/server/database/schemas";
+import type { IJournal } from "$schemas";
+import type { IEntry } from "$schemas";
+import type { SerializableUser } from "$schemas";
 
 export interface UserJournalsProps {
     journalList: IJournal[];

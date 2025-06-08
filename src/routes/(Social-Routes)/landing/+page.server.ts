@@ -1,7 +1,7 @@
 ﻿import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, url }) => {
+export const load: PageServerLoad = ({ locals, url }) => {
     if (!locals.user) {
         // not logged in, redirect to login page
         // pass the current path as a redirectTo query parameter

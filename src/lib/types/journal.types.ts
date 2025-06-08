@@ -1,4 +1,4 @@
-import type { IEntry } from '$lib/server/database/schemas';
+import type { IEntry } from '$schemas';
 
 export interface EntrySidebarProps {
     entries: IEntry[];

@@ -1,6 +1,6 @@
 ﻿import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import connectToDatabase from '$lib/server/database';
+import connectToDatabase from '$lib/server/database/database';
 import { type SerializableUser, User } from '$lib/server/database/schemas';
 import { verifyPassword } from '$lib/server/auth/password';
 import { createSession } from '$lib/server/auth/sessionManager';

@@ -1,28 +1,125 @@
 ﻿<script lang="ts">
     import { goto } from '$app/navigation';
     import type { IEntrySerializable } from '$schemas';
+    import { getTemplate, type EntryTemplate } from '$lib/types/templates.types';
+    import ConfirmDialog from '$lib/components/common/ConfirmDialog.svelte';
 
     interface Props {
         journalId: string;
+        templateId: string;
+        entryId?: string;
+        initialData?: Partial<IEntrySerializable>;
         onSuccess?: (entry: IEntrySerializable) => void;
+        onTemplateChange?: (newTemplateId: string) => void;
     }
 
-    let { journalId, onSuccess }: Props = $props();
+    let { 
+        journalId, 
+        templateId,
+        entryId,
+        initialData,
+        onSuccess,
+        onTemplateChange
+    }: Props = $props();
 
-    // Zone states
-    let title = $state('');
-    let pictureUrl = $state<string | null>(null);
-    let pictureAlt = $state('');
-    let pictureCaption = $state('');
-    let pictureText = $state('');
-    let listItems = $state<Array<{ text: string; checked: boolean }>>([]);
-    let textRight = $state('');
-    let freeFormContent = $state('');
+    // Get template configuration
+    let template = $derived(getTemplate(templateId));
+    
+    // Zone states - Initialize with existing data if in edit mode
+    let title = $state(initialData?.title || '');
+    let pictureUrl = $state<string | null>(initialData?.content_zones?.picture_text?.image?.url || null);
+    let pictureAlt = $state(initialData?.content_zones?.picture_text?.image?.alt || '');
+    let pictureCaption = $state(initialData?.content_zones?.picture_text?.image?.caption || '');
+    let pictureText = $state(initialData?.content_zones?.picture_text?.text || '');
+    let listItems = $state<Array<{ text: string; checked: boolean }>>(
+        initialData?.content_zones?.list?.items || []
+    );
+    let textRight = $state(initialData?.content_zones?.text_right?.content || '');
+    let freeFormContent = $state(initialData?.free_form_content || '');
 
     // UI states
     let isSubmitting = $state(false);
     let error = $state<string | null>(null);
     let uploadingImage = $state(false);
+    let showTemplateChangeDialog = $state(false);
+    let pendingTemplateId = $state<string | null>(null);
+    
+    // Check if any zones have content (for template change warning)
+    function hasZoneContent(zoneId: string): boolean {
+        switch (zoneId) {
+            case 'picture_text':
+                return !!(pictureUrl || pictureText || pictureAlt || pictureCaption);
+            case 'list':
+                return listItems.some(item => item.text.trim());
+            case 'text_right':
+                return !!textRight.trim();
+            case 'free_form_content':
+                return !!freeFormContent.trim();
+            default:
+                return false;
+        }
+    }
+    
+    // Handle template change request
+    function requestTemplateChange(newTemplateId: string) {
+        if (!onTemplateChange) return;
+        
+        // Check if switching templates would lose data
+        const newTemplate = getTemplate(newTemplateId);
+        if (!newTemplate) return;
+        
+        let wouldLoseData = false;
+        const currentZones = ['picture_text', 'list', 'text_right', 'free_form_content'] as const;
+        
+        for (const zone of currentZones) {
+            if (hasZoneContent(zone) && !newTemplate.zones[zone]?.enabled) {
+                wouldLoseData = true;
+                break;
+            }
+        }
+        
+        if (wouldLoseData) {
+            pendingTemplateId = newTemplateId;
+            showTemplateChangeDialog = true;
+        } else {
+            onTemplateChange(newTemplateId);
+        }
+    }
+    
+    // Confirm template change
+    function confirmTemplateChange() {
+        if (pendingTemplateId && onTemplateChange) {
+            // Clear data from zones that won't be in new template
+            const newTemplate = getTemplate(pendingTemplateId);
+            if (newTemplate) {
+                if (!newTemplate.zones.picture_text.enabled) {
+                    pictureUrl = null;
+                    pictureAlt = '';
+                    pictureCaption = '';
+                    pictureText = '';
+                }
+                if (!newTemplate.zones.list.enabled) {
+                    listItems = [];
+                }
+                if (!newTemplate.zones.text_right.enabled) {
+                    textRight = '';
+                }
+                if (!newTemplate.zones.free_form_content.enabled) {
+                    freeFormContent = '';
+                }
+            }
+            
+            onTemplateChange(pendingTemplateId);
+            showTemplateChangeDialog = false;
+            pendingTemplateId = null;
+        }
+    }
+    
+    // Cancel template change
+    function cancelTemplateChange() {
+        showTemplateChangeDialog = false;
+        pendingTemplateId = null;
+    }
 
     // Add a new list item
     function addListItem() {
@@ -56,8 +153,6 @@
 
         uploadingImage = true;
         try {
-            // TODO: Implement actual image upload to Mongo
-            // For now, using a data URL as placeholder
             const reader = new FileReader();
             reader.onload = (e) => {
                 pictureUrl = e.target?.result as string;
@@ -105,15 +200,19 @@
                 shared_with_friends: []
             };
 
-            const response = await fetch(`/api/journals/${journalId}/entries`, {
-                method: 'POST',
+            const url = entryId 
+                ? `/api/journals/${journalId}/entries/${entryId}`
+                : `/api/journals/${journalId}/entries`;
+            
+            const response = await fetch(url, {
+                method: entryId ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(entryData)
             });
 
             if (!response.ok) {
                 const data = await response.json();
-                throw new Error(data.message || 'Failed to create entry');
+                throw new Error(data.message || `Failed to ${entryId ? 'update' : 'create'} entry`);
             }
 
             const newEntry = await response.json();
@@ -138,6 +237,22 @@
         </div>
     {/if}
     
+    {#if template}
+        <div class="template-header">
+            <h2>{entryId ? 'Edit' : 'Create'} {template.name}</h2>
+            <p>{template.description}</p>
+            {#if onTemplateChange}
+                <button
+                    type="button"
+                    class="change-template-button"
+                    onclick={() => onTemplateChange && onTemplateChange('')}
+                >
+                    Change Template
+                </button>
+            {/if}
+        </div>
+    {/if}
+    
     <form onsubmit={handleSubmit}>
         <!-- Zone 1: Title -->
         <div class="zone zone-title">
@@ -152,7 +267,14 @@
         </div>
         
         <!-- Zone 2: Picture + Text (Two Column) -->
+        {#if template?.zones.picture_text.enabled}
         <div class="zone zone-picture-text">
+            {#if template.zones.picture_text.label}
+                <h3 class="zone-label">{template.zones.picture_text.label}</h3>
+            {/if}
+            {#if template.zones.picture_text.description}
+                <p class="zone-description">{template.zones.picture_text.description}</p>
+            {/if}
             <div class="picture-box">
                 {#if pictureUrl}
                     <div class="image-preview">
@@ -211,11 +333,19 @@
                 ></textarea>
             </div>
         </div>
+        {/if}
         
         <!-- Zone 3: List -->
+        {#if template?.zones.list.enabled}
         <div class="zone zone-list">
+            {#if template.zones.list.label}
+                <h3 class="zone-label">{template.zones.list.label}</h3>
+            {/if}
+            {#if template.zones.list.description}
+                <p class="zone-description">{template.zones.list.description}</p>
+            {/if}
             <div class="zone-header">
-                <h3>List Items</h3>
+                <h3>{template.zones.list.label || 'List Items'}</h3>
                 <button
                     type="button"
                     class="add-button"
@@ -257,10 +387,15 @@
                 {/if}
             </div>
         </div>
+        {/if}
         
         <!-- Zone 4: Text Right -->
+        {#if template?.zones.text_right.enabled}
         <div class="zone zone-text-right">
-            <h3>Additional Notes</h3>
+            <h3>{template.zones.text_right.label || 'Additional Notes'}</h3>
+            {#if template.zones.text_right.description}
+                <p class="zone-description">{template.zones.text_right.description}</p>
+            {/if}
             <textarea
                 bind:value={textRight}
                 placeholder="Additional thoughts..."
@@ -268,10 +403,15 @@
                 disabled={isSubmitting}
             ></textarea>
         </div>
+        {/if}
         
         <!-- Zone 5: Free Form Content -->
+        {#if template?.zones.free_form_content.enabled}
         <div class="zone zone-freeform">
-            <h3>Free Writing</h3>
+            <h3>{template.zones.free_form_content.label || 'Free Writing'}</h3>
+            {#if template.zones.free_form_content.description}
+                <p class="zone-description">{template.zones.free_form_content.description}</p>
+            {/if}
             <textarea
                 bind:value={freeFormContent}
                 placeholder="Write freely here..."
@@ -280,6 +420,7 @@
                 disabled={isSubmitting}
             ></textarea>
         </div>
+        {/if}
         
         <!-- Submit -->
         <div class="form-actions">
@@ -296,17 +437,74 @@
                 class="submit-button"
                 disabled={isSubmitting}
             >
-                {isSubmitting ? 'Creating...' : 'Create Entry'}
+                {isSubmitting ? (entryId ? 'Updating...' : 'Creating...') : (entryId ? 'Update Entry' : 'Create Entry')}
             </button>
         </div>
     </form>
 </div>
+
+<ConfirmDialog
+    isOpen={showTemplateChangeDialog}
+    title="Change Template?"
+    message="Changing the template will clear any content from sections that aren't included in the new template. This action cannot be undone."
+    confirmText="Change Template"
+    cancelText="Keep Current"
+    variant="warning"
+    onConfirm={confirmTemplateChange}
+    onCancel={cancelTemplateChange}
+/>
 
 <style>
     .templated-entry-form {
         max-width: 800px;
         margin: 0 auto;
         padding: 2rem;
+    }
+
+    .template-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .template-header h2 {
+        font-size: 2rem;
+        margin: 0 0 0.5rem 0;
+        color: #111827;
+    }
+
+    .template-header p {
+        color: #6b7280;
+        margin: 0 0 1rem 0;
+    }
+
+    .change-template-button {
+        padding: 0.5rem 1rem;
+        background: #f3f4f6;
+        color: #374151;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+
+    .change-template-button:hover {
+        background: #e5e7eb;
+    }
+
+    .zone-label {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+        color: #111827;
+    }
+
+    .zone-description {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin: 0 0 1rem 0;
     }
 
     .error-message {

@@ -61,8 +61,8 @@
     </main>
     
     {#if showDeleteConfirm}
-        <div class="modal-backdrop" onclick={() => showDeleteConfirm = false} aria-label="button" {document.getElementsByClassName("modal-backdrop").addEventListener('keydown', (event) => {if (event.key === 'Escape') showDeleteConfirm = false;})} >
-            <div class="modal">t={
+        <div class="modal-backdrop" onclick={() => showDeleteConfirm = false}>
+            <div class="modal" onclick={(e) => e.stopPropagation()}>
                 <h2>Delete Entry?</h2>
                 <p>Are you sure you want to delete "{data.entry.title}"? This action cannot be undone.</p>
                 <div class="modal-actions">

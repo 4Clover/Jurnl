@@ -25,9 +25,16 @@ Thumbs.db
 !.env.example
 !.env.test
 
+# Development Database
+.mongodb-data/
+
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-#Husky
+# Husky
 !.husky
+
+# Other
+docker-compose.override.yml
+local-ref-doc.md

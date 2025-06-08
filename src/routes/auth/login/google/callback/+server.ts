@@ -4,7 +4,7 @@ import {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL,} from '$env/static/pri
 import { User } from '$schemas';
 import { createSession } from '$auth/sessionManager';
 import { setSessionCookie } from '$auth/cookies';
-import connectToDatabase from '$database';
+import connectToDatabase from '$lib/server/database/database';
 
 
 async function generateUniqueUsername(email: string): Promise<string> {

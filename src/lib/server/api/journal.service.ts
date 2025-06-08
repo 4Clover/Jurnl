@@ -1,7 +1,8 @@
 ﻿import { Journal, type IJournal } from '$schemas';
 import { CrudService } from './base.service';
 import { z } from 'zod';
-import type { RequestEvent } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
+
 
 export const createJournalSchema = z.object({
     title: z.string().min(1).max(100),
@@ -18,27 +19,27 @@ export const journalService = new CrudService<IJournal>({
     validateCreate: createJournalSchema,
     validateUpdate: updateJournalSchema,
 
-    canRead: async (journal, event) => {
+    canRead: (journal, event) => {
         // Check if user owns the journal
         if (!event.locals.user) return false;
         return journal.user.toString() === event.locals.user.id;
     },
 
-    canWrite: async (journal, event) => {
+    canWrite: (journal, event) => {
         if (!event.locals.user) return false;
         return journal.user.toString() === event.locals.user.id;
     },
 
-    beforeCreate: async (data, event) => {
+    beforeCreate: (data, event) => {
         // Add the current user as owner
         if (!event.locals.user) {
-            throw new Error('User not authenticated');
+            error(401, 'User not authenticated');
         }
-        return {
-            ...data,
+        return Promise.resolve({
+            ...(data as { title: string, cover_color: string }),
             user: event.locals.user.id,
             entries: []
-        };
+        });
     },
 
     afterCreate: async (journal, event) => {

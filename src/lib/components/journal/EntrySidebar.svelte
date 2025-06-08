@@ -6,7 +6,7 @@ https://svelte.dev/docs/svelte/bind
 <script lang="ts">
     import type { EntrySidebarProps } from '$lib/types/journal.types';
     import EntrySidebarItem from './EntrySidebarItem.svelte';
-    import { page } from '$app/stores';
+    import { page } from '$app/state';
     import CreateJournalEntryButton from '../buttons/CreateJournalEntryButton.svelte';
 
     // let { entries }: EntrySidebarProps = $props();
@@ -24,19 +24,19 @@ https://svelte.dev/docs/svelte/bind
 
     <EntrySidebarItem
         title="my first entry! ^o^"
-        journalID={$page['params']['journal']}
+        journalID={page['params']['journal']}
         entryID="1"
     />
 
     <EntrySidebarItem
         title="my second entry! ^o^"
-        journalID={$page['params']['journal']}
+        journalID={page['params']['journal']}
         entryID="2"
     />
 
     <EntrySidebarItem
         title="my third entry! ^o^"
-        journalID={$page['params']['journal']}
+        journalID={page['params']['journal']}
         entryID="3"
     />
 
