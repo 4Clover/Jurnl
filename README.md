@@ -2,7 +2,7 @@
 
 Welcome to the ScribblyScraps repository! This project aims to create a rich, interactive web application where users can create and personalize digital journal entries, much like a scrapbook.
 
-## TODO:
+## TODO
 
 1. Vercel docs/deployment information
     - GitHub actions for checks before push to prod
@@ -12,19 +12,21 @@ Welcome to the ScribblyScraps repository! This project aims to create a rich, in
 
 ## Table of Contents
 
-1.  [Project Overview](#project-overview)
+- [ScribblyScraps - A Digital Journaling \& Scrapbooking Platform](#scribblyscraps---a-digital-journaling--scrapbooking-platform)
+  - [TODO](#todo)
+  - [Table of Contents](#table-of-contents)
+  - [Project Overview](#project-overview)
     - [Key Features (Planned)](#key-features-planned)
-2.  [Technology Stack](#technology-stack)
-3.  [Development Environment Setup](README/DEV_ENV_SETUP.md)
-4.  [Coding Standards & Conventions](#coding-standards--conventions)
+  - [Technology Stack](#technology-stack)
+  - [Coding Standards \& Conventions](#coding-standards--conventions)
     - [Code Editor](#code-editor)
-    - [Formatting & Linting](#formatting--linting)
+    - [Formatting \& Linting](#formatting--linting)
     - [Environment Variables](#environment-variables)
-5.  [Git Workflow](#git-workflow)
+  - [Git Workflow](#git-workflow)
     - [Branching Strategy](#branching-strategy)
-    - [Pull Requests (PRs) & Merging to `main`](#pull-requests-prs--merging-to-main)
+    - [Pull Requests (PRs) \& Merging to `main`](#pull-requests-prs--merging-to-main)
     - [Developer Best Practices for this Workflow](#developer-best-practices-for-this-workflow)
-6.  [Contributing](#contributing)
+  - [Contributing](#contributing)
 
 ## Project Overview
 
@@ -66,19 +68,19 @@ For detailed instructions on setting up your development environment, please see
 
 - **Recommended Editor:** Visual Studio Code (VS Code).
 - **Recommended Extensions:**
-    - A `.vscode/extensions.json` file is included in this repository. VS Code will prompt you to install these recommended extensions when you open the project.
-    - Key extensions include: Svelte for VS Code, ESLint, Prettier - Code formatter, Tailwind CSS IntelliSense.
+  - A `.vscode/extensions.json` file is included in this repository. VS Code will prompt you to install these recommended extensions when you open the project.
+  - Key extensions include: Svelte for VS Code, ESLint, Prettier - Code formatter, Tailwind CSS IntelliSense.
 - If you use a different editor, please ensure you have equivalent plugins for Svelte, TypeScript, ESLint, and Prettier.
-    - Dillon uses JetBrains products (WebStorm, etc.) so he can help with its specific setup and plugins.
+  - Dillon uses JetBrains products (WebStorm, etc.) so he can help with its specific setup and plugins.
 
 ### Formatting & Linting
 
 - **Formatter:** Prettier (configuration in `.prettierrc`).
-    - We use the `prettier-plugin-tailwindcss` to automatically sort Tailwind classes.
+  - We use the `prettier-plugin-tailwindcss` to automatically sort Tailwind classes.
 - **Linter:** ESLint (configuration in `.eslint.config.js`) with Svelte and TypeScript support.
 
-    - VS Code ESLint Extension: Make sure your VS Code ESLint extension is configured to use "flat config" if it doesn't detect it automatically (may not matter in newer versions).
-        - In your VS Code settings.json:
+  - VS Code ESLint Extension: Make sure your VS Code ESLint extension is configured to use "flat config" if it doesn't detect it automatically (may not matter in newer versions).
+    - In your VS Code settings.json:
 
     ```json
         "eslint.experimental.useFlatConfig": true,
@@ -92,11 +94,12 @@ For detailed instructions on setting up your development environment, please see
     ```
 
 - **Pre-commit Hooks:** Husky is configured to run Prettier and ESLint on staged files before each commit. This helps maintain code consistency and catch errors early.
-    - You can manually run checks:
-        ```bash
+  - You can manually run checks:
+
+    ```bash
         npm run lint
         npm run format
-        ```
+    ```
 
 ### Environment Variables
 
@@ -106,8 +109,8 @@ For detailed instructions on setting up your development environment, please see
 - A `.env.example` file is provided as a template. Copy it to `.env` and fill in your values.
 - **The `.env` file is ignored by Git and should never be committed.**
 - **SvelteKit Convention:**
-    - Variables intended for client-side browser access **must** be prefixed with `PUBLIC_`.
-    - Variables without this prefix are only available on the server-side.
+  - Variables intended for client-side browser access **must** be prefixed with `PUBLIC_`.
+  - Variables without this prefix are only available on the server-side.
 
 ## Git Workflow
 
@@ -115,9 +118,9 @@ We use a disciplined Git workflow centered around Pull Requests (PRs) to maintai
 
 ### Branching Strategy
 
-1.  The `main` branch is our stable, production-ready branch.
-2.  For any new feature, bugfix, or task, create a new branch from the latest `main`.
-3.  **Branch Naming Conventions:**
+1. The `main` branch is our stable, production-ready branch.
+2. For any new feature, bugfix, or task, create a new branch from the latest `main`.
+3. **Branch Naming Conventions:**
     - Features: `feature/<feature-name>` (e.g., `feature/user-authentication`)
     - Bugfixes: `fix/<issue-description>` (e.g., `fix/calendar-rendering-bug`)
     - Chores/Refactors: `chore/<task-name>` (e.g., `chore/update-dependencies`)
@@ -125,8 +128,8 @@ We use a disciplined Git workflow centered around Pull Requests (PRs) to maintai
 
 ### Pull Requests (PRs) & Merging to `main`
 
-1.  All changes destined for `main` **must** go through a Pull Request.
-2.  **Key `main` Branch Protections Enforced by GitHub:**
+1. All changes destined for `main` **must** go through a Pull Request.
+2. **Key `main` Branch Protections Enforced by GitHub:**
     - PRs require at least one approval.
     - Stale approvals are dismissed if new commits are pushed to the PR.
     - The most recent push to a PR must be approved by someone other than the author.
@@ -140,9 +143,10 @@ We use a disciplined Git workflow centered around Pull Requests (PRs) to maintai
 
 To make working with this workflow smoother:
 
-1.  **Keep Feature Branches Up-to-Date with `main` using Rebase:**
+1. **Keep Feature Branches Up-to-Date with `main` using Rebase:**
 
     - Before starting new work or when wanting to incorporate latest `main` changes into your feature branch, use rebase:
+
         ```bash
         git checkout main
         git pull origin main
@@ -150,35 +154,38 @@ To make working with this workflow smoother:
         git rebase main
         # Resolve any conflicts, then continue: git rebase --continue
         ```
+
     - This keeps your feature branch history linear on top of `main`.
 
-2.  **Clean Up Local Commits Before Pushing/Updating a PR:**
+2. **Clean Up Local Commits Before Pushing/Updating a PR:**
 
     - Commit frequently with descriptive messages on your local feature branch.
     - Before pushing to create or update your PR, consider using interactive rebase to squash WIP commits, fixup typos, and reword messages into a set of logical, clean commits for easier review:
+
         ```bash
         # On your feature branch (assuming 'main' is your base):
         git rebase -i main
         ```
+
     - While GitHub will perform the final squash into a single commit on `main`, a clean commit history _within the PR itself_ greatly aids the review process.
 
-3.  **Make Small, Focused PRs:**
+3. **Make Small, Focused PRs:**
 
     - Smaller PRs are easier and faster to review and merge.
 
-4.  **Use Pull Request Templates:**
+4. **Use Pull Request Templates:**
 
     - When creating a PR, please fill out the provided template to ensure all necessary information is included for reviewers.
 
-5.  **Pre-commit Hooks:**
+5. **Pre-commit Hooks:**
     - Our Husky pre-commit hooks will automatically run linters and formatters. Ensure these pass before pushing your commits.
 
 ## Contributing
 
-1.  Pick an issue to work on (or create one) from the [GitHub Issues page](https://github.com/4Clover/ScribblyScraps/issues). Assign yourself or comment to claim it.
-2.  Follow the [Git Workflow](#git-workflow) to create a branch and make your changes.
-3.  Ensure your code adheres to the [Coding Standards & Conventions](#coding-standards--conventions).
-4.  Thoroughly test your changes locally.
-5.  Open a Pull Request for review.
+1. Pick an issue to work on (or create one) from the [GitHub Issues page](https://github.com/4Clover/ScribblyScraps/issues). Assign yourself or comment to claim it.
+2. Follow the [Git Workflow](#git-workflow) to create a branch and make your changes.
+3. Ensure your code adheres to the [Coding Standards & Conventions](#coding-standards--conventions).
+4. Thoroughly test your changes locally.
+5. Open a Pull Request for review.
 
 If you have any questions, ask in Discord!
