@@ -99,11 +99,13 @@
     align-items: center;
     gap: 0.25rem;
     background-color: variables.$off-white;
+    position: absolute;
     width: 18.8rem;
     height: 7.31rem;
     padding: 0.188rem;
     margin: auto;
     margin-top: 15rem;
+    margin-left: 5rem;
     z-index: 20;
 }
 

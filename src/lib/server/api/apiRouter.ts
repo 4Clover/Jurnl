@@ -2,8 +2,8 @@
 import { json, error } from '@sveltejs/kit';
 import { journalService, entryService, userService } from './index';
 import { addFriend, deleteFriend, getFriendsUsernames, getFriendsPublicEntries } from './user.service';
-import { seedTestUsers, clearTestData } from '../database/seed-dev-data';
-import { dev } from '$app/environment';
+// import { seedTestUsers, clearTestData } from '../database/seed-dev-data';
+// import { dev } from '$app/environment';
 
 type RouteHandler = (event: RequestEvent) => Promise<Response>;
 
@@ -195,34 +195,34 @@ export const api = new ApiRouter()
     })
 
     // ===== DEVELOPMENT ENDPOINTS =====
-    .post('dev/seed', async () => {
-            if (!dev) {
-                error(403, 'Development endpoints only available in dev mode');
-            }
+    // .post('dev/seed', async () => {
+    //         if (!dev) {
+    //             error(403, 'Development endpoints only available in dev mode');
+    //         }
             
-            try {
-                await seedTestUsers();
-                return json({
-                    success: true,
-                    message: 'Test users seeded successfully',
-                    users: ['alice_writer', 'bob_traveler', 'charlie_dev', 'diana_artist']
-                });
-            } catch (err) {
-                error(500, `Seeding failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
-            }
-        })
-    .delete('dev/seed', async () => {
-            if (!dev) {
-                error(403, 'Development endpoints only available in dev mode');
-            }
+    //         try {
+    //             await seedTestUsers();
+    //             return json({
+    //                 success: true,
+    //                 message: 'Test users seeded successfully',
+    //                 users: ['alice_writer', 'bob_traveler', 'charlie_dev', 'diana_artist']
+    //             });
+    //         } catch (err) {
+    //             error(500, `Seeding failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    //         }
+    //     })
+    // .delete('dev/seed', async () => {
+    //         if (!dev) {
+    //             error(403, 'Development endpoints only available in dev mode');
+    //         }
             
-            try {
-                await clearTestData();
-                return json({
-                    success: true,
-                    message: 'Test data cleared successfully'
-                });
-            } catch (err) {
-                error(500, `Clear failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
-            }
-        })
+    //         try {
+    //             await clearTestData();
+    //             return json({
+    //                 success: true,
+    //                 message: 'Test data cleared successfully'
+    //             });
+    //         } catch (err) {
+    //             error(500, `Clear failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    //         }
+    //     })

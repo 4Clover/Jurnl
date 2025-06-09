@@ -3,7 +3,8 @@
     import type { LayoutProps } from './$types';
     import NormalNav from '$components/nav/NormalNav.svelte';
     import InitialUserNav from '$components/nav/InitialUserNav.svelte';
-    import DevDebugPanel from '$components/debug/DevDebugPanel.svelte';
+    import { page } from '$app/stores';
+    // import DevDebugPanel from '$components/debug/DevDebugPanel.svelte';
 
     let { data, children }: LayoutProps = $props();
     let loggedIn = $derived(!!data.user);
@@ -15,6 +16,7 @@
             <div class="navbar__container">
                 {#if loggedIn}
                     <NormalNav />
+                <!-- {:else if $page["route"]} -->
                 {:else}
                     <InitialUserNav />
                 {/if}
@@ -42,4 +44,4 @@
 </div>
 
 <!-- Development Debug Panel -->
-<DevDebugPanel />
+<!-- <DevDebugPanel /> -->

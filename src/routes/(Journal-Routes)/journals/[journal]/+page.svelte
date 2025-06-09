@@ -1,4 +1,5 @@
 <script lang="ts">
+    import JournalCover from '$lib/components/journal/JournalCover.svelte';
     import type { PageData } from './$types';
 
     let { data }: { data: PageData } = $props();
@@ -40,6 +41,8 @@
             </a>
         </div>
     </header>
+
+    <JournalCover journalTitle={data.journal.title} journalId={data.journal._id}/>
     
     {#if data.entries.length === 0}
         <div class="empty-state">
