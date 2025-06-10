@@ -1,15 +1,126 @@
 <script lang="ts">
     import type { UserJournalProps } from "$lib/types/landing.types";
+    import type { IEntrySerializable } from "$schemas";
+    import { goto } from '$app/navigation';
+    import JournalEditDialog from '$lib/components/journal/JournalEditDialog.svelte';
 
-    let { journalTitle, journalColor, latestJournalEntries }: UserJournalProps = $props();
-    const recentEntries = $derived(latestJournalEntries.slice(0, 3));
-    const entryCount = $derived(latestJournalEntries.length);
+    interface Props extends UserJournalProps {
+        onJournalUpdate?: (journalId: string) => void;
+    }
+    
+    let { journalTitle, journalColor, journalId, journalDescription, latestJournalEntries, onJournalUpdate }: Props = $props();
+    
+    // Check if entries are populated objects or just IDs
+    const isPopulated = $derived(
+        Array.isArray(latestJournalEntries) && 
+        latestJournalEntries.length > 0 && 
+        typeof latestJournalEntries[0] === 'object' && 
+        latestJournalEntries[0] !== null &&
+        'title' in latestJournalEntries[0]
+    );
+    
+    const recentEntries = $derived(
+        isPopulated ? (latestJournalEntries as IEntrySerializable[]).slice(0, 3) : []
+    );
+    
+    const entryCount = $derived(latestJournalEntries?.length || 0);
+    
+    let showEditDialog = $state(false);
+    
+    function handleJournalClick(event: MouseEvent) {
+        // Only navigate if clicking on the journal itself, not on entry links
+        if (!(event.target as HTMLElement).closest('.entry-preview-link')) {
+            goto(`/journals/${journalId}`);
+        }
+    }
+    
+    function handleEntryClick(event: MouseEvent, entryId: string) {
+        event.stopPropagation();
+        goto(`/journals/${journalId}/entries/${entryId}`);
+    }
+    
+    function handleJournalKeydown(event: KeyboardEvent) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            goto(`/journals/${journalId}`);
+        }
+    }
+    
+    function handleEntryKeydown(event: KeyboardEvent, entryId: string) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            event.stopPropagation();
+            goto(`/journals/${journalId}/entries/${entryId}`);
+        }
+    }
+    
+    function handleSettingsClick(event: MouseEvent) {
+        event.stopPropagation();
+        showEditDialog = true;
+    }
+    
+    function handleSettingsKeydown(event: KeyboardEvent) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            event.stopPropagation();
+            showEditDialog = true;
+        }
+    }
+    
+    async function handleJournalSave(data: { title: string; description: string; color: string }) {
+        try {
+            const response = await fetch(`/api/journals/${journalId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: data.title,
+                    description: data.description,
+                    cover_color: data.color
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update journal');
+            }
+
+            showEditDialog = false;
+            
+            // Notify parent component to refresh data
+            if (onJournalUpdate) {
+                onJournalUpdate(journalId);
+            }
+        } catch (error) {
+            throw error; // Lets dialog handle the error display
+        }
+    }
+    
+    function handleEditCancel() {
+        showEditDialog = false;
+    }
+    
 </script>
 
-<div class="user-journal">
+<div class="user-journal" 
+     role="button" 
+     tabindex="0"
+     onclick={handleJournalClick}
+     onkeydown={handleJournalKeydown}
+     aria-label="Open journal: {journalTitle}">
     <div class="journal-header">
-        <h3>{journalTitle}</h3>
-        <span class="entry-count">{entryCount} {entryCount === 1 ? 'entry' : 'entries'}</span>
+        <div class="header-content">
+            <h3>{journalTitle}</h3>
+            <span class="entry-count">{entryCount} {entryCount === 1 ? 'entry' : 'entries'}</span>
+        </div>
+        <button 
+            class="settings-btn"
+            tabindex="0"
+            onclick={handleSettingsClick}
+            onkeydown={handleSettingsKeydown}
+            aria-label="Edit journal settings"
+        >
+            ⚙️
+        </button>
     </div>
     
     <div class="journal-preview">
@@ -20,11 +131,18 @@
         <div class="entry-previews">
             {#if recentEntries.length > 0}
                 {#each recentEntries as entry}
-                    <div class="entry-preview">
-                        <span class="entry-title">{entry.title}</span>
-                        <span class="entry-date">
-                            {new Date(entry.entry_date || entry.createdAt).toLocaleDateString()}
-                        </span>
+                    <div class="entry-preview-link" 
+                         role="button"
+                         tabindex="0"
+                         onclick={(e) => handleEntryClick(e, entry._id)}
+                         onkeydown={(e) => handleEntryKeydown(e, entry._id)}
+                         aria-label="Open entry: {entry.title}">
+                        <div class="entry-preview">
+                            <span class="entry-title">{entry.title}</span>
+                            <span class="entry-date">
+                                {new Date(entry.entry_date).toLocaleDateString()}
+                            </span>
+                        </div>
                     </div>
                 {/each}
                 {#if entryCount > 3}
@@ -41,6 +159,16 @@
         </div>
     </div>
 </div>
+
+<JournalEditDialog
+    isOpen={showEditDialog}
+    title={journalTitle}
+    description={journalDescription || ''}
+    color={journalColor}
+    journalId={journalId}
+    onSave={handleJournalSave}
+    onCancel={handleEditCancel}
+/>
 
 <style lang="scss">
     .user-journal {
@@ -60,6 +188,14 @@
     .journal-header {
         padding: 1rem;
         border-bottom: 1px solid #f3f4f6;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .header-content {
+        flex: 1;
+        min-width: 0;
     }
 
     .journal-header h3 {
@@ -68,6 +204,9 @@
         font-weight: 600;
         color: #111827;
         line-height: 1.25;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .entry-count {
@@ -107,6 +246,21 @@
         overflow: hidden;
     }
 
+    .entry-preview-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: all 0.2s;
+        border-radius: 4px;
+        padding: 0.25rem;
+        margin: -0.25rem;
+    }
+
+    .entry-preview-link:hover {
+        background: #f3f4f6;
+        transform: translateX(2px);
+    }
+
     .entry-preview {
         display: flex;
         flex-direction: column;
@@ -115,7 +269,7 @@
         border-bottom: 1px solid #f3f4f6;
     }
 
-    .entry-preview:last-child {
+    .entry-preview-link:last-child .entry-preview {
         border-bottom: none;
         padding-bottom: 0;
     }
@@ -163,5 +317,36 @@
     .no-entries small {
         font-size: 0.75rem;
         color: #d1d5db;
+    }
+
+    .settings-btn {
+        background: none;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 4px;
+        transition: all 0.2s;
+        color: #6b7280;
+        opacity: 0;
+        transform: scale(0.9);
+        margin-left: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .settings-btn:hover, .settings-btn:focus {
+        background: #f3f4f6;
+        color: #374151;
+        transform: scale(1);
+    }
+
+    .settings-btn:focus {
+        outline: 2px solid #3b82f6;
+        outline-offset: 1px;
+    }
+
+    .user-journal:hover .settings-btn {
+        opacity: 1;
+        transform: scale(1);
     }
 </style>

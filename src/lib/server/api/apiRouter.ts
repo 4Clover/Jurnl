@@ -1,9 +1,10 @@
-﻿import type { RequestEvent } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit';
 import { json, error } from '@sveltejs/kit';
 import { journalService, entryService, userService } from './index';
+import { journalServiceWithEntries } from './journal.service';
 import { addFriend, deleteFriend, getFriendsUsernames, getFriendsPublicEntries } from './user.service';
-// import { seedTestUsers, clearTestData } from '../database/seed-dev-data';
-// import { dev } from '$app/environment';
+import { seedTestUsers, clearTestData } from '../database/seed-dev-data';
+import { dev } from '$app/environment';
 
 type RouteHandler = (event: RequestEvent) => Promise<Response>;
 
@@ -13,7 +14,6 @@ export class ApiRouter {
 
     constructor(private basePath = '/api') {}
 
-    // Simple auth toggle
     requireAuth(required = true) {
         this.authRequired = required;
         return this;
@@ -29,7 +29,6 @@ export class ApiRouter {
         return this;
     }
 
-    // Convenience methods
     get = (path: string, handler: RouteHandler) => this.on('GET', path, handler);
     post = (path: string, handler: RouteHandler) => this.on('POST', path, handler);
     put = (path: string, handler: RouteHandler) => this.on('PUT', path, handler);
@@ -54,7 +53,6 @@ export class ApiRouter {
                     error(405, `Method ${event.request.method} not allowed`);
                 }
 
-                // Add params to event
                 event.params = { ...event.params, ...params };
                 return handler(event);
             }
@@ -104,9 +102,17 @@ export const api = new ApiRouter()
     })
 
     // ===== JOURNALS =====
-    .get('journals', (event) => 
-        journalService.list(event, { user: event.locals.user!.id })
-    )
+    .get('journals', (event) => {
+        // Check if we need to populate entries for landing page
+        const url = new URL(event.request.url);
+        const withEntries = url.searchParams.get('withEntries') === 'true';
+        
+        if (withEntries) {
+            return journalServiceWithEntries.listWithRecentEntries(event, { user: event.locals.user!.id });
+        } else {
+            return journalService.list(event, { user: event.locals.user!.id });
+        }
+    })
     .post('journals', (event) => journalService.create(event))
     .get('journals/:id', (event) => 
         journalService.get(event, event.params.id!)
@@ -195,34 +201,37 @@ export const api = new ApiRouter()
     })
 
     // ===== DEVELOPMENT ENDPOINTS =====
-    // .post('dev/seed', async () => {
-    //         if (!dev) {
-    //             error(403, 'Development endpoints only available in dev mode');
-    //         }
+    .post('dev/seed', async (event) => {
+            if (!dev) {
+                error(403, 'Development endpoints only available in dev mode');
+            }
             
-    //         try {
-    //             await seedTestUsers();
-    //             return json({
-    //                 success: true,
-    //                 message: 'Test users seeded successfully',
-    //                 users: ['alice_writer', 'bob_traveler', 'charlie_dev', 'diana_artist']
-    //             });
-    //         } catch (err) {
-    //             error(500, `Seeding failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
-    //         }
-    //     })
-    // .delete('dev/seed', async () => {
-    //         if (!dev) {
-    //             error(403, 'Development endpoints only available in dev mode');
-    //         }
+            try {
+                const currentUserId = event.locals.user?.id;
+                await seedTestUsers(currentUserId);
+                return json({
+                    success: true,
+                    message: 'Test users seeded successfully',
+                    users: ['alice_writer', 'bob_traveler', 'charlie_dev', 'diana_artist'],
+                    friendsAdded: !!currentUserId,
+                    sharedEntriesCreated: !!currentUserId
+                });
+            } catch (err) {
+                error(500, `Seeding failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+            }
+        })
+    .delete('dev/seed', async () => {
+            if (!dev) {
+                error(403, 'Development endpoints only available in dev mode');
+            }
             
-    //         try {
-    //             await clearTestData();
-    //             return json({
-    //                 success: true,
-    //                 message: 'Test data cleared successfully'
-    //             });
-    //         } catch (err) {
-    //             error(500, `Clear failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
-    //         }
-    //     })
+            try {
+                await clearTestData();
+                return json({
+                    success: true,
+                    message: 'Test data cleared successfully'
+                });
+            } catch (err) {
+                error(500, `Clear failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+            }
+        })

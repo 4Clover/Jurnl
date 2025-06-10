@@ -20,10 +20,8 @@ export const userService = new CrudService<IUser>({
     canRead: (user, event) => {
         if (!event.locals.user) return false;
 
-        // Users can read their own profile
         if (user._id.toString() === event.locals.user.id) return true;
 
-        // Check if users are friends
         const currentUserId = event.locals.user.id;
         return (
             user.close_friends.some((id) => id.toString() === currentUserId) ||
@@ -33,12 +31,10 @@ export const userService = new CrudService<IUser>({
 
     canWrite: (user, event) => {
         if (!event.locals.user) return false;
-        // Users can only update their own profile
         return user._id.toString() === event.locals.user.id;
     },
 
     beforeUpdate: (user, data, event) => {
-        // Prevent updating protected fields
         const protectedFields = [
             'email',
             'google_id',
@@ -49,7 +45,6 @@ export const userService = new CrudService<IUser>({
         const updateData = data as Record<string, unknown>;
         protectedFields.forEach((field) => delete updateData[field]);
 
-        // Update last_login if it's the user's own profile
         if (user._id.toString() === event.locals.user!.id) {
             updateData.last_login = new Date();
         }
@@ -58,7 +53,6 @@ export const userService = new CrudService<IUser>({
     },
 });
 
-// Additional user-specific methods
 export async function getUserProfile(event: RequestEvent, userId: string) {
     if (!event.locals.user) {
         error(401, 'Unauthorized');

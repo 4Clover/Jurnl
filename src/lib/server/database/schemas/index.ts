@@ -1,4 +1,4 @@
-﻿// ---- Core Models ----
+// ---- Core Models ----
 import { Journal as JournalModel } from './journal.schema';
 import { Entry as EntryModel } from './entry.schema';
 import { User as UserModel } from './user.schema';

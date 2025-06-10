@@ -12,10 +12,10 @@ export const load: PageServerLoad = async ({ locals, url, fetch }) => {
         );
     }
 
-    // Fetch user's journals
+    // Fetch user's journals with recent entries for landing page
     let journals = [];
     try {
-        const response = await fetch('/api/journals');
+        const response = await fetch('/api/journals?withEntries=true');
         if (response.ok) {
             journals = await response.json();
         } else {

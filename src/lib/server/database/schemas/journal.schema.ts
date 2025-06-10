@@ -2,9 +2,10 @@
 
 export interface IJournal extends Document {
     title: string;
-    user: Types.ObjectId; // Reference to User who owns this journal
-    cover_color: string; // Hex color for the journal cover
-    entries: Types.ObjectId[]; // Array of Entry references
+    user: Types.ObjectId; 
+    cover_color: string;
+    description?: string; 
+    entries: Types.ObjectId[]; 
     createdAt: Date;
     updatedAt: Date;
 }
@@ -12,9 +13,10 @@ export interface IJournal extends Document {
 export interface IJournalSerializable {
     _id: string;
     title: string;
-    user: string; // ObjectId as string
+    user: string;
     cover_color: string;
-    entries: string[]; // Array of ObjectId strings
+    description?: string;
+    entries: string[];
     createdAt: string;
     updatedAt: string;
 }
@@ -40,6 +42,10 @@ const JournalSchema = new Schema<IJournal>(
                 },
                 message: 'Cover color must be a valid hex color.',
             },
+        },
+        description: {
+            type: String,
+            maxlength: 500,
         },
         entries: [
             {

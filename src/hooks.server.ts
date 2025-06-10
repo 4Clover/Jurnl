@@ -28,31 +28,6 @@ export const handle: Handle = async ({ event, resolve }) => {
         console.log(`📍 [${event.request.method}] ${event.url.pathname} → ${filePath}`);
     }
 
-    // ============ TEMPORARY AUTH BYPASS FOR DEVELOPMENT ============
-    // Remove when auth is working
-    // if (dev) {
-    //     console.log('🔧 Dev mode: Bypassing auth for', event.url.pathname);
-    //     event.locals.user = {
-    //         id: '507f1f77bcf86cd799439011',
-    //         email: 'test@example.com',
-    //         username: 'testuser',
-    //         username_display: 'Test User',
-    //         avatar_url: undefined,
-    //         bio_image_url: undefined,
-    //         bio_text: '',
-    //         auth_provider: 'google',
-    //         createdAt: new Date().toISOString()
-    //     };
-    //     event.locals.session = {
-    //         _id: 'fake-session-id',
-    //         userId: '507f1f77bcf86cd799439011',
-    //         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-    //     };
-    //
-    //     return resolve(event);
-    // }
-    // ============ END TEMPORARY BYPASS ============
-
     const clientToken = event.cookies.get(SESSION_COOKIE_NAME);
 
     if (clientToken) {
@@ -124,7 +99,8 @@ export const handleError: HandleServerError = ({ error, event }) => {
         if (error instanceof Error && 'code' in error && error.code) {
             clientError.code = error.code as string;
         }
-        clientError.stack = error instanceof Error ? error.stack : undefined;
+        const errorWithStack = clientError as App.Error & { stack?: string };
+        errorWithStack.stack = error instanceof Error ? error.stack : undefined;
     }
 
     return clientError;

@@ -1,6 +1,6 @@
-import type { IJournal } from "$schemas";
-import type { IEntry } from "$schemas";
+import type { IJournal, IEntrySerializable } from "$schemas";
 import type { SerializableUser } from "$schemas";
+import type { Types } from "mongoose";
 
 export interface UserJournalsProps {
     journalList: IJournal[];
@@ -9,7 +9,9 @@ export interface UserJournalsProps {
 export interface UserJournalProps {
     journalTitle: string;
     journalColor: string;
-    latestJournalEntries: IEntry[];
+    journalId: string;
+    journalDescription?: string;
+    latestJournalEntries: IEntrySerializable[] | Types.ObjectId[];
 }
 
 export interface UserProfileProps {

@@ -26,7 +26,7 @@
     {#if entry.content_zones.picture_text.image.url || entry.content_zones.picture_text.text}
         <section class="zone-picture-text">
             {#if entry.content_zones.picture_text.image.url}
-                <div class="image-container">
+                <figure class="image-container">
                     <img
                         src={entry.content_zones.picture_text.image.url}
                         alt={entry.content_zones.picture_text.image.alt}
@@ -34,7 +34,7 @@
                     {#if entry.content_zones.picture_text.image.caption}
                         <figcaption>{entry.content_zones.picture_text.image.caption}</figcaption>
                     {/if}
-                </div>
+                </figure>
             {/if}
             
             {#if entry.content_zones.picture_text.text}
