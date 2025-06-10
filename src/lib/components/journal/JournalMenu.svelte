@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { JournalCoverProps } from "$lib/types/journal.types";
+    import type { JournalMenuProps } from "$lib/types/journal.types";
 
-    let {journalTitle, journalId} : JournalCoverProps = $props();
+    let {journalTitle, journalId} : JournalMenuProps = $props();
 </script>
 
 <div class="journal-menu">
