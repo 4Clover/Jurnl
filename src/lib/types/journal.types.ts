@@ -14,4 +14,10 @@ export interface EntrySidebarItemProps {
 export interface JournalCoverProps {
     journalTitle: string;
     journalId: string;
+    coverColor: string;
+}
+
+export interface JournalMenuProps {
+    journalTitle: string;
+    journalId: string;
 }

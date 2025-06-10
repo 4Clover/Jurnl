@@ -88,9 +88,9 @@
 .journal-book-cover {
     width: 29rem;
     height: 38.313rem;
-    background-image: url(../assets/journal_book.png);
     margin: auto;
-    margin-top: 5rem;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
 }
 
 .journal-menu {
@@ -100,6 +100,7 @@
     gap: 0.25rem;
     background-color: variables.$off-white;
     position: absolute;
+    top: 17rem;
     width: 18.8rem;
     height: 7.31rem;
     padding: 0.188rem;
