@@ -26,26 +26,6 @@
 //
 // For JournalCover.svelte
 //
-
-//
-// For JournalEditDialog.svelte
-//
-
-//
-// For JournalMenu.svelte
-//
-
-.journal-preview {
-    display: flex;
-}
-
-.journal-page-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-}
-
 .journal-book-cover {
     width: 29rem;
     height: 38.313rem;
@@ -54,6 +34,13 @@
     margin-bottom: 5rem;
 }
 
+//
+// For JournalEditDialog.svelte
+//
+
+//
+// For JournalMenu.svelte
+//
 .journal-menu {
     display: flex;
     flex-direction: column;
@@ -65,24 +52,10 @@
     width: 18.8rem;
     height: 7.31rem;
     padding: 0.188rem;
-
-
-
     margin: auto;
     margin-top: 15rem;
     margin-left: 5rem;
     z-index: 20;
-}
-
-.journal-title-box {
-    width: 18.5rem;
-    height: 3.5rem;
-    background-color: variables.$brown;
-}
-
-.journal-title-box > h3 {
-    color: variables.$off-white;
-    text-align: center;
 }
 
 .journal-menu-bar {
@@ -94,12 +67,13 @@
     height: 3.5rem;
 }
 
-.entry-toolbar {
-    width: 100%;
-    height: 3.06rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-color: variables.$light-brown;
+.journal-title-box {
+    width: 18.5rem;
+    height: 3.5rem;
+    background-color: variables.$brown;
+}
+
+.journal-title-box > h3 {
+    color: variables.$off-white;
+    text-align: center;
 }
