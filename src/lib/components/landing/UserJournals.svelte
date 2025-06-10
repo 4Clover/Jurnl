@@ -18,10 +18,10 @@
         '#999f85', // sage
         '#e1d4cb', // beige
         '#bf95aa', // powder pink
-        '#3B82F6', // Blue
-        '#8B5CF6', // Violet
-        '#EC4899', // Pink
-        '#14B8A6', // Teal
+        '#e0a699', 
+        '#b1a0ba', 
+        '#a0bab7', 
+        '#bad9b6',
     ];
 
     async function handleCreateJournal(e: Event) {

@@ -13,7 +13,7 @@
         isOpen = false, 
         title = '',
         description = '',
-        color = '#4B5563',
+        color = '#a2aec6',
         journalId,
         onSave, 
         onCancel
@@ -26,14 +26,14 @@
     let error = $state<string | null>(null);
 
     const presetColors = [
-        '#4B5563', // Gray
-        '#EF4444', // Red
-        '#F59E0B', // Amber
-        '#10B981', // Emerald
-        '#3B82F6', // Blue
-        '#8B5CF6', // Violet
-        '#EC4899', // Pink
-        '#14B8A6', // Teal
+        '#a2aec6', // baby blue
+        '#999f85', // sage
+        '#e1d4cb', // beige
+        '#bf95aa', // powder pink
+        '#e0a699', 
+        '#b1a0ba', 
+        '#a0bab7', 
+        '#bad9b6',
     ];
 
     // Reset form when dialog opens/closes or props change
