@@ -198,7 +198,7 @@
         design = 'inner label',
         options = [],
         fontSize = 16,
-        value = 'on',
+        value = $bindable('on'),
     } = $props();
 
     let checked = $state(true);

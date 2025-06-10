@@ -39,7 +39,7 @@
     }
 
     .zone-label {
-        font-size: 1.125rem;
+        font-size: 1.3rem;
         font-weight: 600;
         margin: 0 0 0.5rem 0;
         color: #111827;
@@ -278,6 +278,7 @@
         type EntryTemplate,
     } from '$lib/types/templates.types';
     import ConfirmDialog from '$lib/components/common/ConfirmDialog.svelte';
+    import Switch from '$lib/components/buttons/Switch.svelte';
 
     interface Props {
         journalId: string;
@@ -741,6 +742,18 @@
                 ></textarea>
             </div>
         {/if}
+
+        <!-- Zone 6: Make Public -->
+        <div class="zone zone-freeform">
+            <h3 class="zone-label">Share Entry</h3>
+            <Switch
+                bind:value={shared_with_friends}
+                label=""
+                design="multi"
+                options={['public', 'private']}
+                fontSize={14}
+            />
+        </div>
 
         <!-- Submit -->
         <div class="form-actions">
