@@ -4,7 +4,7 @@
     import { goto } from '$app/navigation';
 
     let { journalList } : UserJournalsProps = $props();
-    
+
     let refreshTrigger = $state(0);
     
     let showCreateForm = $state(false);
@@ -65,7 +65,7 @@
         coverColor = '#4B5563';
         error = null;
     }
-    
+
     function handleJournalUpdate(journalId: string) {
         // Trigger refresh of the journal list
         refreshTrigger++;
@@ -80,11 +80,11 @@
         <h2>My Journals</h2>
         {#if journalList.length > 0}
             <button 
-                class="create-button"
+                class="create-button sm-button"
                 onclick={() => showCreateForm = true}
                 disabled={showCreateForm}
             >
-                + New Journal
+                <h3>Create New Journal</h3>
             </button>
         {/if}
     </div>
@@ -191,27 +191,6 @@
         font-size: 1.5rem;
         font-weight: 600;
         color: #111827;
-    }
-
-    .create-button {
-        background: #3b82f6;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-    .create-button:hover:not(:disabled) {
-        background: #2563eb;
-    }
-
-    .create-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
     }
 
     .create-form-container {
@@ -365,4 +344,14 @@
         padding-bottom: 1rem;
     }
 
+    .journal-link {
+        text-decoration: none;
+        color: inherit;
+        flex-shrink: 0;
+        transition: transform 0.2s;
+    }
+
+    .journal-link:hover {
+        transform: translateY(-2px);
+    }
 </style>

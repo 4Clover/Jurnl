@@ -107,6 +107,15 @@
 
 <div class="feed-title">
     <h2 class="friend-title">My Close Friends</h2>
+<<<<<<< Updated upstream
+=======
+{#if successMessage}
+    <div>{successMessage}</div>
+{/if}
+{#if errorMessage}
+    <div>{errorMessage}</div>
+{/if}
+>>>>>>> Stashed changes
 
     <div class="friend-func">
         <div class="top">

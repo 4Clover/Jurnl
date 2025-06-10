@@ -76,9 +76,8 @@
     }
 
     .template-card {
-        background: white;
+        background: #999f85;
         border: 2px solid #e5e7eb;
-        border-radius: 12px;
         padding: 2rem;
         cursor: pointer;
         transition: all 0.2s ease;
@@ -88,13 +87,13 @@
     }
 
     .template-card:hover {
-        border-color: #3b82f6;
+        border-color: #4a571a;
         transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
     .template-card.selected {
-        border-color: #3b82f6;
+        border-color: #4a571a;
         background: #eff6ff;
     }
 
@@ -103,7 +102,7 @@
         position: absolute;
         top: 1rem;
         right: 1rem;
-        background: #3b82f6;
+        background: #4a571a;
         color: white;
         width: 24px;
         height: 24px;
@@ -122,11 +121,11 @@
     .template-card h3 {
         font-size: 1.25rem;
         margin: 0 0 0.5rem 0;
-        color: #111827;
+        color: #ffffff;
     }
 
     .template-description {
-        color: #6b7280;
+        color: #ffffff;
         font-size: 0.875rem;
         margin-bottom: 1rem;
         line-height: 1.5;
@@ -144,7 +143,6 @@
         background: #f3f4f6;
         color: #4b5563;
         padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
         font-size: 0.75rem;
         font-weight: 500;
     }

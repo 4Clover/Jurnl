@@ -99,3 +99,9 @@ background-color: variables.$beige
     margin-left: 0;
     margin-right: 0;
 }
+
+.create-button {
+    @include primary;
+    height: 3.125rem;
+    margin-inline: 0;
+}

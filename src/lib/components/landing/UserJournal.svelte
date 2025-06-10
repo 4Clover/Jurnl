@@ -172,12 +172,12 @@
 
 <style lang="scss">
     .user-journal {
-        background: white;
+        background: #d9d9d9;
         border-radius: 8px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         transition: all 0.2s;
-        min-width: 280px;
+        min-width: 26rem;
         cursor: pointer;
     }
 
@@ -237,12 +237,11 @@
     }
 
     .entry-previews {
-        flex: 1;
         padding: 1rem;
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-        justify-content: flex-start;
+        align-items: start;
         overflow: hidden;
     }
 
@@ -264,6 +263,8 @@
     .entry-preview {
         display: flex;
         flex-direction: column;
+        overflow: hidden;
+        text-overflow: ellipsis;
         gap: 0.25rem;
         padding-bottom: 0.5rem;
         border-bottom: 1px solid #f3f4f6;
@@ -349,4 +350,5 @@
         opacity: 1;
         transform: scale(1);
     }
+
 </style>

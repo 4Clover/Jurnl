@@ -57,6 +57,7 @@
     text-align: center;
 }
 
+
 //SOURCE: https://www.w3schools.com/howto/howto_css_menu_horizontal_scroll.asp
 .journal-scroll {
     display: flex;
@@ -72,10 +73,6 @@
 .journal-cover {
     min-width: 13rem;
     min-height: 18rem;
-    border-bottom-style: inset;
-    border-right-style: inset;
-    border-width: 0.5rem;
-    border-color: variables.$beige;
 }
 
 .journal-page-content {
@@ -104,6 +101,9 @@
     width: 18.8rem;
     height: 7.31rem;
     padding: 0.188rem;
+
+
+
     margin: auto;
     margin-top: 15rem;
     margin-left: 5rem;
@@ -128,25 +128,6 @@
     align-items: center;
     width: 18.5rem;
     height: 3.5rem;
-}
-
-.entry-previews {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    padding-inline: 0.5rem;
-    width: 13rem;
-    height: 18rem;
-}
-
-.entry-preview-button {
-    width: 10.25rem;
-    height: 1.3rem;
-    padding-inline: 0.25rem;
-    flex-shrink: 0;
-    background-color: variables.$gray;
-    text-align: start;
 }
 
 .entry-sidebar {
@@ -201,6 +182,7 @@
     &__button {
         width: 40%;
         margin: 0;
+
     }
 }
 
@@ -212,6 +194,7 @@
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
+
 .user-profile {
     padding-block-start: 2.5rem;
 }
@@ -283,7 +266,9 @@
 }
 
 .public-entry-preview {
+
     padding: 0.67rem;
+
     background-color: variables.$gray;
 }
 
