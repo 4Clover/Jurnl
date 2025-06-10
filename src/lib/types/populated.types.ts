@@ -31,7 +31,7 @@ export interface PopulatedEntry {
     entry_date: Date;
     journal: PopulatedJournal;
     user?: PopulatedUser;
-    shared_with_friends?: string[];
+    shared_with_friends: string;
 }
 
 /**
@@ -40,15 +40,15 @@ export interface PopulatedEntry {
 export const USER_POPULATE_FIELDS = {
     basic: '_id username username_display avatar_url',
     profile: '_id username username_display avatar_url bio_image_url bio_text',
-    friend: '_id username username_display bio_image_url avatar_url'
+    friend: '_id username username_display bio_image_url avatar_url',
 } as const;
 
 export const JOURNAL_POPULATE_FIELDS = {
     basic: '_id title cover_color',
-    full: '_id title cover_color createdAt updatedAt'
+    full: '_id title cover_color createdAt updatedAt',
 } as const;
 
 export const ENTRY_POPULATE_FIELDS = {
     basic: '_id title entry_date',
-    withJournal: '_id title entry_date journal'
+    withJournal: '_id title entry_date journal',
 } as const;

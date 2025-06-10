@@ -9,19 +9,23 @@ export const contentZonesSchema = z.object({
         image: z.object({
             url: z.string().nullable(),
             alt: z.string().default(''),
-            caption: z.string().default('')
+            caption: z.string().default(''),
         }),
-        text: z.string().default('')
+        text: z.string().default(''),
     }),
     list: z.object({
-        items: z.array(z.object({
-            text: z.string(),
-            checked: z.boolean().default(false)
-        })).default([])
+        items: z
+            .array(
+                z.object({
+                    text: z.string(),
+                    checked: z.boolean().default(false),
+                }),
+            )
+            .default([]),
     }),
     text_right: z.object({
-        content: z.string().default('')
-    })
+        content: z.string().default(''),
+    }),
 });
 
 export const createEntrySchema = z.object({
@@ -29,14 +33,19 @@ export const createEntrySchema = z.object({
     entry_date: z.string().datetime().optional(),
     content_zones: contentZonesSchema,
     free_form_content: z.string().default(''),
-    shared_with_friends: z.array(z.string()).optional().default([]),
-    attachments: z.array(z.object({
-        type: z.enum(['image', 'sticker']),
-        id: z.string(),
-        url: z.string().optional(),
-        caption: z.string().optional(),
-        metadata: z.record(z.any()).optional()
-    })).optional().default([])
+    shared_with_friends: z.string().default('private'),
+    attachments: z
+        .array(
+            z.object({
+                type: z.enum(['image', 'sticker']),
+                id: z.string(),
+                url: z.string().optional(),
+                caption: z.string().optional(),
+                metadata: z.record(z.any()).optional(),
+            }),
+        )
+        .optional()
+        .default([]),
 });
 
 export const updateEntrySchema = createEntrySchema.partial();
@@ -53,8 +62,10 @@ export class EntryService extends CrudService<IEntry> {
                 const userId = event.locals.user.id;
 
                 // Check if user owns the entry or is in shared_with_friends
-                return entry.user.toString() === userId ||
-                    entry.shared_with_friends.some(id => id.toString() === userId);
+                return (
+                    entry.user.toString() === userId ||
+                    entry.shared_with_friends === 'public'
+                );
             },
 
             canWrite: (entry, event) => {
@@ -68,7 +79,9 @@ export class EntryService extends CrudService<IEntry> {
                 }
 
                 // Ensure we have a journal ID
-                const journalId = event.params?.journal || (data as { journal: string }).journal;
+                const journalId =
+                    event.params?.journal ||
+                    (data as { journal: string }).journal;
                 if (!journalId) {
                     error(400, 'Journal ID is required');
                 }
@@ -87,9 +100,11 @@ export class EntryService extends CrudService<IEntry> {
                     ...(data as { journal: string }),
                     journal: journalId,
                     user: event.locals.user.id,
-                    entry_date: (data as { entry_date: string }).entry_date || new Date().toISOString()
+                    entry_date:
+                        (data as { entry_date: string }).entry_date ||
+                        new Date().toISOString(),
                 };
-            }
+            },
         });
     }
 
@@ -111,7 +126,7 @@ export class EntryService extends CrudService<IEntry> {
 
         return this.list(event, {
             journal: journalId,
-            user: event.locals.user.id
+            user: event.locals.user.id,
         });
     }
 }
