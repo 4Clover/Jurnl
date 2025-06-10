@@ -5,7 +5,9 @@
         test: { loading: true, ok: false, data: null },
         journals: { loading: true, ok: false, data: null },
         stats: { loading: true, ok: false, data: null },
-        create: { loading: false, ok: false, data: null }
+        create: { loading: false, ok: false, data: null },
+        seed: { loading: false, ok: false, data: null },
+        clearSeed: { loading: false, ok: false, data: null }
     });
 
     async function checkEndpoint(name: keyof typeof status, url: string) {
@@ -48,6 +50,48 @@
             await checkEndpoint('stats', '/api/stats');
         } catch (err) {
             status.create = {
+                loading: false,
+                ok: false,
+                data: `Error: ${err}` as any,
+            };
+        }
+    }
+
+    async function seedTestData() {
+        status.seed = { loading: true, ok: false, data: null };
+        try {
+            const res = await fetch('/api/dev/seed', {
+                method: 'POST'
+            });
+            const data = await res.json();
+            status.seed = {
+                loading: false,
+                ok: res.ok,
+                data: res.ok ? data : `Error: ${data.message}`
+            };
+        } catch (err) {
+            status.seed = {
+                loading: false,
+                ok: false,
+                data: `Error: ${err}` as any,
+            };
+        }
+    }
+
+    async function clearTestData() {
+        status.clearSeed = { loading: true, ok: false, data: null };
+        try {
+            const res = await fetch('/api/dev/seed', {
+                method: 'DELETE'
+            });
+            const data = await res.json();
+            status.clearSeed = {
+                loading: false,
+                ok: res.ok,
+                data: res.ok ? data : `Error: ${data.message}`
+            };
+        } catch (err) {
+            status.clearSeed = {
                 loading: false,
                 ok: false,
                 data: `Error: ${err}` as any,
@@ -136,35 +180,104 @@
         </div>
     </div>
     
-    <!-- Create Journal Test -->
-    <div style="margin-top: 2rem; text-align: center;">
-        <button
-            onclick={createJournal}
-            disabled={status.create.loading}
-            style="
-                padding: 1rem 2rem;
-                background: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 1rem;
-                cursor: pointer;
-                opacity: {status.create.loading ? 0.5 : 1};
-            "
-        >
-            {status.create.loading ? 'Creating...' : 'Create Test Journal'}
-        </button>
+    <!-- Development Actions -->
+    <div style="margin-top: 2rem;">
+        <h2 style="text-align: center; margin-bottom: 1rem;">🔧 Development Actions</h2>
         
-        {#if status.create.data}
-            <div style="
-                margin-top: 1rem;
-                padding: 1rem;
-                border-radius: 8px;
-                background: {status.create.ok ? '#d1fae5' : '#fee2e2'};
-                text-align: left;
-            ">
-                <strong>Create Result:</strong>
-                <pre style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">{JSON.stringify(status.create.data, null, 2)}</pre>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <!-- Create Journal Test -->
+            <button
+                onclick={createJournal}
+                disabled={status.create.loading}
+                style="
+                    padding: 1rem 2rem;
+                    background: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    opacity: {status.create.loading ? 0.5 : 1};
+                "
+            >
+                {status.create.loading ? 'Creating...' : 'Create Test Journal'}
+            </button>
+            
+            <!-- Seed Test Data -->
+            <button
+                onclick={seedTestData}
+                disabled={status.seed.loading}
+                style="
+                    padding: 1rem 2rem;
+                    background: #10b981;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    opacity: {status.seed.loading ? 0.5 : 1};
+                "
+            >
+                {status.seed.loading ? 'Seeding...' : '🌱 Seed Test Users'}
+            </button>
+            
+            <!-- Clear Test Data -->
+            <button
+                onclick={clearTestData}
+                disabled={status.clearSeed.loading}
+                style="
+                    padding: 1rem 2rem;
+                    background: #ef4444;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    opacity: {status.clearSeed.loading ? 0.5 : 1};
+                "
+            >
+                {status.clearSeed.loading ? 'Clearing...' : '🧹 Clear Test Data'}
+            </button>
+        </div>
+        
+        <!-- Results Display -->
+        {#if status.create.data || status.seed.data || status.clearSeed.data}
+            <div style="margin-top: 1rem; display: grid; gap: 1rem;">
+                {#if status.create.data}
+                    <div style="
+                        padding: 1rem;
+                        border-radius: 8px;
+                        background: {status.create.ok ? '#d1fae5' : '#fee2e2'};
+                        text-align: left;
+                    ">
+                        <strong>Create Journal Result:</strong>
+                        <pre style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">{JSON.stringify(status.create.data, null, 2)}</pre>
+                    </div>
+                {/if}
+                
+                {#if status.seed.data}
+                    <div style="
+                        padding: 1rem;
+                        border-radius: 8px;
+                        background: {status.seed.ok ? '#d1fae5' : '#fee2e2'};
+                        text-align: left;
+                    ">
+                        <strong>Seed Data Result:</strong>
+                        <pre style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">{JSON.stringify(status.seed.data, null, 2)}</pre>
+                    </div>
+                {/if}
+                
+                {#if status.clearSeed.data}
+                    <div style="
+                        padding: 1rem;
+                        border-radius: 8px;
+                        background: {status.clearSeed.ok ? '#d1fae5' : '#fee2e2'};
+                        text-align: left;
+                    ">
+                        <strong>Clear Data Result:</strong>
+                        <pre style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">{JSON.stringify(status.clearSeed.data, null, 2)}</pre>
+                    </div>
+                {/if}
             </div>
         {/if}
     </div>
@@ -183,6 +296,45 @@
             {:else}
                 ❌ Not authenticated
             {/if}
+        </p>
+    </div>
+
+    <!-- Test Users Info -->
+    <div style="
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: #f0f9ff;
+        border-radius: 8px;
+        border: 1px solid #0ea5e9;
+    ">
+        <h3 style="margin: 0 0 1rem 0; color: #0369a1;">👥 Test Users for Friends Testing</h3>
+        <p style="margin: 0 0 1rem 0; color: #0c4a6e;">
+            Use the "Seed Test Users" button to create these test accounts with sample journals and entries:
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div style="background: white; padding: 1rem; border-radius: 6px;">
+                <strong>alice_writer</strong><br>
+                <small>Alice Cooper</small><br>
+                <em>Daily journaler ☕</em>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: 6px;">
+                <strong>bob_traveler</strong><br>
+                <small>Bob the Explorer</small><br>
+                <em>Adventure seeker 🌍</em>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: 6px;">
+                <strong>charlie_dev</strong><br>
+                <small>Charlie Code</small><br>
+                <em>Developer 💻</em>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: 6px;">
+                <strong>diana_artist</strong><br>
+                <small>Diana Arts</small><br>
+                <em>Creative soul 🎨</em>
+            </div>
+        </div>
+        <p style="margin: 0; color: #0c4a6e;">
+            <strong>Password for all test users:</strong> <code>testpass123</code>
         </p>
     </div>
 </div>

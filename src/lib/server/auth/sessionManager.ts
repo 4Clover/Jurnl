@@ -124,6 +124,9 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         bio_image_url: userDoc.bio_image_url,
         auth_provider: userDoc.auth_provider,
         createdAt: userDoc.createdAt.toISOString(),
+        updatedAt: userDoc.updatedAt.toISOString(),
+        close_friends: userDoc.close_friends.map(id => id.toString()),
+        can_view_friends: userDoc.can_view_friends.map(id => id.toString()),
         journals: []
     };
 

@@ -68,10 +68,14 @@ export const actions: Actions = {
                     username_display: userDoc.username_display,
                     email: userDoc.email,
                     avatar_url: userDoc.avatar_url,
-                    close_friends: userDoc.close_friends,
-                    can_view_friends: userDoc.can_view_friends,
+                    close_friends: userDoc.close_friends.map(id => id.toString()),
+                    can_view_friends: userDoc.can_view_friends.map(id => id.toString()),
                     bio_text: userDoc.bio_text,
                     bio_image_url: userDoc.bio_image_url,
+                    auth_provider: userDoc.auth_provider,
+                    createdAt: userDoc.createdAt.toISOString(),
+                    updatedAt: userDoc.updatedAt.toISOString(),
+                    journals: []
                 };
                 locals.session = {
                     _id: sessionDetails.sessionId,

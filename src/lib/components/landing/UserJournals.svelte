@@ -5,6 +5,8 @@
 
     let { journalList } : UserJournalsProps = $props();
     
+    let refreshTrigger = $state(0);
+    
     let showCreateForm = $state(false);
     let title = $state('');
     let coverColor = $state('#4B5563');
@@ -62,6 +64,14 @@
         title = '';
         coverColor = '#4B5563';
         error = null;
+    }
+    
+    function handleJournalUpdate(journalId: string) {
+        // Trigger refresh of the journal list
+        refreshTrigger++;
+        // In a real app, you'd call an API to refresh the data
+        // For now, we'll let the parent component handle the refresh
+        window.location.reload();
     }
 </script>
 
@@ -151,13 +161,14 @@
     {:else if journalList.length > 0}
         <div class="journal-scroll">
             {#each journalList as journal}
-                <a href="/journals/{journal._id}" class="journal-link">
-                    <UserJournal
-                        journalTitle={journal.title}
-                        journalColor={journal.cover_color}
-                        latestJournalEntries={journal.entries || []}
-                    />
-                </a>
+                <UserJournal
+                    journalTitle={journal.title}
+                    journalColor={journal.cover_color}
+                    journalId={String(journal._id)}
+                    journalDescription={journal.description}
+                    latestJournalEntries={journal.entries || []}
+                    onJournalUpdate={handleJournalUpdate}
+                />
             {/each}
         </div>
     {/if}
@@ -354,14 +365,4 @@
         padding-bottom: 1rem;
     }
 
-    .journal-link {
-        text-decoration: none;
-        color: inherit;
-        flex-shrink: 0;
-        transition: transform 0.2s;
-    }
-
-    .journal-link:hover {
-        transform: translateY(-2px);
-    }
 </style>

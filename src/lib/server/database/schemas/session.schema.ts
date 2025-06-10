@@ -1,7 +1,7 @@
 ﻿import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 
 export interface ISession extends Document {
-    _id: string; // Hashed token
+    _id: string;
     userId: Types.ObjectId;
     expiresAt: Date;
     userAgent?: string;

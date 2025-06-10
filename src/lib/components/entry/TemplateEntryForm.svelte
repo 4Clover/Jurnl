@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
     import { goto } from '$app/navigation';
     import type { IEntrySerializable } from '$schemas';
     import { getTemplate, type EntryTemplate } from '$lib/types/templates.types';
