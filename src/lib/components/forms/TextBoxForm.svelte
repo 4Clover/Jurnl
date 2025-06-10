@@ -1,5 +1,5 @@
 <script lang="ts">
-    let { bioText, isSubmitting } = $props();
+    let { bioText = $bindable(), isSubmitting } = $props();
 </script>
 
 <div class="text-box">
