@@ -195,22 +195,6 @@
     margin-bottom: 0.5rem;
 }
 
-.user-profile {
-    padding-block-start: 2.5rem;
-}
-
-.user-profile-image {
-    max-width: 31.25rem;
-    max-height: 23.5rem;
-    width: 100%;
-    object-fit: cover;
-    flex-shrink: 0;
-}
-
-.user-close-friends {
-    padding-block-start: 2.5rem;
-}
-
 .manage-friends {
     display: flex;
     flex-direction: row;
@@ -359,15 +343,4 @@
     border: 1px solid #d1d5db;
     border-radius: 4px;
     resize: vertical;
-}
-
-@media screen and (min-width: variables.$user-profile-breakpoint) {
-    .user-profile-contents {
-        display: flex;
-    }
-    .user-profile-description {
-        display: flex;
-        padding-inline: 2.5rem;
-        align-items: center;
-    }
 }
