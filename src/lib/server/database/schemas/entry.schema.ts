@@ -4,7 +4,7 @@ import type { IJournal } from '$schemas';
 export interface IEntry extends Document {
     journal: Types.ObjectId;
     user: Types.ObjectId;
-    shared_with_friends: Types.ObjectId[];
+    shared_with_friends: string;
     entry_date: Date;
     title: string;
     content_zones: {
@@ -43,7 +43,7 @@ export interface IEntrySerializable {
     _id: string;
     journal: string;
     user: string;
-    shared_with_friends: string[];
+    shared_with_friends: string;
     entry_date: string;
     title: string;
     content_zones: {
@@ -89,12 +89,10 @@ const EntrySchema = new Schema<IEntry>(
             ref: 'User',
             required: true,
         },
-        shared_with_friends: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-            },
-        ],
+        shared_with_friends: {
+            type: String,
+            required: true,
+        },
         entry_date: {
             type: Date,
             default: Date.now,
@@ -170,7 +168,7 @@ const EntrySchema = new Schema<IEntry>(
             },
         ],
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 
 // Add toJSON method for proper serialization
@@ -181,24 +179,25 @@ EntrySchema.set('toJSON', {
         ret._id = ret._id.toString();
         ret.journal = ret.journal.toString();
         ret.user = ret.user.toString();
-        ret.shared_with_friends = ret.shared_with_friends.map(
-            (id: Types.ObjectId) => id.toString()
-        );
+        ret.shared_with_friends = ret.shared_with_friends as string;
         ret.entry_date = ret.entry_date.toISOString() as string;
         ret.createdAt = ret.createdAt.toISOString() as string;
         ret.updatedAt = ret.updatedAt.toISOString() as string;
 
         // Convert Map to a plain object for metadata in attachments
         if (ret.attachments && Array.isArray(ret.attachments)) {
-            ret.attachments = ret.attachments.map((attachment: Record<string, unknown>) => ({
-                type: attachment.type,
-                id: attachment.id,
-                url: attachment.url,
-                caption: attachment.caption,
-                metadata: attachment.metadata instanceof Map
-                    ? Object.fromEntries(attachment.metadata)
-                    : attachment.metadata || {},
-            }));
+            ret.attachments = ret.attachments.map(
+                (attachment: Record<string, unknown>) => ({
+                    type: attachment.type,
+                    id: attachment.id,
+                    url: attachment.url,
+                    caption: attachment.caption,
+                    metadata:
+                        attachment.metadata instanceof Map
+                            ? Object.fromEntries(attachment.metadata)
+                            : attachment.metadata || {},
+                }),
+            );
         }
 
         delete ret.__v;
@@ -215,7 +214,7 @@ EntrySchema.post<IEntry>('save', async function (doc, next) {
     if (!doc.journal) {
         console.error(
             'Entry saved without journal reference, cannot update journal.',
-            String(doc._id)
+            String(doc._id),
         );
         return next();
     }
@@ -227,7 +226,7 @@ EntrySchema.post<IEntry>('save', async function (doc, next) {
     } catch (err: unknown) {
         console.error(
             `Error in Entry post-save hook for entry ${String(doc._id)} (updating journal ${String(doc.journal)}):`,
-            err
+            err,
         );
         next();
     }
@@ -248,7 +247,7 @@ EntrySchema.post<IEntry>(
             } catch (err: unknown) {
                 console.error(
                     `Error in Entry post-findOneAndDelete hook for entry ${String(doc._id)} (updating journal ${String(doc.journal)}):`,
-                    err
+                    err,
                 );
                 next();
             }
@@ -258,12 +257,12 @@ EntrySchema.post<IEntry>(
                 // console.log('Entry post-findOneAndDelete hook: No document was deleted.');
             } else if (doc && !doc.journal) {
                 console.warn(
-                    `Entry post-findOneAndDelete hook: Deleted entry ${String(doc._id)} had no journal reference.`
+                    `Entry post-findOneAndDelete hook: Deleted entry ${String(doc._id)} had no journal reference.`,
                 );
             }
             next();
         }
-    }
+    },
 );
 
 export const Entry: Model<IEntry> =
