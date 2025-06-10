@@ -130,11 +130,13 @@
     align-items: center;
 }
 
+//SOURCE: https://www.w3schools.com/howto/howto_css_menu_horizontal_scroll.asp
 .journal-scroll {
     display: flex;
+    overflow: auto;
     gap: 1.5rem;
-    overflow-x: auto;
-    padding-bottom: 1rem;
+    white-space: nowrap;
+    padding-block-start: 0.5rem;
 }
 
 .journals-section {
@@ -245,7 +247,8 @@
 }
 
 .journal-cover {
-    width: 80px;
+    min-width: 13rem;
+    min-height: 18rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -280,7 +283,6 @@
 
 .journal-preview {
     display: flex;
-    height: 160px;
 }
 
 .more-entries {
@@ -471,10 +473,6 @@
 //
 // For UserPublicEntries.svelte
 //
-.journal-cover {
-    min-width: 13rem;
-    min-height: 18rem;
-}
 
 .public-entry-journal {
     padding-block-end: 2rem;

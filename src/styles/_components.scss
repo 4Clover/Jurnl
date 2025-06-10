@@ -21,22 +21,6 @@
     margin-bottom: 3rem;
 }
 
-.fieldbox {
-    margin-top: 1rem;
-    width: 50%;
-    height: 3rem;
-    padding: 1rem;
-    background: variables.$off-white;
-    border: 2px solid variables.$beige;
-    border-radius: 5px;
-    &__friend {
-        width: 10rem;
-        height: 3rem;
-        margin-top: 1rem;
-        padding: 1rem;
-    }
-}
-
 .center-container {
     display: flex;
     justify-content: center;
@@ -57,22 +41,8 @@
     text-align: center;
 }
 
-
-//SOURCE: https://www.w3schools.com/howto/howto_css_menu_horizontal_scroll.asp
-.journal-scroll {
-    display: flex;
-    overflow: auto;
-    white-space: nowrap;
-    padding-block-start: 0.5rem;
-}
-
 .journal-preview {
     display: flex;
-}
-
-.journal-cover {
-    min-width: 13rem;
-    min-height: 18rem;
 }
 
 .journal-page-content {
@@ -130,23 +100,6 @@
     height: 3.5rem;
 }
 
-.entry-sidebar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 51rem;
-    width: 21.875rem;
-    padding-top: 4.25rem;
-    gap: 1.75rem;
-    background-color: variables.$beige;
-}
-
-.entry-sidebar-item {
-    width: 18.75rem;
-    height: 3.563rem;
-    background-color: variables.$baby-blue;
-}
-
 .entry-toolbar {
     width: 100%;
     height: 3.06rem;
@@ -155,128 +108,6 @@
     align-items: center;
     justify-content: center;
     background-color: variables.$light-brown;
-}
-
-.feed-item {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin: 1rem;
-    img {
-        max-height: 21rem;
-        min-height: 18rem;
-        width: 30%;
-        object-fit: cover;
-    }
-    &__desc {
-        width: 70%;
-    }
-}
-
-.feed-title {
-    display: flex;
-    align-items: center;
-    &__name {
-        width: 60%;
-    }
-    &__button {
-        width: 40%;
-        margin: 0;
-
-    }
-}
-
-.feed-entry {
-    background-color: variables.$beige;
-    text-align: left;
-    padding: 1rem;
-    width: 100%;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.manage-friends {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 2rem;
-}
-
-.manage-friend {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: variables.$beige;
-    padding: 1.5rem;
-    min-width: 23.75rem;
-    height: 5.13rem;
-}
-
-.delete-friend-button {
-    color: variables.$red;
-}
-
-.user-public-entries {
-    padding-block-start: 2.5rem;
-}
-
-.public-entry-journal {
-    padding-block-end: 2rem;
-    display: flex;
-}
-
-.public-entry-times {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding-inline-start: 1.37rem;
-}
-
-.public-entry-time {
-    width: 13.57rem;
-    padding: 0.67rem;
-    flex-shrink: 0;
-    background-color: variables.$gray;
-}
-
-.public-entry-previews {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 1.5rem;
-    padding-inline-start: 1.37rem;
-}
-
-.public-entry-preview {
-
-    padding: 0.67rem;
-
-    background-color: variables.$gray;
-}
-
-.addfriend {
-    display: flex;
-}
-
-.friend-title {
-    display: flex;
-	//justify-content: flex-begin;
-    white-space: nowrap;
-	width: 100%;
-}
-
-.friend-error {
-    color: red;
-    display: block;
-    white-space: nowrap;
-	width: 100%;
-}
-
-.friend-func {
-    display: flex;
-	justify-content: flex-end;
 }
 
 // User profile setup page components
