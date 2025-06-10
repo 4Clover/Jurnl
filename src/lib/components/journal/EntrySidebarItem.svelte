@@ -2,13 +2,13 @@
     import type { EntrySidebarItemProps } from '$lib/types/journal.types';
     import { goto } from '$app/navigation';
 
-    let { title, entryID, journalID }: EntrySidebarItemProps = $props();
+    let { title, entryId, journalId }: EntrySidebarItemProps = $props();
 </script>
 
 <button
     class="entry-sidebar-item"
     onclick={async () => {
-        await goto(`/journals/${journalID}/${entryID}`);
+        await goto(`/journals/${journalId}/entries/${entryId}`);
     }}
 >
     <h3>{title}</h3>

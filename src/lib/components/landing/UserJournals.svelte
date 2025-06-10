@@ -9,15 +9,15 @@
     
     let showCreateForm = $state(false);
     let title = $state('');
-    let coverColor = $state('#4B5563');
+    let coverColor = $state('#a2aec6');
     let isSubmitting = $state(false);
     let error = $state<string | null>(null);
 
     const presetColors = [
-        '#4B5563', // Gray
-        '#EF4444', // Red
-        '#F59E0B', // Amber
-        '#10B981', // Emerald
+        '#a2aec6', // baby blue
+        '#999f85', // sage
+        '#e1d4cb', // beige
+        '#bf95aa', // powder pink
         '#3B82F6', // Blue
         '#8B5CF6', // Violet
         '#EC4899', // Pink

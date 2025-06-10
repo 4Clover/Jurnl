@@ -1,4 +1,5 @@
 <script lang="ts">
+    import JournalCover from '$lib/components/journal/JournalCover.svelte';
     import type { PageData } from './$types';
 
     let { data }: { data: PageData } = $props();
@@ -15,7 +16,7 @@
 <!--======== VIEW SINGULAR JOURNAL PAGE========-->
 
 <div class="page-container">
-    <header class="page-header">
+    <!-- <header class="page-header">
         <div>
             <nav class="breadcrumb">
                 <a href="/journals">My Journals</a>
@@ -39,17 +40,19 @@
                 Edit Journal
             </a>
         </div>
-    </header>
+    </header> -->
+
+    <JournalCover journalTitle={data.journal.title} journalId={data.journal._id} coverColor={data.journal.cover_color}/>
     
     {#if data.entries.length === 0}
         <div class="empty-state">
             <p>This journal doesn't have any entries yet.</p>
-            <a
+            <!-- <a
                 href="/journals/{data.journal._id}/entries/create"
                 class="button button-primary"
             >
                 Create First Entry
-            </a>
+            </a> -->
         </div>
     {:else}
         <div class="entries-list">
@@ -86,44 +89,6 @@
         padding: 2rem;
     }
 
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 3rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-        color: #6b7280;
-        margin-bottom: 0.5rem;
-    }
-
-    .breadcrumb a {
-        color: #3b82f6;
-        text-decoration: none;
-    }
-
-    .breadcrumb a:hover {
-        text-decoration: underline;
-    }
-
-    .page-header h1 {
-        font-size: 2.5rem;
-        margin: 0;
-        color: #111827;
-    }
-
-    .actions {
-        display: flex;
-        gap: 1rem;
-    }
-
     .button {
         padding: 0.75rem 1.5rem;
         border-radius: 6px;
@@ -156,13 +121,13 @@
     .empty-state {
         text-align: center;
         padding: 4rem;
-        background: #f9fafb;
+        background: #e1d4cb;
         border-radius: 8px;
     }
 
     .empty-state p {
         font-size: 1.125rem;
-        color: #6b7280;
+        /* color: #6b7280; */
         margin-bottom: 2rem;
     }
 

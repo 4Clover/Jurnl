@@ -7,6 +7,17 @@ export interface EntrySidebarProps {
 export interface EntrySidebarItemProps {
     entryDate?: Date;
     title: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+    journalId: string;
+    entryId: string;
+}
+
+export interface JournalCoverProps {
+    journalTitle: string;
+    journalId: string;
+    coverColor: string;
+}
+
+export interface JournalMenuProps {
+    journalTitle: string;
+    journalId: string;
 }

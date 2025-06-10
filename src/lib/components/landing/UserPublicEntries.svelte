@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
 
     const props = $props();
 
@@ -30,12 +29,6 @@
     ];
 
     const journalList = props.journalList ?? defaultJournals;
-
-    onMount(() => {
-        
-        console.log('friendJournals value:', journalList);
-
-    });
     
 </script>
 

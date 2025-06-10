@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config';
 
 // TODO: SITE CONFIG WEBSITES
 
-export default defineConfig({
+export default defineConfig (({mode}) => ({
     plugins: [
         sveltekit(),
         {
@@ -93,6 +93,7 @@ export default defineConfig({
 
     resolve: {
         dedupe: ['svelte'], // Prevent duplicate Svelte instances
+        conditions: mode === 'test' ? ['browser'] : [],
     },
 
     // Enhanced dependency optimization
@@ -139,4 +140,4 @@ export default defineConfig({
             },
         ],
     },
-});
+}));
