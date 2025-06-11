@@ -142,6 +142,16 @@ For basic development, no configuration is needed. For production or custom setu
 ```
 6. Save and copy client ID and secret to .env
 
+## Resources
+All resources are commented in the code directly. Here are a list of general resources used throughout the entire project:
+1. [w3schools.com](https://www.w3schools.com/)
+2. [Svelte Docs](https://svelte.dev/docs)
+3. [Vitest](https://vitest.dev/api/)
+4. [Google OAuth Client Docs](https://support.google.com/cloud/answer/15549257?hl=en)
+5. [Figma](https://www.figma.com/?&utm_source=google&utm_medium=cpc&utm_campaign=21284800681&utm_term=figma&utm_content=699203569595&utm_adgroup=169015407344&gad_source=1&gad_campaignid=21284800681&gbraid=0AAAAACTf0kM1lGeTUv4OY91iDwH8fVyzL&gclid=Cj0KCQjw0qTCBhCmARIsAAj8C4YJZOf2Ll8Aic7t_SIF2rhSPwGGVtwQyxKBtvjnBTOzcFS8wLMKEW8aApAlEALw_wcB&gclsrc=aw.ds)
+6. [Prettier Formatting](https://prettier.io/)
+7. [Docker](https://medium.com/@kerrache.massipssa/basic-dockerfile-commands-a6757872d375)
+
 ## License
 
 Copyright 2025 "The Jurnlers LLC."
