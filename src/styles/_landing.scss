@@ -1,0 +1,512 @@
+@use 'variables';
+@use 'buttons';
+
+//
+// For UserJournals.svelte
+//
+.cancel-button, .create-submit-button {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-size: 0.875rem;
+}
+
+.cancel-button {
+    background: white;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.cancel-button:hover:not(:disabled) {
+    background: #f3f4f6;
+}
+
+.color-option {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+}
+
+.color-option.selected {
+    border-color: #111827;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #111827;
+}
+
+.color-picker {
+    display: flex;
+    gap: 0.5rem;
+}
+
+//.create-button in buttons.scss
+
+.create-first-button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.create-first-button:hover {
+    background: #2563eb;
+}
+
+.create-form-container {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.create-submit-button {
+    background: #3b82f6;
+    color: white;
+}
+
+.create-submit-button:hover:not(:disabled) {
+    background: #2563eb;
+}
+
+.create-submit-button:disabled, .cancel-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.empty-content h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.empty-content p {
+    margin: 0 0 2rem 0;
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.empty-state {
+    background: #f9fafb;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 3rem;
+    text-align: center;
+}
+
+.error-message {
+    background: #fee;
+    border: 1px solid #fcc;
+    color: #c00;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+//SOURCE: https://www.w3schools.com/howto/howto_css_menu_horizontal_scroll.asp
+.journal-scroll {
+    display: flex;
+    overflow: auto;
+    gap: 1.5rem;
+    white-space: nowrap;
+    padding-block-start: 0.5rem;
+}
+
+.journals-section {
+    width: 100%;
+}
+
+.quick-create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.title-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.title-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+//
+// For UserJournal.svelte
+//
+.entry-count {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.entry-date {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.entry-preview {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    gap: 0.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.entry-preview-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.2s;
+    border-radius: 4px;
+    padding: 0.25rem;
+    margin: -0.25rem;
+}
+
+.entry-preview-link:hover {
+    background: #f3f4f6;
+    transform: translateX(2px);
+}
+
+.entry-preview-link:last-child .entry-preview {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.entry-previews {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: start;
+    overflow: hidden;
+}
+
+.entry-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.header-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.journal-cover {
+    min-width: 13rem;
+    min-height: 18rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color), var(--color-dark, var(--color)));
+    position: relative;
+    flex-shrink: 0;
+}
+
+.journal-header {
+    padding: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.journal-header h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.journal-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.journal-preview {
+    display: flex;
+}
+
+.more-entries {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-style: italic;
+    text-align: center;
+    padding: 0.5rem;
+    background: #f9fafb;
+    border-radius: 4px;
+}
+
+.no-entries {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: #9ca3af;
+}
+
+.no-entries span {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.no-entries small {
+    font-size: 0.75rem;
+    color: #d1d5db;
+}
+
+.settings-btn {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    color: #6b7280;
+    transform: scale(0.9);
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+}
+
+.settings-btn:hover, .settings-btn:focus {
+    background: #f3f4f6;
+    color: #374151;
+    transform: scale(1);
+}
+
+.settings-btn:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 1px;
+}
+
+.settings-btn .user-journal:hover {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.user-journal {
+    background: #d9d9d9;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.2s;
+    min-width: 26rem;
+    cursor: pointer;
+}
+
+.user-journal:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+//
+// For UserProfile.svelte
+//
+.user-profile {
+    padding-block-start: 2.5rem;
+}
+
+.user-profile-image {
+    max-width: 31.25rem;
+    max-height: 23.5rem;
+    width: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+@media screen and (min-width: variables.$user-profile-breakpoint) {
+    .user-profile-contents {
+        display: flex;
+    }
+    .user-profile-description {
+        display: flex;
+        padding-inline: 2.5rem;
+        align-items: center;
+    }
+}
+
+//
+// For UserCloseFriends.svelte
+//
+.addfriend {
+    display: flex;
+}
+
+//.addfriend-button in _buttons.scss
+
+.delete-friend-button {
+    color: variables.$red;
+}
+
+.feed-title {
+    display: flex;
+    align-items: center;
+    &__name {
+        width: 60%;
+    }
+    &__button {
+        width: 40%;
+        margin: 0;
+
+    }
+}
+
+.fieldbox {
+    margin-top: 1rem;
+    width: 50%;
+    height: 3rem;
+    padding: 1rem;
+    background: variables.$off-white;
+    border: 2px solid variables.$beige;
+    border-radius: 5px;
+    &__friend {
+        width: 10rem;
+        height: 3rem;
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+}
+
+.friend-error {
+    color: red;
+    display: block;
+    white-space: nowrap;
+	width: 100%;
+}
+
+.friend-func {
+    display: flex;
+	justify-content: flex-end;
+}
+
+.friend-title {
+    display: flex;
+	//justify-content: flex-begin;
+    white-space: nowrap;
+	width: 100%;
+}
+
+.manage-friend {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: variables.$beige;
+    padding: 1.5rem;
+    min-width: 23.75rem;
+    height: 5.13rem;
+}
+
+.manage-friends {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.user-close-friends {
+    padding-block-start: 2.5rem;
+}
+
+//
+// For UserPublicEntries.svelte
+//
+
+.public-entry-journal {
+    padding-block-end: 2rem;
+    display: flex;
+}
+
+.public-entry-preview {
+
+    padding: 0.67rem;
+
+    background-color: variables.$gray;
+}
+
+.public-entry-previews {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.5rem;
+    padding-inline-start: 1.37rem;
+}
+
+.public-entry-time {
+    width: 13.57rem;
+    padding: 0.67rem;
+    flex-shrink: 0;
+    background-color: variables.$gray;
+}
+
+.public-entry-times {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-inline-start: 1.37rem;
+}
+
+.user-public-entries {
+    padding-block-start: 2.5rem;
+}
