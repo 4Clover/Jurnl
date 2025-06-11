@@ -3,22 +3,22 @@
 //
 // For ImageSubmissionForm.svelte
 //
-.image-preview {
+.pfp-preview {
     position: relative;
 }
 
-.image-preview img {
+.pfp-preview img {
     width: 18.75rem;
     height: 12.5rem;
     object-fit: cover;
     border-radius: 4px;
 }
 
-.image-upload input[type='file'] {
+.pfp-upload input[type='file'] {
     display: none;
 }
 
-.picture-box {
+.image-submission-form {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -38,7 +38,7 @@
     cursor: pointer;
 }
 
-.upload-placeholder {
+.pfp-upload-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,7 +51,7 @@
     transition: all 0.2s;
 }
 
-.upload-placeholder:hover {
+.pfp-upload-placeholder:hover {
     border-color: #9ca3af;
     background: #f9fafb;
 }
@@ -66,4 +66,12 @@
     border: 1px solid #d1d5db;
     border-radius: 4px;
     resize: vertical;
+}
+
+.user-profile-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    width: 45rem;
+    align-items: start;
 }

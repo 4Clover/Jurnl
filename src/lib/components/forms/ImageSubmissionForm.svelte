@@ -5,9 +5,9 @@
         $props();
 </script>
 
-<div class="picture-box">
+<div class="image-submission-form">
     {#if pictureUrl}
-        <div class="image-preview">
+        <div class="pfp-preview">
             <img src={pictureUrl} alt={pictureAlt} />
             <button
                 type="button"
@@ -19,14 +19,14 @@
             </button>
         </div>
     {:else}
-        <label class="image-upload">
+        <label class="pfp-upload">
             <input
                 type="file"
                 accept="image/*"
                 onchange={onUpload}
                 disabled={isSubmitting || uploadingImage}
             />
-            <div class="upload-placeholder">
+            <div class="pfp-upload-placeholder">
                 {#if uploadingImage}
                     <span>Uploading...</span>
                 {:else}

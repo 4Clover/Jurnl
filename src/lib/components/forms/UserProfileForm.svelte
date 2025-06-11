@@ -1,12 +1,3 @@
-<style>
-    .zone-picture-text {
-        display: grid;
-        width: 20rem;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-    }
-</style>
-
 <script lang="ts">
     import { goto } from '$app/navigation';
     import type { UserProfileFormProps } from '$lib/types/profile.types';
@@ -80,7 +71,7 @@
     }
 </script>
 
-<div class="zone zone-picture-text">
+<div class="zone user-profile-form">
     <ImageSubmissionForm
         {pictureUrl}
         {pictureAlt}
