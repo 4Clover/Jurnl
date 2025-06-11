@@ -11,6 +11,6 @@
     <a href="/landing">Landing</a>
     <a href="/feed">Friends' Feed</a>
     <a href="/journals">My Journals</a>
-    <a href="/profile">My Profile</a>
+    <a href="/profile">Edit Profile</a>
 </div>
 <LogInOutButton />
