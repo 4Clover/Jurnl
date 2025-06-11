@@ -7,52 +7,51 @@
 
 import connectToDatabase from './database';
 import { User, Journal, Entry } from './schemas';
-import { hashPassword } from '../auth/password';
 import type { Document } from 'mongoose';
 import type { IUser } from './schemas';
 
 interface TestUser {
     username: string;
     email: string;
-    password: string;
     username_display: string;
     bio_text: string;
     bio_image_url?: string;
     avatar_url?: string;
+    google_id: string;
 }
 
 const testUsers: TestUser[] = [
     {
         username: 'alice_writer',
         email: 'alice@example.com',
-        password: 'testpass123',
         username_display: 'Alice Cooper',
         bio_text: 'Daily journaler and coffee enthusiast ☕',
         avatar_url: 'https://api.dicebear.com/7.x/personas/svg?seed=alice',
+        google_id: 'alice_test_google_id',
     },
     {
         username: 'bob_traveler',
         email: 'bob@example.com',
-        password: 'testpass123',
         username_display: 'Bob the Explorer',
         bio_text: 'Adventure seeker documenting travels 🌍',
         avatar_url: 'https://api.dicebear.com/7.x/personas/svg?seed=bob',
+        google_id: 'bob_test_google_id',
     },
     {
         username: 'charlie_dev',
         email: 'charlie@example.com',
-        password: 'testpass123',
         username_display: 'Charlie Code',
         bio_text: 'Software developer who journals about tech and life 💻',
         avatar_url: 'https://api.dicebear.com/7.x/personas/svg?seed=charlie',
+        google_id: 'charlie_test_google_id',
     },
     {
         username: 'diana_artist',
         email: 'diana@example.com',
-        password: 'testpass123',
         username_display: 'Diana Arts',
         bio_text: 'Creative soul sharing art and inspiration 🎨',
         avatar_url: 'https://api.dicebear.com/7.x/personas/svg?seed=diana',
+        google_id: 'diana_test_google_id',
     },
 ];
 
@@ -88,17 +87,15 @@ export async function seedTestUsers(currentUserId?: string): Promise<void> {
         const createdUsers = [];
 
         for (const testUser of testUsers) {
-            const hashedPassword = await hashPassword(testUser.password);
-
             const user = new User({
                 username: testUser.username,
                 email: testUser.email,
-                password: hashedPassword,
+                google_id: testUser.google_id,
                 username_display: testUser.username_display,
                 bio_text: testUser.bio_text,
                 bio_image_url: testUser.bio_image_url || testUser.avatar_url,
                 avatar_url: testUser.avatar_url,
-                auth_provider: 'password',
+                auth_provider: 'google',
                 close_friends: [],
                 can_view_friends: [],
             });
@@ -281,7 +278,7 @@ export async function seedTestUsers(currentUserId?: string): Promise<void> {
             );
             console.log('📰 Shared journal entries created for feed testing');
         }
-        console.log('🔑 All test users have password: testpass123');
+        console.log('🔑 All test users use Google OAuth authentication');
     } catch (error) {
         console.error('❌ Error seeding test users:', error);
     }

@@ -43,7 +43,6 @@ export const userService = new CrudService<IUser>({
             'google_id',
             'username',
             'auth_provider',
-            'password',
         ];
         const updateData = data as Record<string, unknown>;
         protectedFields.forEach((field) => delete updateData[field]);
@@ -62,8 +61,7 @@ export async function getUserProfile(event: RequestEvent, userId: string) {
     }
 
     const user = await User.findById(userId)
-        .populate('journals', 'title cover_color')
-        .select('-password');
+        .populate('journals', 'title cover_color');
 
     if (!user) {
         error(404, 'User not found');

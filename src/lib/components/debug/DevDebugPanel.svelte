@@ -736,9 +736,7 @@
                                         feed testing
                                     </p>
                                     <p>
-                                        🔑 Test user password: <code
-                                            >testpass123</code
-                                        >
+                                        🔑 Test users use Google OAuth authentication
                                     </p>
                                 </div>
                             {/if}

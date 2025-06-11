@@ -14,13 +14,4 @@
     >
         <h3>Log In</h3>
     </button>
-    <button
-        onclick={() => {
-            if (window.location.href !== '/auth/register')
-                window.location.href = '/auth/register';
-        }}
-        class="secondary-button button-md"
-    >
-        <h3>Sign Up</h3>
-    </button>
 </div>

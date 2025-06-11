@@ -13,8 +13,7 @@ export interface IUser extends Document {
     username_display: string;
 
     // Authentication
-    password?: string;
-    auth_provider: 'google' | 'password';
+    auth_provider: 'google';
 
     // Profile Fields
     avatar_url?: string;
@@ -41,7 +40,7 @@ export interface SerializableUser {
     avatar_url?: string;
     bio_image_url?: string;
     bio_text?: string;
-    auth_provider: 'google' | 'password';
+    auth_provider: 'google';
     createdAt: string;
     updatedAt: string;
     close_friends: string[];
@@ -94,15 +93,11 @@ const UserSchema = new Schema<IUser>(
         },
 
         // Authentication
-        password: {
-            type: String,
-            required: false,
-            select: false,
-        },
         auth_provider: {
             type: String,
-            enum: ['google', 'password'],
+            enum: ['google'],
             required: true,
+            default: 'google',
         },
 
         // Profile Fields
@@ -162,7 +157,7 @@ const UserSchema = new Schema<IUser>(
                     close_friends: doc.close_friends.map((friend) =>
                         friend.toString(),
                     ),
-                    // Don't include: google_id, password, journals, friends arrays
+                    // Don't include: google_id, journals, friends arrays
                 };
             },
         },

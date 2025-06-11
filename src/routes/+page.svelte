@@ -22,7 +22,7 @@
             </p>
             <PrimaryButton
                 text="Get Started"
-                onClick={() => goto('/auth/register')}
+                onClick={() => goto('/auth/login')}
             />
         </div>
     </div>
@@ -44,8 +44,8 @@
 
     <div class="cta-title">
         <PrimaryButton
-            text="Sign Up for an Account"
-            onClick={() => goto('/auth/register')}
+            text="Sign In to Get Started"
+            onClick={() => goto('/auth/login')}
         />
     </div>
 </main>

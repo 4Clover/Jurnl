@@ -1,39 +1,12 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { fail } from '@sveltejs/kit';
-import { actions } from '../routes/auth/login/+page.server';
-
-// Mock the database connection
-vi.mock('$lib/server/database/database', () => ({
-    default: vi.fn()
+import { redirect } from '@sveltejs/kit';
+vi.mock('@sveltejs/kit', () => ({
+    redirect: vi.fn(() => {
+        throw new Error('redirect called');
+    })
 }));
 
-// Mock the User model
-vi.mock('$lib/server/database/schemas', () => ({
-    User: {
-        findOne: vi.fn().mockReturnValue({
-            select: vi.fn().mockReturnValue({
-                exec: vi.fn()
-            })
-        })
-    }
-}));
-
-// Mock password verification
-vi.mock('$lib/server/auth/password', () => ({
-    verifyPassword: vi.fn()
-}));
-
-// Mock session management
-vi.mock('$lib/server/auth/sessionManager', () => ({
-    createSession: vi.fn()
-}));
-
-// Mock cookies
-vi.mock('$lib/server/auth/cookies', () => ({
-    setSessionCookie: vi.fn()
-}));
-
-describe('Login Actions', () => {
+describe('Login Page Server', () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
@@ -42,87 +15,105 @@ describe('Login Actions', () => {
         vi.restoreAllMocks();
     });
 
-    it('returns validation error for missing username', async () => {
-        const mockEvent = {
-            request: {
-                formData: async () => new FormData()
-            },
-            url: new URL('http://localhost:3000/login'),
-            locals: {}
-        };
+    describe('Load Function', () => {
+        it('redirects authenticated users to landing page', async () => {
+            const { load } = await import('../routes/auth/login/+page.server');
+            
+            const mockEvent = {
+                locals: {
+                    user: { id: 'user123', username: 'testuser' }
+                },
+                url: new URL('http://localhost:3000/auth/login'),
+                params: {},
+                route: { id: '/auth/login' },
+                cookies: {} as any,
+                fetch: {} as any,
+                getClientAddress: vi.fn(),
+                request: {} as any,
+                setHeaders: vi.fn(),
+                depends: vi.fn(),
+                parent: vi.fn(),
+                untrack: vi.fn(),
+                isDataRequest: false,
+                isSubRequest: false
+            } as any;
 
-        const result = await actions.default(mockEvent);
-        
-        expect(result.status).toBe(400);
-        expect(result.data).toHaveProperty('errors');
-    });
+            await expect(async () => await load(mockEvent)).rejects.toThrow('redirect called');
+            expect(redirect).toHaveBeenCalledWith(303, '/landing');
+        });
 
-    it('returns validation error for missing password', async () => {
-        const formData = new FormData();
-        formData.append('username', 'testuser');
-        
-        const mockEvent = {
-            request: {
-                formData: async () => formData
-            },
-            url: new URL('http://localhost:3000/login'),
-            locals: {}
-        };
+        it('redirects authenticated users to intended destination', async () => {
+            const { load } = await import('../routes/auth/login/+page.server');
+            
+            const mockEvent = {
+                locals: {
+                    user: { id: 'user123', username: 'testuser' }
+                },
+                url: new URL('http://localhost:3000/auth/login?redirectTo=/journals'),
+                params: {},
+                route: { id: '/auth/login' },
+                cookies: {} as any,
+                fetch: {} as any,
+                getClientAddress: vi.fn(),
+                request: {} as any,
+                setHeaders: vi.fn(),
+                depends: vi.fn(),
+                parent: vi.fn(),
+                untrack: vi.fn(),
+                isDataRequest: false,
+                isSubRequest: false
+            } as any;
 
-        const result = await actions.default(mockEvent);
-        
-        expect(result.status).toBe(400);
-        expect(result.data).toHaveProperty('errors');
-    });
+            await expect(async () => await load(mockEvent)).rejects.toThrow('redirect called');
+            expect(redirect).toHaveBeenCalledWith(303, '/journals');
+        });
 
-    it('handles database connection failure', async () => {
-        const connectToDatabase = await import('$lib/server/database/database');
-        vi.mocked(connectToDatabase.default).mockRejectedValue(new Error('Database connection failed'));
-        
-        const formData = new FormData();
-        formData.append('username', 'testuser');
-        formData.append('password', 'testpass');
-        
-        const mockEvent = {
-            request: {
-                formData: async () => formData
-            },
-            url: new URL('http://localhost:3000/login'),
-            locals: {}
-        };
+        it('returns redirect parameter for unauthenticated users', async () => {
+            const { load } = await import('../routes/auth/login/+page.server');
+            
+            const mockEvent = {
+                locals: {},
+                url: new URL('http://localhost:3000/auth/login?redirectTo=/journals'),
+                params: {},
+                route: { id: '/auth/login' },
+                cookies: {} as any,
+                fetch: {} as any,
+                getClientAddress: vi.fn(),
+                request: {} as any,
+                setHeaders: vi.fn(),
+                depends: vi.fn(),
+                parent: vi.fn(),
+                untrack: vi.fn(),
+                isDataRequest: false,
+                isSubRequest: false
+            } as any;
 
-        const result = await actions.default(mockEvent);
-        
-        expect(result.status).toBe(500);
-        expect(result.data?.errors?.form).toContain('unexpected server error');
-    });
+            const result = await load(mockEvent);
+            expect(result).toEqual({ redirectTo: '/journals' });
+        });
 
-    it('returns error for invalid credentials', async () => {
-        const connectToDatabase = await import('$lib/server/database/database');
-        const { User } = await import('$lib/server/database/schemas');
-        
-        vi.mocked(connectToDatabase.default).mockResolvedValue(undefined);
-        vi.mocked(User.findOne).mockReturnValue({
-            select: vi.fn().mockReturnValue({
-                exec: vi.fn().mockResolvedValue(null)
-            })
-        } as any);
-        
-        const formData = new FormData();
-        formData.append('username', 'invaliduser');
-        formData.append('password', 'wrongpass');
-        
-        const mockEvent = {
-            request: {
-                formData: async () => formData
-            },
-            url: new URL('http://localhost:3000/login'),
-            locals: {}
-        };
+        it('returns null redirectTo when no parameter provided', async () => {
+            const { load } = await import('../routes/auth/login/+page.server');
+            
+            const mockEvent = {
+                locals: {},
+                url: new URL('http://localhost:3000/auth/login'),
+                params: {},
+                route: { id: '/auth/login' },
+                cookies: {} as any,
+                fetch: {} as any,
+                getClientAddress: vi.fn(),
+                request: {} as any,
+                setHeaders: vi.fn(),
+                depends: vi.fn(),
+                parent: vi.fn(),
+                untrack: vi.fn(),
+                isDataRequest: false,
+                isSubRequest: false
+            } as any;
 
-        const result = await actions.default(mockEvent);
-        
-        expect(result.status).toBe(400);
-        expect(result.data).toHaveProperty('errors');
+            const result = await load(mockEvent);
+            expect(result).toEqual({ redirectTo: null });
+        });
     });
 });
