@@ -474,13 +474,15 @@
         <!-- Zone 6: Make Public -->
         <div class="zone zone-freeform">
             <h3 class="zone-label">Share Entry</h3>
-            <Switch
-                bind:value={shared_with_friends}
-                label=""
-                design="multi"
-                options={['public', 'private']}
-                fontSize={14}
-            />
+            <div class="public-private-switch">
+                <Switch
+                    bind:value={shared_with_friends}
+                    label=""
+                    design="multi"
+                    options={['public', 'private']}
+                    fontSize={14}
+                />
+            </div>
         </div>
 
         <!-- Submit -->

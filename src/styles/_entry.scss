@@ -178,6 +178,10 @@ section {
 //
 // For TemplateEntryForm.svelte
 //
+.public-private-switch {
+    font-family: 'Neue Montreal';
+}
+
 .templated-entry-form {
     max-width: 800px;
     margin: 0 auto;
@@ -204,10 +208,9 @@ section {
 
 .change-template-button {
     padding: 0.5rem 1rem;
-    background: #f3f4f6;
-    color: #374151;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
+    background: variables.$olive;
+    color: variables.$off-white;
+    font-family: 'Neue Montreal';
     cursor: pointer;
     font-size: 0.875rem;
     transition: all 0.2s;
@@ -349,20 +352,6 @@ section {
     font-weight: 600;
 }
 
-.add-button {
-    padding: 0.5rem 1rem;
-    background: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.875rem;
-}
-
-.add-button:hover {
-    background: #2563eb;
-}
-
 .list-items {
     display: flex;
     flex-direction: column;
@@ -404,22 +393,6 @@ section {
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 2rem;
-}
-
-.submit-button {
-    background: #10b981;
-    color: white;
-    border: none;
-}
-
-.submit-button:hover {
-    background: #059669;
-}
-
-.submit-button:disabled,
-.cancel-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 /* Responsive */
@@ -522,11 +495,12 @@ section {
 }
 
 .zone-badge {
-    background: #f3f4f6;
+    background: variables.$off-white;
     color: #4b5563;
     padding: 0.25rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 500;
+    font-family: 'Neue Montreal';
 }
 
 .template-card.selected .zone-badge {

@@ -127,3 +127,8 @@ background-color: variables.$beige
 .create-submit-button {
     @include primary;
 }
+
+.submit-button, .add-button {
+    @include primary;
+    font-family: 'Nothing You Could Do';
+}

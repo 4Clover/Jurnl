@@ -61,7 +61,7 @@
 }
 
 .dialog-content {
-    background: white;
+    background: variables.$gray;
     border-radius: 12px;
     padding: 2rem;
     max-width: 520px;
@@ -229,12 +229,12 @@ legend {
 }
 
 .button-primary {
-    background: #3b82f6;
+    background: variables.$olive;
     color: white;
 }
 
 .button-primary:hover:not(:disabled) {
-    background: #2563eb;
+    background: variables.$olive;
 }
 
 @media (max-width: 480px) {

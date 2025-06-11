@@ -1,6 +1,6 @@
 <style>
     :root {
-        --accent-color: CornflowerBlue;
+        --accent-color: #4a571a;
         --gray: #ccc;
     }
     /* Inner Design Option */
