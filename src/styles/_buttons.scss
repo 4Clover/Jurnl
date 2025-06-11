@@ -15,7 +15,7 @@ button {
     padding: 0.5rem 2rem;
     justify-content: center;
     align-items: center;
-    border: 3px solid white;
+    border: 3px solid variables.$off-white;
     color: variables.$off-white;
     margin: 1rem;
     white-space: nowrap;
@@ -104,4 +104,26 @@ background-color: variables.$beige
     @include primary;
     height: 3.125rem;
     margin-inline: 0;
+}
+
+.cancel-button {
+    @include secondary;
+    font-size: 1rem;
+    display: inline-block;
+    width: min-content;
+    text-wrap: nowrap;
+    overflow: hidden;
+    justify-self: right;
+    margin-right: 0;
+    padding: 0.5rem 0 0.5rem 0rem;
+    max-width: 5rem;
+    font-family: 'Nothing You Could Do';
+}
+
+.cancel-button:hover {
+    border: 3px solid variables.$off-white;
+}
+
+.create-submit-button {
+    @include primary;
 }

@@ -4,25 +4,6 @@
 //
 // For UserJournals.svelte
 //
-.cancel-button, .create-submit-button {
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-    font-size: 0.875rem;
-}
-
-.cancel-button {
-    background: white;
-    color: #374151;
-    border: 1px solid #d1d5db;
-}
-
-.cancel-button:hover:not(:disabled) {
-    background: #f3f4f6;
-}
 
 .color-option {
     width: 2rem;
@@ -66,26 +47,12 @@
 }
 
 .create-form-container {
-    background: white;
+    background: variables.$gray;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.create-submit-button {
-    background: #3b82f6;
-    color: white;
-}
-
-.create-submit-button:hover:not(:disabled) {
-    background: #2563eb;
-}
-
-.create-submit-button:disabled, .cancel-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 .empty-content h3 {
@@ -167,13 +134,15 @@
     flex: 1;
     padding: 0.75rem;
     border: 1px solid #d1d5db;
+    background-color: variables.$off-white;
     border-radius: 6px;
     font-size: 1rem;
+    font-family: 'Neue Montreal';
 }
 
 .title-input:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: variables.$olive;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -182,14 +151,15 @@
 //
 .entry-count {
     font-size: 0.75rem;
-    color: #6b7280;
+    color: black;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-family: 'Neue Montreal';
 }
 
 .entry-date {
     font-size: 0.75rem;
-    color: #9ca3af;
+    color: black;
 }
 
 .entry-preview {
@@ -199,7 +169,7 @@
     text-overflow: ellipsis;
     gap: 0.25rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid variables.$off-white;
 }
 
 .entry-preview-link {
@@ -298,11 +268,9 @@
 .no-entries {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     height: 100%;
-    text-align: center;
-    color: #9ca3af;
+    color: #000000;
 }
 
 .no-entries span {
@@ -312,7 +280,8 @@
 
 .no-entries small {
     font-size: 0.75rem;
-    color: #d1d5db;
+    color: black;
+    font-family: 'Neue Montreal';
 }
 
 .settings-btn {

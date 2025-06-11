@@ -187,8 +187,8 @@ legend {
 }
 
 .color-option.selected {
-    border-color: #111827;
-    box-shadow: 0 0 0 2px white, 0 0 0 4px #111827;
+    border-color: variables.$olive;
+    box-shadow: 0 0 0 2px variables.$off-white, 0 0 0 4px #111827;
 }
 
 .color-option:disabled {

@@ -41,13 +41,13 @@
 </script>
 
 {#if loading}
-    <div class="loading">Loading friends...</div>
+    <div class="loading"><p>Loading friends...</p></div>
 {:else if error}
     <div class="error">{error}</div>
 {:else if friendlist.length === 0}
     <div class="no-friends">
-        No friends have shared entries with you yet. Add some friends so they
-        can see your shared entries!
+        <p>No friends have shared entries with you yet. Add some friends so they
+        can see your shared entries!</p>
     </div>
 {:else}
     {#each friendlist as friend}

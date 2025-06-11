@@ -37,7 +37,7 @@
         </div>
         <div class="column">
             <h4 class="header">Logistics</h4>
-            <p class="item">Terms and Condition</p>
+            <p class="item">Terms and Conditions</p>
             <p class="item">Privacy Policies</p>
         </div>
     </footer>
