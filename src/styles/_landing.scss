@@ -69,7 +69,7 @@
 }
 
 .create-form-container {
-    background: white;
+    background: variables.$gray;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 1.5rem;
@@ -171,13 +171,15 @@
     flex: 1;
     padding: 0.75rem;
     border: 1px solid #d1d5db;
+    background-color: variables.$off-white;
     border-radius: 6px;
     font-size: 1rem;
+    font-family: 'Neue Montreal';
 }
 
 .title-input:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: variables.$olive;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -186,14 +188,15 @@
 //
 .entry-count {
     font-size: 0.75rem;
-    color: #6b7280;
+    color: black;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-family: 'Neue Montreal';
 }
 
 .entry-date {
     font-size: 0.75rem;
-    color: #9ca3af;
+    color: black;
 }
 
 .entry-preview {
@@ -203,7 +206,7 @@
     text-overflow: ellipsis;
     gap: 0.25rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid variables.$off-white;
 }
 
 .entry-preview-link {
@@ -306,11 +309,9 @@
 .no-entries {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     height: 100%;
-    text-align: center;
-    color: #9ca3af;
+    color: #000000;
 }
 
 .no-entries span {
@@ -320,7 +321,8 @@
 
 .no-entries small {
     font-size: 0.75rem;
-    color: #d1d5db;
+    color: black;
+    font-family: 'Neue Montreal';
 }
 
 .settings-btn {
@@ -488,8 +490,11 @@
 
 .public-entry-preview {
     padding: 0.67rem;
-
     background-color: variables.$gray;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .public-entry-previews {
@@ -501,7 +506,7 @@
 }
 
 .public-entry-scroll {
-    overflow-y: auto;
+    overflow: auto;
     max-height: 18rem;
     width: 80%;
     display: flex;

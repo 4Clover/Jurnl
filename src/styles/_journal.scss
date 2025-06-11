@@ -61,7 +61,7 @@
 }
 
 .dialog-content {
-    background: white;
+    background: variables.$gray;
     border-radius: 12px;
     padding: 2rem;
     max-width: 520px;
@@ -195,9 +195,9 @@ legend {
 }
 
 .color-option.selected {
-    border-color: #111827;
+    border-color: variables.$olive;
     box-shadow:
-        0 0 0 2px white,
+        0 0 0 2px variables.$off-white,
         0 0 0 4px #111827;
 }
 
@@ -239,12 +239,12 @@ legend {
 }
 
 .button-primary {
-    background: #3b82f6;
+    background: variables.$olive;
     color: white;
 }
 
 .button-primary:hover:not(:disabled) {
-    background: #2563eb;
+    background: variables.$olive;
 }
 
 @media (max-width: 480px) {

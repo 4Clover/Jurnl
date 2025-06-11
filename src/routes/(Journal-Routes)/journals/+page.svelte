@@ -27,12 +27,10 @@
     }
 
     .button-primary {
-        background: #3b82f6;
-        color: white;
-    }
-
-    .button-primary:hover {
-        background: #2563eb;
+        background: #4a571a;
+        color: #fdfff4;
+        font-family: 'Nothing You Could Do';
+        border-radius: 0px;
     }
 
     .empty-state {

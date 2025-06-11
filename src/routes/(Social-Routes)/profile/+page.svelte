@@ -5,6 +5,6 @@
     let { data }: PageProps = $props();
 </script>
 
-<h1>USER PROFILE SETUP</h1>
+<h1>EDIT USER PROFILE</h1>
 
 <UserProfileForm userInfo={data.user} />

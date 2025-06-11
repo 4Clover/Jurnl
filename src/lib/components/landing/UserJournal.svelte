@@ -158,12 +158,12 @@
                         aria-label="Open entry: {entry.title}"
                     >
                         <div class="entry-preview">
-                            <span class="entry-title">{entry.title}</span>
-                            <span class="entry-date">
+                            <span class="entry-title"><p>{entry.title}</p></span>
+                            <p class="entry-date">
                                 {new Date(
                                     entry.entry_date,
                                 ).toLocaleDateString()}
-                            </span>
+                            </p>
                         </div>
                     </div>
                 {/each}
@@ -174,7 +174,7 @@
                 {/if}
             {:else}
                 <div class="no-entries">
-                    <span>No entries yet</span>
+                    <p>No entries yet</p>
                     <small>Click to add your first entry</small>
                 </div>
             {/if}
