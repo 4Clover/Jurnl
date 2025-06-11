@@ -1,193 +1,117 @@
-# ScribblyScraps - A Digital Journaling & Scrapbooking Platform
+# Jurnl
 
-Welcome to the ScribblyScraps repository! This project aims to create a rich, interactive web application where users can create and personalize digital journal entries, much like a scrapbook.
+A digital journaling web application where users can create personalized journal entries, organize their thoughts, and express themselves through customizable text and images.
 
-## TODO
+## About Jurnl
 
-1. Vercel docs/deployment information
-    - GitHub actions for checks before push to prod
-    - Configure env secrets so MongoDB can be used
-2. Deal with possible annoying aspects of Prettier and ESlint checks locally and on GitHub
-3.
+Jurnl is designed to bring the personal touch of traditional journaling to the digital world. Users can create multiple journals, write entries with custom fonts and styles, add images, and organize their memories by date. Whether you're documenting daily thoughts, tracking personal growth, or creating a digital scrapbook, Jurnl provides a simple yet flexible platform for self-expression.
 
-## Table of Contents
+### Features
 
-- [ScribblyScraps - A Digital Journaling \& Scrapbooking Platform](#scribblyscraps---a-digital-journaling--scrapbooking-platform)
-    - [TODO](#todo)
-    - [Table of Contents](#table-of-contents)
-    - [Project Overview](#project-overview)
-        - [Key Features (Planned)](#key-features-planned)
-    - [Technology Stack](#technology-stack)
-    - [Coding Standards \& Conventions](#coding-standards--conventions)
-        - [Code Editor](#code-editor)
-        - [Formatting \& Linting](#formatting--linting)
-        - [Environment Variables](#environment-variables)
-    - [Git Workflow](#git-workflow)
-        - [Branching Strategy](#branching-strategy)
-        - [Pull Requests (PRs) \& Merging to `main`](#pull-requests-prs--merging-to-main)
-        - [Developer Best Practices for this Workflow](#developer-best-practices-for-this-workflow)
-    - [Contributing](#contributing)
+- **Multiple Journals**: Create and manage different journals for various aspects of your life
+- **Rich Text Entries**: Write with customizable fonts, text styles, and formatting
+- **Image Support**: Add photos and images to bring your entries to life
+- **Calendar View**: Navigate through your entries by date
+- **Privacy Options**: Keep journals private or share selected entries
+- **Friends System**: Connect with friends and share your journey (coming soon)
+- **Customization**: Personalize the look and feel of your journals
 
-## Project Overview
+## Tech Stack
 
-ScribblyScraps is a full-stack web application built with SvelteKit and MongoDB. It allows users to:
+- **Frontend**: SvelteKit with TypeScript - for a fast, reactive user interface
+- **Database**: MongoDB - for flexible document storage
+- **Styling**: SCSS - for maintainable stylesheets
+- **Authentication**: Session-based auth - for secure user accounts
+- **Development**: In-memory MongoDB for zero-config local development
 
-- Create text-based journal entries.
-- Upload and incorporate photos into entries.
-- Access a calendar view to see entries by date.
-- Customize entries with different "paper" styles, fonts, and digital "stickers."
-- (Future) Share entries with friends or make selected entries public.
+## Getting Started
 
-### Key Features (Planned)
+### Prerequisites
 
-- User authentication and private journals.
-- Rich text editor for journaling.
-- Image uploads and embedding.
-- Calendar view.
-- Customization options (paper, fonts, stickers).
-- Drag-and-drop interface for placing elements.
-- (Barebones) Friends system, custom paper, multiple fonts, image positioning.
-- (Additional) Speech-to-text, prompt of the day, Spotify integration, emoji reactions.
-- (Stretch) Uploadable stickers.
+- Node.js (v16 or higher)
+- npm
 
-## Technology Stack
+### Quick Start
 
-- **Framework:** [SvelteKit (with TypeScript)](README/SVELTE_KIT_EXPLAINED.md)
-- **Database:** [MongoDB](README/MONGODB_EXPLAINED.md)
-- **Styling:** Tailwind CSS
-- **Authentication:** [Lucia](README/LUCIA_EXPLAINED.md)
-- **Build Tool:** Vite (managed by SvelteKit)
-- **Package Manager:** npm
-- **Version Control:** Git, hosted on GitHub
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/jurnl.git
+   cd jurnl
+   ```
 
-For detailed instructions on setting up your development environment, please see [DEVELOPMENT_SETUP.md](README/DEV_ENV_SETUP.md).
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-## Coding Standards & Conventions
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-### Code Editor
+4. Open http://localhost:3000 in your browser
 
-- **Recommended Editor:** Visual Studio Code (VS Code).
-- **Recommended Extensions:**
-    - A `.vscode/extensions.json` file is included in this repository. VS Code will prompt you to install these recommended extensions when you open the project.
-    - Key extensions include: Svelte for VS Code, ESLint, Prettier - Code formatter, Tailwind CSS IntelliSense.
-- If you use a different editor, please ensure you have equivalent plugins for Svelte, TypeScript, ESLint, and Prettier.
-    - Dillon uses JetBrains products (WebStorm, etc.) so he can help with its specific setup and plugins.
+That's it! The app uses an in-memory database for development, so there's no database setup required.
 
-### Formatting & Linting
+### Development Commands
 
-- **Formatter:** Prettier (configuration in `.prettierrc`).
-    - We use the `prettier-plugin-tailwindcss` to automatically sort Tailwind classes.
-- **Linter:** ESLint (configuration in `.eslint.config.js`) with Svelte and TypeScript support.
+```bash
+npm run dev        # Start development server
+npm run build      # Build for production
+npm run preview    # Preview production build
+npm run lint       # Run linting
+npm run format     # Format code with Prettier
+npm run check      # Type checking
+npm run test       # Run tests
+```
 
-    - VS Code ESLint Extension: Make sure your VS Code ESLint extension is configured to use "flat config" if it doesn't detect it automatically (may not matter in newer versions).
+## Debug Panel
 
-        - In your VS Code settings.json:
+Jurnl includes a developer debug panel at `/debug` that allows you to:
+- Test all API routes directly
+- Check authentication states
+- Verify database operations
+- Test the friends system
+- Inspect API responses
 
-        ```json
-            "eslint.experimental.useFlatConfig": true,
-            "eslint.validate": [
-                "javascript",
-                "javascriptreact",
-                "typescript",
-                "typescriptreact",
-                "svelte"
-            ],
-        ```
+This is particularly useful for backend development and API testing without going through the UI.
 
-- **Pre-commit Hooks:** Husky is configured to run Prettier and ESLint on staged files before each commit. This helps maintain code consistency and catch errors early.
+## Project Structure
 
-    - You can manually run checks:
+```
+src/
+├── routes/          # SvelteKit pages and API routes
+├── lib/
+│   ├── components/  # Reusable UI components
+│   ├── server/      # Server-side logic
+│   │   ├── api/     # API services
+│   │   ├── auth/    # Authentication
+│   │   └── database/# Database configuration
+│   └── types/       # TypeScript type definitions
+└── styles/          # SCSS stylesheets
+```
 
-        ```bash
-            npm run lint
-            npm run format
-        ```
+## Environment Variables
 
-### Environment Variables
+For basic development, no configuration is needed. For production or custom setups:
 
-**!!! CURRENTLY BEING EDITED !!!**
-
-- All environment-specific configurations (API keys, database URIs, etc.) should be stored in a `.env` file at the project root.
-- A `.env.example` file is provided as a template. Copy it to `.env` and fill in your values.
-- **The `.env` file is ignored by Git and should never be committed.**
-- **SvelteKit Convention:**
-    - Variables intended for client-side browser access **must** be prefixed with `PUBLIC_`.
-    - Variables without this prefix are only available on the server-side.
-
-## Git Workflow
-
-We use a disciplined Git workflow centered around Pull Requests (PRs) to maintain a clean, stable, and linear history on our `main` branch. **Direct pushes to `main` are disabled.**
-
-### Branching Strategy
-
-1. The `main` branch is our stable, production-ready branch.
-2. For any new feature, bugfix, or task, create a new branch from the latest `main`.
-3. **Branch Naming Conventions:**
-    - Features: `feature/<feature-name>` (e.g., `feature/user-authentication`)
-    - Bugfixes: `fix/<issue-description>` (e.g., `fix/calendar-rendering-bug`)
-    - Chores/Refactors: `chore/<task-name>` (e.g., `chore/update-dependencies`)
-    - Use hyphens (`-`) to separate words in the branch name.
-
-### Pull Requests (PRs) & Merging to `main`
-
-1. All changes destined for `main` **must** go through a Pull Request.
-2. **Key `main` Branch Protections Enforced by GitHub:**
-    - PRs require at least one approval.
-    - Stale approvals are dismissed if new commits are pushed to the PR.
-    - The most recent push to a PR must be approved by someone other than the author.
-    - All review conversations must be resolved.
-    - Required status checks (e.g., linting, tests, build from GitHub Actions) must pass.
-    - The PR branch must be up-to-date with `main` before merging.
-    - **Only Squash Merging is allowed** when merging a PR into `main`. This ensures `main` has a linear history where each commit represents a complete PR.
-    - Force pushes to `main` are blocked.
-
-### Developer Best Practices for this Workflow
-
-To make working with this workflow smoother:
-
-1. **Keep Feature Branches Up-to-Date with `main` using Rebase:**
-
-    - Before starting new work or when wanting to incorporate latest `main` changes into your feature branch, use rebase:
-
-        ```bash
-        git checkout main
-        git pull origin main
-        git checkout your-feature-branch
-        git rebase main
-        # Resolve any conflicts, then continue: git rebase --continue
-        ```
-
-    - This keeps your feature branch history linear on top of `main`.
-
-2. **Clean Up Local Commits Before Pushing/Updating a PR:**
-
-    - Commit frequently with descriptive messages on your local feature branch.
-    - Before pushing to create or update your PR, consider using interactive rebase to squash WIP commits, fixup typos, and reword messages into a set of logical, clean commits for easier review:
-
-        ```bash
-        # On your feature branch (assuming 'main' is your base):
-        git rebase -i main
-        ```
-
-    - While GitHub will perform the final squash into a single commit on `main`, a clean commit history _within the PR itself_ greatly aids the review process.
-
-3. **Make Small, Focused PRs:**
-
-    - Smaller PRs are easier and faster to review and merge.
-
-4. **Use Pull Request Templates:**
-
-    - When creating a PR, please fill out the provided template to ensure all necessary information is included for reviewers.
-
-5. **Pre-commit Hooks:**
-    - Our Husky pre-commit hooks will automatically run linters and formatters. Ensure these pass before pushing your commits.
+- `MONGODB_URI` - MongoDB connection string (optional in dev)
+- Additional OAuth variables for Google login (optional)
 
 ## Contributing
 
-1. Pick an issue to work on (or create one) from the [GitHub Issues page](https://github.com/4Clover/ScribblyScraps/issues). Assign yourself or comment to claim it.
-2. Follow the [Git Workflow](#git-workflow) to create a branch and make your changes.
-3. Ensure your code adheres to the [Coding Standards & Conventions](#coding-standards--conventions).
-4. Thoroughly test your changes locally.
-5. Open a Pull Request for review.
+We welcome contributions! Please:
 
-If you have any questions, ask in Discord!
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
+
+## License
+
+[Your license here]
+
+## Questions?
+
+Feel free to open an issue or reach out to the team!
