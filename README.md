@@ -13,20 +13,20 @@ Welcome to the ScribblyScraps repository! This project aims to create a rich, in
 ## Table of Contents
 
 - [ScribblyScraps - A Digital Journaling \& Scrapbooking Platform](#scribblyscraps---a-digital-journaling--scrapbooking-platform)
-  - [TODO](#todo)
-  - [Table of Contents](#table-of-contents)
-  - [Project Overview](#project-overview)
-    - [Key Features (Planned)](#key-features-planned)
-  - [Technology Stack](#technology-stack)
-  - [Coding Standards \& Conventions](#coding-standards--conventions)
-    - [Code Editor](#code-editor)
-    - [Formatting \& Linting](#formatting--linting)
-    - [Environment Variables](#environment-variables)
-  - [Git Workflow](#git-workflow)
-    - [Branching Strategy](#branching-strategy)
-    - [Pull Requests (PRs) \& Merging to `main`](#pull-requests-prs--merging-to-main)
-    - [Developer Best Practices for this Workflow](#developer-best-practices-for-this-workflow)
-  - [Contributing](#contributing)
+    - [TODO](#todo)
+    - [Table of Contents](#table-of-contents)
+    - [Project Overview](#project-overview)
+        - [Key Features (Planned)](#key-features-planned)
+    - [Technology Stack](#technology-stack)
+    - [Coding Standards \& Conventions](#coding-standards--conventions)
+        - [Code Editor](#code-editor)
+        - [Formatting \& Linting](#formatting--linting)
+        - [Environment Variables](#environment-variables)
+    - [Git Workflow](#git-workflow)
+        - [Branching Strategy](#branching-strategy)
+        - [Pull Requests (PRs) \& Merging to `main`](#pull-requests-prs--merging-to-main)
+        - [Developer Best Practices for this Workflow](#developer-best-practices-for-this-workflow)
+    - [Contributing](#contributing)
 
 ## Project Overview
 
@@ -68,38 +68,40 @@ For detailed instructions on setting up your development environment, please see
 
 - **Recommended Editor:** Visual Studio Code (VS Code).
 - **Recommended Extensions:**
-  - A `.vscode/extensions.json` file is included in this repository. VS Code will prompt you to install these recommended extensions when you open the project.
-  - Key extensions include: Svelte for VS Code, ESLint, Prettier - Code formatter, Tailwind CSS IntelliSense.
+    - A `.vscode/extensions.json` file is included in this repository. VS Code will prompt you to install these recommended extensions when you open the project.
+    - Key extensions include: Svelte for VS Code, ESLint, Prettier - Code formatter, Tailwind CSS IntelliSense.
 - If you use a different editor, please ensure you have equivalent plugins for Svelte, TypeScript, ESLint, and Prettier.
-  - Dillon uses JetBrains products (WebStorm, etc.) so he can help with its specific setup and plugins.
+    - Dillon uses JetBrains products (WebStorm, etc.) so he can help with its specific setup and plugins.
 
 ### Formatting & Linting
 
 - **Formatter:** Prettier (configuration in `.prettierrc`).
-  - We use the `prettier-plugin-tailwindcss` to automatically sort Tailwind classes.
+    - We use the `prettier-plugin-tailwindcss` to automatically sort Tailwind classes.
 - **Linter:** ESLint (configuration in `.eslint.config.js`) with Svelte and TypeScript support.
 
-  - VS Code ESLint Extension: Make sure your VS Code ESLint extension is configured to use "flat config" if it doesn't detect it automatically (may not matter in newer versions).
-    - In your VS Code settings.json:
+    - VS Code ESLint Extension: Make sure your VS Code ESLint extension is configured to use "flat config" if it doesn't detect it automatically (may not matter in newer versions).
 
-    ```json
-        "eslint.experimental.useFlatConfig": true,
-        "eslint.validate": [
-            "javascript",
-            "javascriptreact",
-            "typescript",
-            "typescriptreact",
-            "svelte"
-        ],
-    ```
+        - In your VS Code settings.json:
+
+        ```json
+            "eslint.experimental.useFlatConfig": true,
+            "eslint.validate": [
+                "javascript",
+                "javascriptreact",
+                "typescript",
+                "typescriptreact",
+                "svelte"
+            ],
+        ```
 
 - **Pre-commit Hooks:** Husky is configured to run Prettier and ESLint on staged files before each commit. This helps maintain code consistency and catch errors early.
-  - You can manually run checks:
 
-    ```bash
-        npm run lint
-        npm run format
-    ```
+    - You can manually run checks:
+
+        ```bash
+            npm run lint
+            npm run format
+        ```
 
 ### Environment Variables
 
@@ -109,8 +111,8 @@ For detailed instructions on setting up your development environment, please see
 - A `.env.example` file is provided as a template. Copy it to `.env` and fill in your values.
 - **The `.env` file is ignored by Git and should never be committed.**
 - **SvelteKit Convention:**
-  - Variables intended for client-side browser access **must** be prefixed with `PUBLIC_`.
-  - Variables without this prefix are only available on the server-side.
+    - Variables intended for client-side browser access **must** be prefixed with `PUBLIC_`.
+    - Variables without this prefix are only available on the server-side.
 
 ## Git Workflow
 

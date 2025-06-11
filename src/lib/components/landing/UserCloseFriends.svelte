@@ -24,10 +24,11 @@
 
     async function loadExistingFriends() {
         try {
-            const response = await fetch('/api/friend/getUsernames');
+            const response = await fetch('/api/friends');
             if (response.ok) {
                 const data = await response.json();
-                friends = data.result.map((friend: any) => friend);
+                // API returns the array directly, not wrapped in a result property
+                friends = Array.isArray(data) ? data : [];
             } else {
                 const error = await response.json();
                 let message = error.error;
@@ -47,7 +48,7 @@
             return;
         }
         try {
-            const response = await fetch('/api/friend/add', {
+            const response = await fetch('/api/friends', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -76,12 +77,8 @@
     async function handleClick(event: Event, username: String) {
         event.preventDefault();
         try {
-            const response = await fetch('/api/friend/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ friendUsername: username }),
+            const response = await fetch(`/api/friends/${username}`, {
+                method: 'DELETE',
             });
             if (response.ok) {
                 const data = await response.json();

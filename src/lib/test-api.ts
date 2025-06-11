@@ -1,19 +1,45 @@
 ﻿export async function testApiRoutes() {
     const tests = [
         { method: 'GET', path: '/api/journals', description: 'List journals' },
-        { method: 'POST', path: '/api/journals', description: 'Create journal', body: { title: 'Test Journal' } },
-        { method: 'GET', path: '/api/journals/[id]', description: 'Get specific journal' },
-        { method: 'PUT', path: '/api/journals/[id]', description: 'Update journal', body: { title: 'Updated' } },
-        { method: 'GET', path: '/api/journals/[id]/entries', description: 'List entries' },
-        { method: 'POST', path: '/api/journals/[id]/entries', description: 'Create entry', body: {
+        {
+            method: 'POST',
+            path: '/api/journals',
+            description: 'Create journal',
+            body: { title: 'Test Journal' },
+        },
+        {
+            method: 'GET',
+            path: '/api/journals/[id]',
+            description: 'Get specific journal',
+        },
+        {
+            method: 'PUT',
+            path: '/api/journals/[id]',
+            description: 'Update journal',
+            body: { title: 'Updated' },
+        },
+        {
+            method: 'GET',
+            path: '/api/journals/[id]/entries',
+            description: 'List entries',
+        },
+        {
+            method: 'POST',
+            path: '/api/journals/[id]/entries',
+            description: 'Create entry',
+            body: {
                 title: 'Test Entry',
                 content_zones: {
-                    picture_text: { image: { url: null, alt: '', caption: '' }, text: '' },
+                    picture_text: {
+                        image: { url: null, alt: '', caption: '' },
+                        text: '',
+                    },
                     list: { items: [] },
-                    text_right: { content: '' }
+                    text_right: { content: '' },
                 },
-                free_form_content: 'Test content'
-            }},
+                free_form_content: 'Test content',
+            },
+        },
         { method: 'GET', path: '/api/stats', description: 'Get stats' },
     ];
 
@@ -42,7 +68,7 @@
                 `${test.method} ${test.path}`,
                 `(${response.status})`,
                 '-',
-                test.description
+                test.description,
             );
 
             if (!response.ok && response.status !== 401) {
@@ -50,7 +76,12 @@
                 console.log('   Error:', error);
             }
         } catch (error) {
-            console.log('❌', `${test.method} ${test.path}`, '- Network error', error);
+            console.log(
+                '❌',
+                `${test.method} ${test.path}`,
+                '- Network error',
+                error,
+            );
         }
     }
 

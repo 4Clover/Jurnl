@@ -10,16 +10,16 @@ export async function startMemoryServer(): Promise<string> {
     if (mongoServer && mongoUri) {
         return mongoUri;
     }
-    
+
     // If starting, wait for promise
     if (startPromise) {
         return startPromise;
     }
-    
+
     // ACTUAL START OF SERVER
     // Create a new start promise
     startPromise = createMemoryServer();
-    
+
     try {
         const uri = await startPromise;
         startPromise = null; // Clear promise once complete
@@ -32,20 +32,20 @@ export async function startMemoryServer(): Promise<string> {
 
 async function createMemoryServer(): Promise<string> {
     console.log('Creating new MongoDB Memory Server...');
-    
+
     // Create instance of MongoMemoryServer
     mongoServer = await MongoMemoryServer.create({
         instance: {
             dbName: 'jurnl',
             port: 27018, // Different for conflicts w docker
-            storageEngine: 'wiredTiger'
-        }
+            storageEngine: 'wiredTiger',
+        },
     });
 
     // Get connection string
     mongoUri = mongoServer.getUri();
     console.log('MongoDB Memory Server started at:', mongoUri);
-    
+
     return mongoUri;
 }
 

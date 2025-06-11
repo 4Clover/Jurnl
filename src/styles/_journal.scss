@@ -68,7 +68,9 @@
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
     animation: slideIn 0.3s ease-out;
 }
 
@@ -106,27 +108,33 @@
     font-size: 0.875rem;
 }
 
-.form-input, .form-textarea {
+.form-input,
+.form-textarea {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
     background: white;
 }
 
-.form-input:focus, .form-textarea:focus {
+.form-input:focus,
+.form-textarea:focus {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.form-input.error, .form-textarea.error {
+.form-input.error,
+.form-textarea.error {
     border-color: #ef4444;
 }
 
-.form-input.error:focus, .form-textarea.error:focus {
+.form-input.error:focus,
+.form-textarea.error:focus {
     border-color: #ef4444;
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
@@ -188,7 +196,9 @@ legend {
 
 .color-option.selected {
     border-color: #111827;
-    box-shadow: 0 0 0 2px white, 0 0 0 4px #111827;
+    box-shadow:
+        0 0 0 2px white,
+        0 0 0 4px #111827;
 }
 
 .color-option:disabled {

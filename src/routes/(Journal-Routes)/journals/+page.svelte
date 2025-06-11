@@ -1,45 +1,4 @@
-﻿<script lang="ts">
-    import type { PageData } from './$types';
-
-    let { data }: { data: PageData } = $props();
-</script>
-
-<div class="page-container">
-    <header class="page-header">
-        <h1>My Journals</h1>
-        <a href="/journals/create" class="button button-primary">
-            Create New Journal
-        </a>
-    </header>
-    
-    {#if data.journals.length === 0}
-        <div class="empty-state">
-            <p>You haven't created any journals yet.</p>
-            <a href="/journals/create" class="button button-primary">
-                Create Your First Journal
-            </a>
-        </div>
-    {:else}
-        <div class="journals-grid">
-            {#each data.journals as journal}
-                <a href="/journals/{journal._id}" class="journal-card">
-                    <div
-                        class="journal-cover"
-                        style="background-color: {journal.cover_color}"
-                    >
-                        <h2>{journal.title}</h2>
-                    </div>
-                    <div class="journal-meta">
-                        <span>{journal.entries?.length || 0} entries</span>
-                        <span>Created {new Date(journal.createdAt).toLocaleDateString()}</span>
-                    </div>
-                </a>
-            {/each}
-        </div>
-    {/if}
-</div>
-
-<style>
+﻿<style>
     .page-container {
         max-width: 1200px;
         margin: 0 auto;
@@ -130,3 +89,48 @@
         color: #6b7280;
     }
 </style>
+
+<script lang="ts">
+    import type { PageData } from './$types';
+
+    let { data }: { data: PageData } = $props();
+</script>
+
+<div class="page-container">
+    <header class="page-header">
+        <h1>My Journals</h1>
+        <a href="/journals/create" class="button button-primary">
+            Create New Journal
+        </a>
+    </header>
+
+    {#if data.journals.length === 0}
+        <div class="empty-state">
+            <p>You haven't created any journals yet.</p>
+            <a href="/journals/create" class="button button-primary">
+                Create Your First Journal
+            </a>
+        </div>
+    {:else}
+        <div class="journals-grid">
+            {#each data.journals as journal}
+                <a href="/journals/{journal._id}" class="journal-card">
+                    <div
+                        class="journal-cover"
+                        style="background-color: {journal.cover_color}"
+                    >
+                        <h2>{journal.title}</h2>
+                    </div>
+                    <div class="journal-meta">
+                        <span>{journal.entries?.length || 0} entries</span>
+                        <span
+                            >Created {new Date(
+                                journal.createdAt,
+                            ).toLocaleDateString()}</span
+                        >
+                    </div>
+                </a>
+            {/each}
+        </div>
+    {/if}
+</div>

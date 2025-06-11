@@ -125,9 +125,9 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         auth_provider: userDoc.auth_provider,
         createdAt: userDoc.createdAt.toISOString(),
         updatedAt: userDoc.updatedAt.toISOString(),
-        close_friends: userDoc.close_friends.map(id => id.toString()),
-        can_view_friends: userDoc.can_view_friends.map(id => id.toString()),
-        journals: []
+        close_friends: userDoc.close_friends.map((id) => id.toString()),
+        can_view_friends: userDoc.can_view_friends.map((id) => id.toString()),
+        journals: [],
     };
 
     // serializable session
@@ -167,7 +167,7 @@ export async function invalidateAllUserSessions(
 
 export async function refreshSession(
     sessionId: string,
-    threshold: number = 7 * 24 * 60 * 60 * 1000 // 7 days
+    threshold: number = 7 * 24 * 60 * 60 * 1000, // 7 days
 ): Promise<Date | null> {
     const session = await Session.findById(sessionId);
     if (!session) return null;

@@ -37,10 +37,8 @@ test('UserProfile', () => {
     const { getByText } = render(UserProfile, {
         userInfo: {
             username: 'Test',
-            bio_text:
-                "Test Text",
-            bio_image_url:
-                'test/img',
+            bio_text: 'Test Text',
+            bio_image_url: 'test/img',
         },
     });
 
@@ -52,68 +50,104 @@ test('UserProfile', () => {
 });
 
 describe('UserJournal', () => {
-	it('renders the journal title and entry count', () => {
-		const props = {
-			journalTitle: 'Test Journal',
-			journalColor: '#ffcc00',
-			journalId: 'abc123',
-			journalDescription: 'A test journal.',
-			latestJournalEntries: [] // no entries
-		};
+    it('renders the journal title and entry count', () => {
+        const props = {
+            journalTitle: 'Test Journal',
+            journalColor: '#ffcc00',
+            journalId: 'abc123',
+            journalDescription: 'A test journal.',
+            latestJournalEntries: [], // no entries
+        };
 
-		const { getByText } = render(UserJournal, { props });
+        const { getByText } = render(UserJournal, { props });
 
-		expect(getByText('Test Journal')).toBeInTheDocument();
-		expect(getByText('0 entries')).toBeInTheDocument();
-	});
+        expect(getByText('Test Journal')).toBeInTheDocument();
+        expect(getByText('0 entries')).toBeInTheDocument();
+    });
 
-	it('renders recent entries if available', () => {
-		const entryData = [
-			{ _id: 'e1', title: 'Entry One', entry_date: new Date().toISOString() },
-			{ _id: 'e2', title: 'Entry Two', entry_date: new Date().toISOString() },
-			{ _id: 'e3', title: 'Entry Three',entry_date: new Date().toISOString() },
-			{ _id: 'e4', title: 'Entry Four', entry_date: new Date().toISOString() }
-		];
+    it('renders recent entries if available', () => {
+        const entryData = [
+            {
+                _id: 'e1',
+                title: 'Entry One',
+                entry_date: new Date().toISOString(),
+            },
+            {
+                _id: 'e2',
+                title: 'Entry Two',
+                entry_date: new Date().toISOString(),
+            },
+            {
+                _id: 'e3',
+                title: 'Entry Three',
+                entry_date: new Date().toISOString(),
+            },
+            {
+                _id: 'e4',
+                title: 'Entry Four',
+                entry_date: new Date().toISOString(),
+            },
+        ];
 
-		const props = {
-			journalTitle: 'Populated Journal',
-			journalColor: '#00ccff',
-			journalId: 'xyz789',
-			journalDescription: '',
-			latestJournalEntries: entryData
-		};
+        const props = {
+            journalTitle: 'Populated Journal',
+            journalColor: '#00ccff',
+            journalId: 'xyz789',
+            journalDescription: '',
+            latestJournalEntries: entryData,
+        };
 
-		const { getByText } = render(UserJournal, { props });
+        const { getByText } = render(UserJournal, { props });
 
-		expect(getByText('Entry One')).toBeInTheDocument();
-		expect(getByText('Entry Two')).toBeInTheDocument();
-		expect(getByText('Entry Three')).toBeInTheDocument();
-		expect(getByText('+1 more')).toBeInTheDocument();
-	});
+        expect(getByText('Entry One')).toBeInTheDocument();
+        expect(getByText('Entry Two')).toBeInTheDocument();
+        expect(getByText('Entry Three')).toBeInTheDocument();
+        expect(getByText('+1 more')).toBeInTheDocument();
+    });
 });
 
 describe('UserJournals', () => {
-	it('renders no journals text', () => {
-		const journalList = []; // empty
+    it('renders no journals text', () => {
+        const journalList = []; // empty
 
-		const { getByText } = render(UserJournals, { journalList });
+        const { getByText } = render(UserJournals, { journalList });
 
-		expect(getByText('No journals yet')).toBeInTheDocument();
-	});
+        expect(getByText('No journals yet')).toBeInTheDocument();
+    });
 
-	it('renders journals if available', () => {
-		const journalList = [
-			{ __id: 'j1', title: 'Journal One', cover_color: 'blue', description: 'First'},
-			{ __id: 'j2', title: 'Journal Two', cover_color: 'blue', description: 'Second'},
-			{ __id: 'j3', title: 'Journal Three', cover_color: 'blue', description: 'Third'},
-			{ __id: 'j4', title: 'Journal Four', cover_color: 'blue', description: 'Fourth'}
-		];
+    it('renders journals if available', () => {
+        const journalList = [
+            {
+                __id: 'j1',
+                title: 'Journal One',
+                cover_color: 'blue',
+                description: 'First',
+            },
+            {
+                __id: 'j2',
+                title: 'Journal Two',
+                cover_color: 'blue',
+                description: 'Second',
+            },
+            {
+                __id: 'j3',
+                title: 'Journal Three',
+                cover_color: 'blue',
+                description: 'Third',
+            },
+            {
+                __id: 'j4',
+                title: 'Journal Four',
+                cover_color: 'blue',
+                description: 'Fourth',
+            },
+        ];
 
-		const { getByText } = render(UserJournals, { journalList });
+        const { getByText } = render(UserJournals, { journalList });
 
-		expect(getByText('Journal One')).toBeInTheDocument();
-		expect(getByText('Journal Two')).toBeInTheDocument();
-		expect(getByText('Journal Three')).toBeInTheDocument();
-		expect(getByText('Journal Four')).toBeInTheDocument();
-	});
+        expect(getByText('Journal One')).toBeInTheDocument();
+        expect(getByText('Journal Two')).toBeInTheDocument();
+        expect(getByText('Journal Three')).toBeInTheDocument();
+        expect(getByText('Journal Four')).toBeInTheDocument();
+    });
 });

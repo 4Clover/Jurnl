@@ -1,87 +1,3 @@
-<script lang="ts">
-    import JournalCover from '$lib/components/journal/JournalCover.svelte';
-    import type { PageData } from './$types';
-
-    let { data }: { data: PageData } = $props();
-
-    function formatDate(dateString: string) {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
-</script>
-
-<!--======== VIEW SINGULAR JOURNAL PAGE========-->
-
-<div class="page-container">
-    <!-- <header class="page-header">
-        <div>
-            <nav class="breadcrumb">
-                <a href="/journals">My Journals</a>
-                <span>/</span>
-                <span>{data.journal.title}</span>
-            </nav>
-            <h1>{data.journal.title}</h1>
-        </div>
-        
-        <div class="actions">
-            <a
-                href="/journals/{data.journal._id}/entries/create"
-                class="button button-primary"
-            >
-                New Entry
-            </a>
-            <a
-                href="/journals/{data.journal._id}/edit"
-                class="button button-secondary"
-            >
-                Edit Journal
-            </a>
-        </div>
-    </header> -->
-
-    <JournalCover journalTitle={data.journal.title} journalId={data.journal._id} coverColor={data.journal.cover_color}/>
-    
-    {#if data.entries.length === 0}
-        <div class="empty-state">
-            <p>This journal doesn't have any entries yet.</p>
-            <!-- <a
-                href="/journals/{data.journal._id}/entries/create"
-                class="button button-primary"
-            >
-                Create First Entry
-            </a> -->
-        </div>
-    {:else}
-        <div class="entries-list">
-            {#each data.entries as entry}
-                <article class="entry-card">
-                    <a href="/journals/{data.journal._id}/entries/{entry._id}">
-                        <h3>{entry.title}</h3>
-                        <time>{formatDate(entry.entry_date)}</time>
-                        
-                        {#if entry.content_zones?.picture_text?.image?.url}
-                            <div class="entry-preview has-image">
-                                <img
-                                    src={entry.content_zones.picture_text.image.url}
-                                    alt={entry.content_zones.picture_text.image.alt}
-                                />
-                                <p>{entry.content_zones.picture_text.text || entry.free_form_content}</p>
-                            </div>
-                        {:else if entry.free_form_content}
-                            <div class="entry-preview">
-                                <p>{@html entry.free_form_content.slice(0, 200)}...</p>
-                            </div>
-                        {/if}
-                    </a>
-                </article>
-            {/each}
-        </div>
-    {/if}
-</div>
-
 <style>
     .page-container {
         max-width: 900px;
@@ -190,3 +106,101 @@
         margin: 0;
     }
 </style>
+
+<script lang="ts">
+    import JournalCover from '$lib/components/journal/JournalCover.svelte';
+    import type { PageData } from './$types';
+
+    let { data }: { data: PageData } = $props();
+
+    function formatDate(dateString: string) {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    }
+</script>
+
+<!--======== VIEW SINGULAR JOURNAL PAGE========-->
+
+<div class="page-container">
+    <!-- <header class="page-header">
+        <div>
+            <nav class="breadcrumb">
+                <a href="/journals">My Journals</a>
+                <span>/</span>
+                <span>{data.journal.title}</span>
+            </nav>
+            <h1>{data.journal.title}</h1>
+        </div>
+        
+        <div class="actions">
+            <a
+                href="/journals/{data.journal._id}/entries/create"
+                class="button button-primary"
+            >
+                New Entry
+            </a>
+            <a
+                href="/journals/{data.journal._id}/edit"
+                class="button button-secondary"
+            >
+                Edit Journal
+            </a>
+        </div>
+    </header> -->
+
+    <JournalCover
+        journalTitle={data.journal.title}
+        journalId={data.journal._id}
+        coverColor={data.journal.cover_color}
+    />
+
+    {#if data.entries.length === 0}
+        <div class="empty-state">
+            <p>This journal doesn't have any entries yet.</p>
+            <!-- <a
+                href="/journals/{data.journal._id}/entries/create"
+                class="button button-primary"
+            >
+                Create First Entry
+            </a> -->
+        </div>
+    {:else}
+        <div class="entries-list">
+            {#each data.entries as entry}
+                <article class="entry-card">
+                    <a href="/journals/{data.journal._id}/entries/{entry._id}">
+                        <h3>{entry.title}</h3>
+                        <time>{formatDate(entry.entry_date)}</time>
+
+                        {#if entry.content_zones?.picture_text?.image?.url}
+                            <div class="entry-preview has-image">
+                                <img
+                                    src={entry.content_zones.picture_text.image
+                                        .url}
+                                    alt={entry.content_zones.picture_text.image
+                                        .alt}
+                                />
+                                <p>
+                                    {entry.content_zones.picture_text.text ||
+                                        entry.free_form_content}
+                                </p>
+                            </div>
+                        {:else if entry.free_form_content}
+                            <div class="entry-preview">
+                                <p>
+                                    {@html entry.free_form_content.slice(
+                                        0,
+                                        200,
+                                    )}...
+                                </p>
+                            </div>
+                        {/if}
+                    </a>
+                </article>
+            {/each}
+        </div>
+    {/if}
+</div>

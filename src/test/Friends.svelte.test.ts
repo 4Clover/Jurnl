@@ -7,9 +7,7 @@ describe('FeedItem', () => {
         const friend = {
             username: 'Friend',
             imgurl: 'flower.png',
-            entries: [
-                "First Entry", "Second Entry"
-            ]
+            entries: ['First Entry', 'Second Entry'],
         };
 
         const { getByText } = render(FeedItem, { friend });

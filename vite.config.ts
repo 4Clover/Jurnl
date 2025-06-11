@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config';
 
 // TODO: SITE CONFIG WEBSITES
 
-export default defineConfig (({mode}) => ({
+export default defineConfig(({ mode }) => ({
     plugins: [
         sveltekit(),
         {
@@ -82,7 +82,13 @@ export default defineConfig (({mode}) => ({
         include: [
             // Add any slow-to-transform dependencies
         ],
-        exclude: ['@sveltejs/kit', 'svelte', 'vite', '@testing-library/svelte', 'mongoose'],
+        exclude: [
+            '@sveltejs/kit',
+            'svelte',
+            'vite',
+            '@testing-library/svelte',
+            'mongoose',
+        ],
         esbuildOptions: {
             target: 'esnext',
             supported: {

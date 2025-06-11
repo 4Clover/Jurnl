@@ -16,7 +16,7 @@
             <div class="navbar__container">
                 {#if loggedIn}
                     <NormalNav />
-                <!-- {:else if $page["route"]} -->
+                    <!-- {:else if $page["route"]} -->
                 {:else}
                     <InitialUserNav />
                 {/if}

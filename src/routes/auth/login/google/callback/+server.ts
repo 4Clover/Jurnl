@@ -1,11 +1,14 @@
 ﻿import { OAuth2Client } from 'google-auth-library';
 import { error, redirect } from '@sveltejs/kit';
-import {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL,} from '$env/static/private';
+import {
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
+    BASE_URL,
+} from '$env/static/private';
 import { User } from '$schemas';
 import { createSession } from '$auth/sessionManager';
 import { setSessionCookie } from '$auth/cookies';
 import connectToDatabase from '$lib/server/database/database';
-
 
 async function generateUniqueUsername(email: string): Promise<string> {
     await connectToDatabase();
@@ -165,7 +168,7 @@ export const GET: (event: any) => Promise<any> = async (event) => {
             bio_text: user.bio_text || '',
             bio_image_url: user.bio_image_url,
             auth_provider: 'google',
-            createdAt: user.createdAt.toISOString()
+            createdAt: user.createdAt.toISOString(),
         };
         locals.session = {
             _id: sessionDetails.sessionId,

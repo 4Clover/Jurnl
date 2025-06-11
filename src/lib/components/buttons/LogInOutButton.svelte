@@ -1,7 +1,7 @@
-﻿<script lang="ts" >
-    import {enhance} from '$app/forms';
-    import {navigating, page} from '$app/state';
-    import {invalidateAll} from '$app/navigation';
+﻿<script lang="ts">
+    import { enhance } from '$app/forms';
+    import { navigating, page } from '$app/state';
+    import { invalidateAll } from '$app/navigation';
 
     // reactive states
     let isLoggingOut = $state(false);

@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ params, fetch, locals }) => {
         // Fetch journal and entries in parallel
         const [journalRes, entriesRes] = await Promise.all([
             fetch(`/api/journals/${params.journal}`),
-            fetch(`/api/journals/${params.journal}/entries`)
+            fetch(`/api/journals/${params.journal}/entries`),
         ]);
 
         if (!journalRes.ok) {
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ params, fetch, locals }) => {
 
         return {
             journal,
-            entries
+            entries,
         };
     } catch (err) {
         console.error('Error loading journal:', err);

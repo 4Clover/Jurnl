@@ -57,7 +57,6 @@ const testUsers: TestUser[] = [
 ];
 
 export async function seedTestUsers(currentUserId?: string): Promise<void> {
-    // Safety check - only run in development
     if (process.env.NODE_ENV === 'production') {
         console.error('❌ Seed script should not be run in production!');
         return;
@@ -86,7 +85,6 @@ export async function seedTestUsers(currentUserId?: string): Promise<void> {
             return;
         }
 
-        // Create test users
         const createdUsers = [];
 
         for (const testUser of testUsers) {
@@ -108,7 +106,7 @@ export async function seedTestUsers(currentUserId?: string): Promise<void> {
             const savedUser = await user.save();
             createdUsers.push(savedUser);
 
-            // Create a sample journal for each user
+            // SAMPLE JOURNAL
             const journal = new Journal({
                 title: `${testUser.username_display}'s Journal`,
                 description: `Personal journal of ${testUser.username_display}`,
@@ -120,7 +118,6 @@ export async function seedTestUsers(currentUserId?: string): Promise<void> {
 
             const savedJournal = await journal.save();
 
-            // Create sample entries (some will be shared with current user)
             const sampleEntries = [
                 {
                     title: 'Welcome to my journal',
@@ -136,7 +133,7 @@ export async function seedTestUsers(currentUserId?: string): Promise<void> {
                     user: savedUser._id,
                     journal: savedJournal._id,
                     entry_date: new Date().toISOString(),
-                    shared_with_friends: currentUserId ? 'private' : 'public',
+                    shared_with_friends: 'public',
                 },
                 {
                     title: `${testUser.username_display}'s daily thoughts`,
@@ -172,7 +169,7 @@ export async function seedTestUsers(currentUserId?: string): Promise<void> {
                     entry_date: new Date(
                         Date.now() - 24 * 60 * 60 * 1000,
                     ).toISOString(),
-                    shared_with_friends: currentUserId ? 'private' : 'public',
+                    shared_with_friends: 'public',
                 },
                 {
                     title: `What I learned today`,
@@ -184,13 +181,73 @@ export async function seedTestUsers(currentUserId?: string): Promise<void> {
                         list: { items: [] },
                         text_right: { content: '' },
                     },
-                    free_form_content: `Every day brings new insights. Today I discovered something fascinating about ${testUser.bio_text.includes('coffee') ? 'brewing techniques' : testUser.bio_text.includes('travel') ? 'local cultures' : testUser.bio_text.includes('tech') ? 'programming patterns' : 'creative expression'}. Sharing this with friends!`,
+                    free_form_content: `
+                        Every day brings new insights. 
+                        Today I discovered something fascinating about 
+                        ${
+                            testUser.bio_text.includes('coffee')
+                                ? 'brewing techniques'
+                                : testUser.bio_text.includes('travel')
+                                  ? 'local cultures'
+                                  : testUser.bio_text.includes('tech')
+                                    ? 'programming patterns'
+                                    : 'creative expression'
+                        }. 
+                        Sharing this with friends!`,
                     user: savedUser._id,
                     journal: savedJournal._id,
                     entry_date: new Date(
                         Date.now() - 2 * 24 * 60 * 60 * 1000,
                     ).toISOString(),
-                    shared_with_friends: currentUserId ? 'private' : 'public',
+                    shared_with_friends: 'public',
+                },
+                // PUBLIC ENTRY
+                {
+                    title: 'Weekend adventures',
+                    content_zones: {
+                        picture_text: {
+                            image: { url: null, alt: '', caption: '' },
+                            text: '',
+                        },
+                        list: { items: [] },
+                        text_right: { content: '' },
+                    },
+                    free_form_content: `Had an amazing weekend! ${
+                        testUser.username === 'alice_writer'
+                            ? 'Found a new coffee shop with the perfect ambiance for writing.'
+                            : testUser.username === 'bob_traveler'
+                              ? 'Explored a hidden trail just outside the city - breathtaking views!'
+                              : testUser.username === 'charlie_dev'
+                                ? "Finally finished that side project I've been working on."
+                                : testUser.username === 'diana_artist'
+                                  ? "Created something beautiful today that I'm really proud of."
+                                  : ''
+                    }`,
+                    user: savedUser._id,
+                    journal: savedJournal._id,
+                    entry_date: new Date(
+                        Date.now() - 3 * 24 * 60 * 60 * 1000,
+                    ).toISOString(),
+                    shared_with_friends: 'public',
+                },
+                // PRIVATE ENTRY
+                {
+                    title: 'Personal reflection',
+                    content_zones: {
+                        picture_text: {
+                            image: { url: null, alt: '', caption: '' },
+                            text: '',
+                        },
+                        list: { items: [] },
+                        text_right: { content: '' },
+                    },
+                    free_form_content: `Some thoughts I'm keeping private for now...`,
+                    user: savedUser._id,
+                    journal: savedJournal._id,
+                    entry_date: new Date(
+                        Date.now() - 4 * 24 * 60 * 60 * 1000,
+                    ).toISOString(),
+                    shared_with_friends: 'private',
                 },
             ];
 
@@ -200,7 +257,7 @@ export async function seedTestUsers(currentUserId?: string): Promise<void> {
             }
 
             console.log(
-                `✅ Created user: ${testUser.username} with journal and sample entries`,
+                `✅ Created user: ${testUser.username} with journal and ${sampleEntries.filter((e) => e.shared_with_friends === 'public').length} public entries`,
             );
         }
 
@@ -248,7 +305,20 @@ async function addFriendsToCurrentUser(
             { $addToSet: { can_view_friends: currentUserId } },
         );
 
-        console.log('✅ Friends relationships created successfully');
+        // Test users add current user as friend : reciprocal relationship so current user can see their entries
+        await User.updateMany(
+            { _id: { $in: testUserIds } },
+            { $addToSet: { close_friends: currentUserId } },
+        );
+
+        // Add test users to current user's can_view_friends : allows current user to see test users' public entries in the feed
+        await User.findByIdAndUpdate(currentUserId, {
+            $addToSet: { can_view_friends: { $each: testUserIds } },
+        });
+
+        console.log(
+            '✅ Friends relationships created successfully (reciprocal)',
+        );
     } catch (error) {
         console.error('❌ Error creating friends relationships:', error);
     }
@@ -272,19 +342,16 @@ export async function clearTestData(): Promise<void> {
 
         const userIds = usersToDelete.map((u) => u._id);
 
-        // Delete entries
         const deletedEntries = await Entry.deleteMany({
             user: { $in: userIds },
         });
         console.log(`🗑️ Deleted ${deletedEntries.deletedCount} entries`);
 
-        // Delete journals
         const deletedJournals = await Journal.deleteMany({
             user: { $in: userIds },
         });
         console.log(`🗑️ Deleted ${deletedJournals.deletedCount} journals`);
 
-        // Delete users
         const deletedUsers = await User.deleteMany({
             username: { $in: testUsernames },
         });
@@ -296,7 +363,7 @@ export async function clearTestData(): Promise<void> {
     }
 }
 
-// If running this file directly
+// SEED VIA CLI
 if (import.meta.url === `file://${process.argv[1]}`) {
     const command = process.argv[2];
 

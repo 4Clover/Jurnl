@@ -12,7 +12,7 @@
     const errors = $derived(
         form?.errors as
             | { username?: string; password?: string; form?: string }
-            | undefined
+            | undefined,
     );
     const usernameFieldError = $derived(errors?.username);
     const passwordFieldError = $derived(errors?.password);

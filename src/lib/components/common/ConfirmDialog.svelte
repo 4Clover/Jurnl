@@ -1,81 +1,3 @@
-<script lang="ts">
-    interface Props {
-        isOpen: boolean;
-        title: string;
-        message: string;
-        confirmText?: string;
-        cancelText?: string;
-        onConfirm: () => void;
-        onCancel: () => void;
-        variant?: 'danger' | 'warning' | 'info';
-    }
-
-    let { 
-        isOpen = false, 
-        title, 
-        message, 
-        confirmText = 'Confirm',
-        cancelText = 'Cancel',
-        onConfirm, 
-        onCancel,
-        variant = 'warning'
-    }: Props = $props();
-
-    function handleConfirm() {
-        onConfirm();
-    }
-
-    function handleCancel() {
-        onCancel();
-    }
-
-    function handleBackdropClick(e: MouseEvent) {
-        if (e.target === e.currentTarget) {
-            handleCancel();
-        }
-    }
-
-    function handleKeydown(e: KeyboardEvent) {
-        if (e.key === 'Escape') {
-            handleCancel();
-        }
-    }
-</script>
-
-{#if isOpen}
-    <div 
-        class="dialog-backdrop" 
-        onclick={handleBackdropClick}
-        onkeydown={handleKeydown}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="dialog-title"
-        tabindex="-1"
-    >
-        <div class="dialog-content {variant}">
-            <h2 id="dialog-title" class="dialog-title">{title}</h2>
-            <p class="dialog-message">{message}</p>
-            
-            <div class="dialog-actions">
-                <button 
-                    type="button"
-                    class="button button-secondary"
-                    onclick={handleCancel}
-                >
-                    {cancelText}
-                </button>
-                <button 
-                    type="button"
-                    class="button button-{variant}"
-                    onclick={handleConfirm}
-                >
-                    {confirmText}
-                </button>
-            </div>
-        </div>
-    </div>
-{/if}
-
 <style>
     .dialog-backdrop {
         position: fixed;
@@ -106,7 +28,9 @@
         padding: 2rem;
         max-width: 480px;
         width: 90%;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        box-shadow:
+            0 20px 25px -5px rgba(0, 0, 0, 0.1),
+            0 10px 10px -5px rgba(0, 0, 0, 0.04);
         animation: slideIn 0.3s ease-out;
     }
 
@@ -213,3 +137,81 @@
         }
     }
 </style>
+
+<script lang="ts">
+    interface Props {
+        isOpen: boolean;
+        title: string;
+        message: string;
+        confirmText?: string;
+        cancelText?: string;
+        onConfirm: () => void;
+        onCancel: () => void;
+        variant?: 'danger' | 'warning' | 'info';
+    }
+
+    let {
+        isOpen = false,
+        title,
+        message,
+        confirmText = 'Confirm',
+        cancelText = 'Cancel',
+        onConfirm,
+        onCancel,
+        variant = 'warning',
+    }: Props = $props();
+
+    function handleConfirm() {
+        onConfirm();
+    }
+
+    function handleCancel() {
+        onCancel();
+    }
+
+    function handleBackdropClick(e: MouseEvent) {
+        if (e.target === e.currentTarget) {
+            handleCancel();
+        }
+    }
+
+    function handleKeydown(e: KeyboardEvent) {
+        if (e.key === 'Escape') {
+            handleCancel();
+        }
+    }
+</script>
+
+{#if isOpen}
+    <div
+        class="dialog-backdrop"
+        onclick={handleBackdropClick}
+        onkeydown={handleKeydown}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dialog-title"
+        tabindex="-1"
+    >
+        <div class="dialog-content {variant}">
+            <h2 id="dialog-title" class="dialog-title">{title}</h2>
+            <p class="dialog-message">{message}</p>
+
+            <div class="dialog-actions">
+                <button
+                    type="button"
+                    class="button button-secondary"
+                    onclick={handleCancel}
+                >
+                    {cancelText}
+                </button>
+                <button
+                    type="button"
+                    class="button button-{variant}"
+                    onclick={handleConfirm}
+                >
+                    {confirmText}
+                </button>
+            </div>
+        </div>
+    </div>
+{/if}

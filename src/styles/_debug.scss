@@ -1,0 +1,191 @@
+// Debug panel styles
+.debug-container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: system-ui;
+}
+
+.debug-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.debug-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.debug-status-card {
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 2px solid;
+
+    &.loading {
+        background: #fef3c7;
+        border-color: #f59e0b;
+    }
+
+    &.success {
+        background: #d1fae5;
+        border-color: #10b981;
+    }
+
+    &.error {
+        background: #fee2e2;
+        border-color: #ef4444;
+    }
+}
+
+.debug-status-header {
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    code {
+        margin-left: auto;
+        font-size: 0.875rem;
+    }
+}
+
+.debug-pre {
+    margin: 0;
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+// Development actions
+.debug-actions {
+    margin-top: 2rem;
+
+    h2 {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+}
+
+.debug-button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.debug-button {
+    padding: 1rem 2rem;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &.create {
+        background: #3b82f6;
+    }
+
+    &.seed {
+        background: #10b981;
+    }
+
+    &.clear {
+        background: #ef4444;
+    }
+}
+
+// Results display
+.debug-results {
+    margin-top: 1rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.debug-result-card {
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: left;
+
+    &.success {
+        background: #d1fae5;
+    }
+
+    &.error {
+        background: #fee2e2;
+    }
+
+    strong {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    pre {
+        margin: 0.5rem 0 0 0;
+        font-size: 0.875rem;
+    }
+}
+
+// Auth status
+.debug-auth-status {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #e0e7ff;
+    border-radius: 8px;
+    text-align: center;
+
+    p {
+        margin: 0;
+    }
+}
+
+// Test users info
+.debug-test-users {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f0f9ff;
+    border-radius: 8px;
+    border: 1px solid #0ea5e9;
+
+    h3 {
+        margin: 0 0 1rem 0;
+        color: #0369a1;
+    }
+
+    > p {
+        margin: 0 0 1rem 0;
+        color: #0c4a6e;
+
+        &:last-child {
+            margin: 0;
+        }
+    }
+}
+
+.debug-users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.debug-user-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 6px;
+
+    strong {
+        display: block;
+    }
+
+    small {
+        display: block;
+    }
+
+    em {
+        display: block;
+        color: #6b7280;
+    }
+}

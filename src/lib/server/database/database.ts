@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/private';
 import { dev } from '$app/environment';
 import mongoose, { Mongoose } from 'mongoose';
-import type {ConnectOptions} from 'mongoose';
+import type { ConnectOptions } from 'mongoose';
 import { startMemoryServer } from './memory-server';
 
 import './schemas';
@@ -14,7 +14,8 @@ interface MongooseConnection {
 }
 
 // Default for Production -- current set to local and for docker
-const defaultConnectionString = 'mongodb://root:example@mongo:27017/jurnl?authSource=admin&directConnection=' +
+const defaultConnectionString =
+    'mongodb://root:example@mongo:27017/jurnl?authSource=admin&directConnection=' +
     'true&maxPoolSize=10&w=majority&wtimeoutMS=2500&maxIdleTimeMS=60000&maxConnecting=2';
 
 // Global singleton [singleton ref page] for connection caching
@@ -51,10 +52,10 @@ async function connectToDatabase(): Promise<Mongoose> {
     // Prevent multiple simultaneous init attempts
     if (isInitializing) {
         // Wait a bit and try again
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
         return connectToDatabase();
     }
-    
+
     isInitializing = true;
 
     // If existing connection in any state, disconnect first
@@ -65,16 +66,16 @@ async function connectToDatabase(): Promise<Mongoose> {
 
     // No connection or promise, create!
     let connectionString: string;
-    
+
     // Use in-memory MongoDB for dev unless MONGODB_URI is explicitly set
     if (dev && (!env.MONGODB_URI || env.MONGODB_URI.trim() === '')) {
         connectionString = await startMemoryServer();
     } else {
         connectionString = env.MONGODB_URI || defaultConnectionString;
     }
-    
+
     console.log('Connecting to MongoDB...');
-    
+
     const mongOpts = {
         maxPoolSize: dev ? 5 : 10, // Fewer connections for memory server
         serverSelectionTimeoutMS: 5000,
@@ -84,13 +85,15 @@ async function connectToDatabase(): Promise<Mongoose> {
         maxIdleTimeMS: 60000,
         maxConnecting: 2,
     } as unknown as ConnectOptions;
-    
+
     cached.promise = mongoose
         .connect(connectionString, mongOpts)
         .then((mongooseInstance) => {
-            console.log(dev && (!env.MONGODB_URI || env.MONGODB_URI.trim() === '')
-                ? 'Successfully connected to MongoDB Memory Server!' 
-                : 'Successfully connected to MongoDB!');
+            console.log(
+                dev && (!env.MONGODB_URI || env.MONGODB_URI.trim() === '')
+                    ? 'Successfully connected to MongoDB Memory Server!'
+                    : 'Successfully connected to MongoDB!',
+            );
             cached.connection = mongooseInstance;
             isInitializing = false;
             return mongooseInstance;

@@ -53,7 +53,7 @@ describe('EntrySidebarItem', () => {
     const props = {
         title: 'My Entry',
         entryId: 'e123',
-        journalId: 'j123'
+        journalId: 'j123',
     };
 
     it('renders the journal title', () => {
@@ -61,5 +61,4 @@ describe('EntrySidebarItem', () => {
 
         expect(getByText('My Entry')).toBeInTheDocument();
     });
-
 });

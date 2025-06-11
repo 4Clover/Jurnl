@@ -5,7 +5,7 @@ export interface TemplateZoneConfig {
     description?: string;
 }
 
-export interface EntryTemplate { 
+export interface EntryTemplate {
     id: string;
     name: string;
     description: string;
@@ -28,13 +28,13 @@ export const ENTRY_TEMPLATES: Record<string, EntryTemplate> = {
             picture_text: { enabled: false },
             list: { enabled: false },
             text_right: { enabled: false },
-            free_form_content: { 
-                enabled: true, 
+            free_form_content: {
+                enabled: true,
                 required: true,
                 label: 'Your Daily Thoughts',
-                description: 'Write freely about your day'
-            }
-        }
+                description: 'Write freely about your day',
+            },
+        },
     },
     photo: {
         id: 'photo',
@@ -42,20 +42,20 @@ export const ENTRY_TEMPLATES: Record<string, EntryTemplate> = {
         description: 'Capture memories with photos and descriptions',
         icon: '📷',
         zones: {
-            picture_text: { 
-                enabled: true, 
+            picture_text: {
+                enabled: true,
                 required: true,
                 label: 'Photo & Story',
-                description: 'Add a photo and tell its story'
+                description: 'Add a photo and tell its story',
             },
             list: { enabled: false },
             text_right: { enabled: false },
-            free_form_content: { 
+            free_form_content: {
                 enabled: true,
                 label: 'Additional Notes',
-                description: 'Any other thoughts about this memory'
-            }
-        }
+                description: 'Any other thoughts about this memory',
+            },
+        },
     },
     tasks: {
         id: 'tasks',
@@ -64,19 +64,19 @@ export const ENTRY_TEMPLATES: Record<string, EntryTemplate> = {
         icon: '✅',
         zones: {
             picture_text: { enabled: false },
-            list: { 
-                enabled: true, 
+            list: {
+                enabled: true,
                 required: true,
                 label: 'Tasks & Goals',
-                description: 'List your tasks and check them off'
+                description: 'List your tasks and check them off',
             },
-            text_right: { 
+            text_right: {
                 enabled: true,
                 label: 'Notes & Reflections',
-                description: 'Notes about your progress'
+                description: 'Notes about your progress',
             },
-            free_form_content: { enabled: false }
-        }
+            free_form_content: { enabled: false },
+        },
     },
     reflection: {
         id: 'reflection',
@@ -84,27 +84,27 @@ export const ENTRY_TEMPLATES: Record<string, EntryTemplate> = {
         description: 'Comprehensive entry with all sections available',
         icon: '🤔',
         zones: {
-            picture_text: { 
+            picture_text: {
                 enabled: true,
                 label: 'Visual Memory',
-                description: 'Add a photo that represents your day'
+                description: 'Add a photo that represents your day',
             },
-            list: { 
+            list: {
                 enabled: true,
                 label: 'Key Points',
-                description: 'List important moments or thoughts'
+                description: 'List important moments or thoughts',
             },
-            text_right: { 
+            text_right: {
                 enabled: true,
                 label: 'Insights',
-                description: 'What did you learn today?'
+                description: 'What did you learn today?',
             },
-            free_form_content: { 
+            free_form_content: {
                 enabled: true,
                 label: 'Deep Reflection',
-                description: 'Explore your thoughts in detail'
-            }
-        }
+                description: 'Explore your thoughts in detail',
+            },
+        },
     },
     custom: {
         id: 'custom',
@@ -112,24 +112,24 @@ export const ENTRY_TEMPLATES: Record<string, EntryTemplate> = {
         description: 'All sections available - use what you need',
         icon: '🎨',
         zones: {
-            picture_text: { 
+            picture_text: {
                 enabled: true,
-                label: 'Picture & Text'
+                label: 'Picture & Text',
             },
-            list: { 
+            list: {
                 enabled: true,
-                label: 'List Items'
+                label: 'List Items',
             },
-            text_right: { 
+            text_right: {
                 enabled: true,
-                label: 'Side Notes'
+                label: 'Side Notes',
             },
-            free_form_content: { 
+            free_form_content: {
                 enabled: true,
-                label: 'Free Writing'
-            }
-        }
-    }
+                label: 'Free Writing',
+            },
+        },
+    },
 };
 
 export type TemplateId = keyof typeof ENTRY_TEMPLATES;

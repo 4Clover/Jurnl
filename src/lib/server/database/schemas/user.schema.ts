@@ -115,18 +115,24 @@ const UserSchema = new Schema<IUser>(
         },
 
         // Relationships
-        journals: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Journal',
-        }],
-        close_friends: [{
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-        }],
-        can_view_friends: [{
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-        }],
+        journals: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Journal',
+            },
+        ],
+        close_friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
+        can_view_friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
 
         // Metadata
         last_login: {
@@ -150,8 +156,12 @@ const UserSchema = new Schema<IUser>(
                     createdAt: doc.createdAt.toISOString(),
                     journals: [],
                     updatedAt: doc.updatedAt.toISOString(),
-                    can_view_friends: doc.can_view_friends.map((friend) => friend.toString()),
-                    close_friends: doc.close_friends.map((friend) => friend.toString()),
+                    can_view_friends: doc.can_view_friends.map((friend) =>
+                        friend.toString(),
+                    ),
+                    close_friends: doc.close_friends.map((friend) =>
+                        friend.toString(),
+                    ),
                     // Don't include: google_id, password, journals, friends arrays
                 };
             },

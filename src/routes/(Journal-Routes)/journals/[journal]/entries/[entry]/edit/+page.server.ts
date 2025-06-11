@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 
 export const load = (async ({ params, parent, fetch }) => {
     const { user } = await parent();
-    
+
     if (!user) {
         throw redirect(303, '/auth/login');
     }
@@ -16,7 +16,9 @@ export const load = (async ({ params, parent, fetch }) => {
     const journal = await journalResponse.json();
 
     // Fetch the entry
-    const entryResponse = await fetch(`/api/journals/${params.journal}/entries/${params.entry}`);
+    const entryResponse = await fetch(
+        `/api/journals/${params.journal}/entries/${params.entry}`,
+    );
     if (!entryResponse.ok) {
         throw redirect(303, `/journals/${params.journal}`);
     }
@@ -24,6 +26,6 @@ export const load = (async ({ params, parent, fetch }) => {
 
     return {
         journal,
-        entry
+        entry,
     };
 }) satisfies PageServerLoad;

@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type { UserJournalsProps } from "$lib/types/landing.types";
-    import UserJournal from "$lib/components/landing/UserJournal.svelte";
+    import type { UserJournalsProps } from '$lib/types/landing.types';
+    import UserJournal from '$lib/components/landing/UserJournal.svelte';
     import { goto } from '$app/navigation';
 
-    let { journalList } : UserJournalsProps = $props();
+    let { journalList }: UserJournalsProps = $props();
 
     let refreshTrigger = $state(0);
-    
+
     let showCreateForm = $state(false);
     let title = $state('');
     let coverColor = $state('#a2aec6');
@@ -18,9 +18,9 @@
         '#999f85', // sage
         '#e1d4cb', // beige
         '#bf95aa', // powder pink
-        '#e0a699', 
-        '#b1a0ba', 
-        '#a0bab7', 
+        '#e0a699',
+        '#b1a0ba',
+        '#a0bab7',
         '#bad9b6',
     ];
 
@@ -41,8 +41,8 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     title: title.trim(),
-                    cover_color: coverColor
-                })
+                    cover_color: coverColor,
+                }),
             });
 
             if (!response.ok) {
@@ -53,7 +53,8 @@
             const journal = await response.json();
             await goto(`/journals/${journal._id}`);
         } catch (err) {
-            error = err instanceof Error ? err.message : 'Failed to create journal';
+            error =
+                err instanceof Error ? err.message : 'Failed to create journal';
         } finally {
             isSubmitting = false;
         }
@@ -79,9 +80,9 @@
     <div class="section-header">
         <h2>My Journals</h2>
         {#if journalList.length > 0}
-            <button 
+            <button
                 class="create-button sm-button"
-                onclick={() => showCreateForm = true}
+                onclick={() => (showCreateForm = true)}
                 disabled={showCreateForm}
             >
                 <h3>Create New Journal</h3>
@@ -97,7 +98,7 @@
                         {error}
                     </div>
                 {/if}
-                
+
                 <div class="form-row">
                     <input
                         type="text"
@@ -108,7 +109,7 @@
                         disabled={isSubmitting}
                         class="title-input"
                     />
-                    
+
                     <div class="color-picker">
                         {#each presetColors.slice(0, 4) as color}
                             <button
@@ -116,14 +117,14 @@
                                 class="color-option"
                                 class:selected={coverColor === color}
                                 style="background-color: {color}"
-                                onclick={() => coverColor = color}
+                                onclick={() => (coverColor = color)}
                                 disabled={isSubmitting}
                                 aria-label="Select {color} color"
                             ></button>
                         {/each}
                     </div>
                 </div>
-                
+
                 <div class="form-actions">
                     <button
                         type="button"
@@ -150,9 +151,9 @@
             <div class="empty-content">
                 <h3>No journals yet</h3>
                 <p>Create your first journal to start writing!</p>
-                <button 
+                <button
                     class="create-first-button"
-                    onclick={() => showCreateForm = true}
+                    onclick={() => (showCreateForm = true)}
                 >
                     Create Your First Journal
                 </button>

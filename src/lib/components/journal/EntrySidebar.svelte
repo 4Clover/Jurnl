@@ -13,7 +13,7 @@ https://svelte.dev/docs/svelte/bind
 </script>
 
 <section class="entry-sidebar">
-    <CreateJournalEntryButton/>
+    <CreateJournalEntryButton />
     <!-- {#each entries as entry (entry._id)}
         <EntrySidebarItem
             title={entry.title}

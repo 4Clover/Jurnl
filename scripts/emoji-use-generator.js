@@ -2,7 +2,7 @@
 
 /**
  * Repo Emoji Use Generator
- * 
+ *
  * Scans all code files for emojis and generates EMOJIS_IN_REPO.md
  * Usage: node scripts/emoji-use-generator.js
  */
@@ -16,11 +16,20 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.join(__dirname, '..');
 
 // Matches most Unicode emojis
-const EMOJI_REGEX = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1F018}-\u{1F270}]|[\u{238C}-\u{2454}]|[\u{20D0}-\u{20FF}]|[\u{FE00}-\u{FE0F}]|[\u{1F004}]|[\u{1F0CF}]|[\u{1F170}-\u{1F251}]/gu;
+const EMOJI_REGEX =
+    /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1F018}-\u{1F270}]|[\u{238C}-\u{2454}]|[\u{20D0}-\u{20FF}]|[\u{FE00}-\u{FE0F}]|[\u{1F004}]|[\u{1F0CF}]|[\u{1F170}-\u{1F251}]/gu;
 
 const SCAN_EXTENSIONS = ['.js', '.ts', '.svelte', '.json'];
 
-const IGNORE_DIRS = ['node_modules', '.git', 'dist', 'build', '.svelte-kit', '.vscode', '.mongodb-data'];
+const IGNORE_DIRS = [
+    'node_modules',
+    '.git',
+    'dist',
+    'build',
+    '.svelte-kit',
+    '.vscode',
+    '.mongodb-data',
+];
 
 const IGNORE_FILES = ['emoji-use-generator.js'];
 
@@ -30,7 +39,7 @@ const IGNORE_FILES = ['emoji-use-generator.js'];
 function getAllFiles(dirPath, arrayOfFiles = []) {
     const files = fs.readdirSync(dirPath);
 
-    files.forEach(file => {
+    files.forEach((file) => {
         const fullPath = path.join(dirPath, file);
         const stat = fs.statSync(fullPath);
 
@@ -57,24 +66,29 @@ function extractEmojisFromFile(filePath) {
 
         lines.forEach((line, lineNumber) => {
             const matches = [...line.matchAll(EMOJI_REGEX)];
-            
-            matches.forEach(match => {
+
+            matches.forEach((match) => {
                 const emoji = match[0];
                 const context = line.trim();
                 const relativeFilePath = path.relative(projectRoot, filePath);
-                
+
                 findings.push({
                     emoji,
                     file: relativeFilePath,
                     line: lineNumber + 1,
-                    context: context.length > 80 ? context.substring(0, 77) + '...' : context
+                    context:
+                        context.length > 80
+                            ? context.substring(0, 77) + '...'
+                            : context,
                 });
             });
         });
 
         return findings;
     } catch (error) {
-        console.warn(`Warning: Could not read file ${filePath}: ${error.message}`);
+        console.warn(
+            `Warning: Could not read file ${filePath}: ${error.message}`,
+        );
         return [];
     }
 }
@@ -85,13 +99,13 @@ function extractEmojisFromFile(filePath) {
 function processFindings(allFindings) {
     const emojiMap = new Map();
 
-    allFindings.forEach(finding => {
+    allFindings.forEach((finding) => {
         const key = finding.emoji;
         if (!emojiMap.has(key)) {
             emojiMap.set(key, {
                 emoji: finding.emoji,
                 count: 0,
-                usages: []
+                usages: [],
             });
         }
 
@@ -100,7 +114,7 @@ function processFindings(allFindings) {
         entry.usages.push({
             file: finding.file,
             line: finding.line,
-            context: finding.context
+            context: finding.context,
         });
     });
 
@@ -115,7 +129,7 @@ function processFindings(allFindings) {
 
 function generateMarkdown(processedEmojis) {
     const now = new Date().toISOString().split('T')[0];
-    
+
     let markdown = `# 🎨 Emoji Use in Repo (Auto-Generated)
 
 *Last updated: ${now}*
@@ -134,11 +148,11 @@ This document catalogs all emojis currently used in the Jurnl codebase. It's aut
 |-------|-------|-----------|---------|
 `;
 
-    processedEmojis.forEach(emojiData => {
+    processedEmojis.forEach((emojiData) => {
         emojiData.usages.forEach((usage, index) => {
             const emoji = index === 0 ? emojiData.emoji : '';
             const count = index === 0 ? emojiData.count : '';
-            
+
             markdown += `| ${emoji} | ${count} | \`${usage.file}:${usage.line}\` | ${usage.context} |\n`;
         });
     });
@@ -147,22 +161,28 @@ This document catalogs all emojis currently used in the Jurnl codebase. It's aut
 ## 🔍 Usage by Category
 
 ### Most Frequently Used (5+)
-${processedEmojis
-    .filter(e => e.count >= 5)
-    .map(e => `- ${e.emoji} (${e.count}x)`)
-    .join('\n') || '*(None)*'}
+${
+    processedEmojis
+        .filter((e) => e.count >= 5)
+        .map((e) => `- ${e.emoji} (${e.count}x)`)
+        .join('\n') || '*(None)*'
+}
 
 ### Moderately Used (2-4)
-${processedEmojis
-    .filter(e => e.count >= 2 && e.count < 5)
-    .map(e => `- ${e.emoji} (${e.count}x)`)
-    .join('\n') || '*(None)*'}
+${
+    processedEmojis
+        .filter((e) => e.count >= 2 && e.count < 5)
+        .map((e) => `- ${e.emoji} (${e.count}x)`)
+        .join('\n') || '*(None)*'
+}
 
 ### Single Use
-${processedEmojis
-    .filter(e => e.count === 1)
-    .map(e => `- ${e.emoji}`)
-    .join(' ') || '*(None)*'}
+${
+    processedEmojis
+        .filter((e) => e.count === 1)
+        .map((e) => `- ${e.emoji}`)
+        .join(' ') || '*(None)*'
+}
 
 ## 🛠️ Maintenance
 
@@ -191,9 +211,9 @@ node scripts/generate-emoji-reference.js
 
 function main() {
     console.log('🔍 Scanning for emojis in project files...');
-    
+
     const allFiles = getAllFiles(projectRoot);
-    const validFiles = allFiles.filter(file => {
+    const validFiles = allFiles.filter((file) => {
         const ext = path.extname(file);
         return SCAN_EXTENSIONS.includes(ext);
     });
@@ -203,13 +223,15 @@ function main() {
     let allFindings = [];
     let processedFiles = 0;
 
-    validFiles.forEach(file => {
+    validFiles.forEach((file) => {
         const findings = extractEmojisFromFile(file);
         allFindings = allFindings.concat(findings);
         processedFiles++;
-        
+
         if (findings.length > 0) {
-            console.log(`  ✨ ${path.relative(projectRoot, file)}: ${findings.length} emoji(s)`);
+            console.log(
+                `  ✨ ${path.relative(projectRoot, file)}: ${findings.length} emoji(s)`,
+            );
         }
     });
 
@@ -223,7 +245,7 @@ function main() {
 
     const finalMarkdown = markdown.replace(
         'Files processed: *Will be updated during generation*',
-        `Files processed: ${processedFiles}`
+        `Files processed: ${processedFiles}`,
     );
 
     const outputPath = path.join(projectRoot, 'EMOJI_REFERENCE.md');
@@ -231,7 +253,9 @@ function main() {
 
     console.log(`\n✅ Generated EMOJI_REFERENCE.md`);
     console.log(`📍 Location: ${outputPath}`);
-    console.log(`📈 Summary: ${processedEmojis.length} unique emojis from ${allFindings.length} occurrences`);
+    console.log(
+        `📈 Summary: ${processedEmojis.length} unique emojis from ${allFindings.length} occurrences`,
+    );
 
     if (processedEmojis.length > 0) {
         console.log('\n🏆 Top 5 Most Used Emojis:');

@@ -1,342 +1,8 @@
-<script lang="ts">
-    import { dev, browser } from '$app/environment';
-    import { onMount } from 'svelte';
-    
-    // Check if we're in development mode using multiple methods
-    let shouldRender = $state(false);
-    
-    let isOpen = $state(false);
-    let isLoading = $state(false);
-    interface TestResult {
-        name: string;
-        url: string;
-        method: string;
-        status: number;
-        ok: boolean;
-        timing: number;
-        data: unknown;
-        timestamp: string;
-    }
-
-    interface SeedResult {
-        success: boolean;
-        message: string;
-        users: string[];
-        friendsAdded: boolean;
-        sharedEntriesCreated: boolean;
-    }
-
-    let testResults = $state<TestResult[]>([]);
-    let lastTestSummary = $state<{
-        totalTests: number;
-        successful: number;
-        failed: number;
-        avgTime: number;
-        seedResult?: SeedResult;
-    } | null>(null);
-
-    async function runFullSystemTest() {
-        if (isLoading) return;
-        
-        isLoading = true;
-        testResults = [];
-        
-        const tests = [
-            { name: 'API Health Check', url: '/api/test', method: 'GET' },
-            { name: 'Database Stats', url: '/api/stats', method: 'GET' },
-            { name: 'Seed Test Users & Friends', url: '/api/dev/seed', method: 'POST' },
-            { name: 'List Journals', url: '/api/journals', method: 'GET' },
-            { name: 'List Journals with Entries', url: '/api/journals?withEntries=true', method: 'GET' },
-            { name: 'Get Friends Usernames', url: '/api/friend/getUsernames', method: 'GET' },
-            { name: 'Get Friends Public Entries', url: '/api/friend/publicEntries', method: 'GET' },
-            { name: 'Final Stats Check', url: '/api/stats', method: 'GET' }
-        ];
-
-        let seedResult = null;
-        
-        for (const test of tests) {
-            const testStartTime = performance.now();
-            
-            try {
-                const options: RequestInit = {
-                    method: test.method,
-                    headers: { 'Content-Type': 'application/json' }
-                };
-                
-                const res = await fetch(test.url, options);
-                const timing = Math.round(performance.now() - testStartTime);
-                
-                let data: unknown;
-                try {
-                    data = await res.json() as unknown;
-                } catch {
-                    data = await res.text();
-                }
-                
-                const result: TestResult = {
-                    name: test.name,
-                    url: test.url,
-                    method: test.method,
-                    status: res.status,
-                    ok: res.ok,
-                    timing,
-                    data: res.ok ? data : `Error ${res.status}: ${(data as {message?: string})?.message || String(data) || 'Failed'}`,
-                    timestamp: new Date().toISOString()
-                };
-                
-                testResults.push(result);
-                
-                if (test.name === 'Seed Test Users & Friends' && res.ok) {
-                    seedResult = data as SeedResult;
-                }
-                
-            } catch (err) {
-                const timing = Math.round(performance.now() - testStartTime);
-                testResults.push({
-                    name: test.name,
-                    url: test.url,
-                    method: test.method,
-                    status: 0,
-                    ok: false,
-                    timing,
-                    data: `Network error: ${String(err)}`,
-                    timestamp: new Date().toISOString()
-                });
-            }
-        }
-        
-        const successful = testResults.filter(r => r.ok).length;
-        const failed = testResults.filter(r => !r.ok).length;
-        const avgTime = Math.round(testResults.reduce((acc, r) => acc + r.timing, 0) / testResults.length);
-        
-        lastTestSummary = {
-            totalTests: testResults.length,
-            successful,
-            failed,
-            avgTime,
-            seedResult: seedResult || undefined
-        };
-        
-        isLoading = false;
-    }
-
-    async function clearTestData() {
-        if (isLoading) return;
-        
-        isLoading = true;
-        
-        try {
-            const res = await fetch('/api/dev/seed', { method: 'DELETE' });
-            await res.json();
-            
-            if (res.ok) {
-                // stats check AFTER clearing
-                await fetch('/api/stats').then(r => r.json());
-                lastTestSummary = null;
-                testResults = [];
-            }
-        } catch (err) {
-            console.error('Failed to clear test data:', err);
-        }
-        
-        isLoading = false;
-    }
-
-    function togglePanel() {
-        isOpen = !isOpen;
-    }
-
-    function closePanel() {
-        isOpen = false;
-    }
-
-    function handleKeydown(e: KeyboardEvent) {
-        if (e.key === 'Escape' && isOpen) {
-            closePanel();
-        }
-    }
-
-    onMount(() => {
-        // Check multiple indicators for development mode
-        const isDevMode = 
-            dev === true || 
-            import.meta.env.DEV === true ||
-            import.meta.env.MODE === 'development' ||
-            window.location.hostname === 'localhost' ||
-            window.location.hostname === '127.0.0.1';
-            
-        console.log('DevDebugPanel mounted:', {
-            dev,
-            browser,
-            'import.meta.env.DEV': import.meta.env.DEV,
-            'import.meta.env.MODE': import.meta.env.MODE,
-            hostname: window.location.hostname,
-            isDevMode
-        });
-        
-        // Only render in browser and dev mode
-        shouldRender = browser && isDevMode;
-        
-        document.addEventListener('keydown', handleKeydown);
-        return () => {
-            console.log('DevDebugPanel unmounting');
-            document.removeEventListener('keydown', handleKeydown);
-        };
-    });
-</script>
-
-{#if shouldRender}
-    <!-- Debug Trigger Button -->
-    <button
-        class="debug-trigger"
-        onclick={togglePanel}
-        title="Open Debug Panel (Dev Mode)"
-        disabled={isLoading}
-    >
-        {#if isLoading}
-            <span class="loading-spinner">⏳</span>
-        {:else}
-            🧪
-        {/if}
-    </button>
-
-    <!-- Debug Panel Modal -->
-    {#if isOpen}
-        <div 
-            class="debug-overlay" 
-            onclick={closePanel}
-            onkeydown={(e) => e.key === 'Enter' && closePanel()}
-            role="button"
-            tabindex="0"
-        >
-            <div 
-                class="debug-panel" 
-                onclick={(e) => e.stopPropagation()}
-                onkeydown={(e) => e.stopPropagation()}
-                role="dialog"
-                aria-modal="true"
-                tabindex="-1"
-            >
-                <!-- Header -->
-                <div class="panel-header">
-                    <h2>🧪 Development Tools</h2>
-                    <button class="close-btn" onclick={closePanel} title="Close (Esc)">
-                        ✕
-                    </button>
-                </div>
-
-                <!-- Main Actions -->
-                <div class="panel-content">
-                    <div class="main-actions">
-                        <button 
-                            class="primary-action-btn" 
-                            onclick={runFullSystemTest}
-                            disabled={isLoading}
-                        >
-                            {#if isLoading}
-                                ⏳ Running Tests...
-                            {:else}
-                                🚀 Setup & Test All APIs
-                            {/if}
-                        </button>
-                        
-                        <button 
-                            class="secondary-action-btn" 
-                            onclick={clearTestData}
-                            disabled={isLoading}
-                        >
-                            🧹 Clear Test Data
-                        </button>
-                    </div>
-
-                    <!-- Test Summary -->
-                    {#if lastTestSummary}
-                        <div class="test-summary">
-                            <h3>📊 Last Test Results</h3>
-                            <div class="summary-grid">
-                                <div class="summary-card">
-                                    <div class="summary-label">Total Tests</div>
-                                    <div class="summary-value">{lastTestSummary.totalTests}</div>
-                                </div>
-                                <div class="summary-card success">
-                                    <div class="summary-label">Successful</div>
-                                    <div class="summary-value">{lastTestSummary.successful}</div>
-                                </div>
-                                <div class="summary-card {lastTestSummary.failed > 0 ? 'error' : ''}">
-                                    <div class="summary-label">Failed</div>
-                                    <div class="summary-value">{lastTestSummary.failed}</div>
-                                </div>
-                                <div class="summary-card">
-                                    <div class="summary-label">Avg Time</div>
-                                    <div class="summary-value">{lastTestSummary.avgTime}ms</div>
-                                </div>
-                            </div>
-
-                            {#if lastTestSummary.seedResult && lastTestSummary.seedResult.friendsAdded}
-                                <div class="seed-info">
-                                    <p>✅ Test users created and added as friends</p>
-                                    <p>📰 Shared journal entries created for feed testing</p>
-                                    <p>🔑 Test user password: <code>testpass123</code></p>
-                                </div>
-                            {/if}
-                        </div>
-                    {/if}
-
-                    <!-- Recent Test Results -->
-                    {#if testResults.length > 0}
-                        <div class="test-results">
-                            <h3>🔍 Detailed Results</h3>
-                            <div class="results-list">
-                                {#each testResults as result, index (index)}
-                                    <div class="result-item {result.ok ? 'success' : 'error'}">
-                                        <div class="result-header">
-                                            <span class="result-icon">
-                                                {result.ok ? '✅' : '❌'}
-                                            </span>
-                                            <span class="result-name">{result.name}</span>
-                                            <span class="result-timing">{result.timing}ms</span>
-                                        </div>
-                                        {#if !result.ok}
-                                            <div class="result-error">
-                                                {String(result.data)}
-                                            </div>
-                                        {/if}
-                                    </div>
-                                {/each}
-                            </div>
-                        </div>
-                    {/if}
-
-                    <!-- Test Users Info -->
-                    <div class="test-users-info">
-                        <h3>👥 Available Test Users</h3>
-                        <div class="test-users-grid">
-                            <div class="test-user">
-                                <strong>alice_writer</strong>
-                                <span>Alice Cooper</span>
-                            </div>
-                            <div class="test-user">
-                                <strong>bob_traveler</strong>
-                                <span>Bob the Explorer</span>
-                            </div>
-                            <div class="test-user">
-                                <strong>charlie_dev</strong>
-                                <span>Charlie Code</span>
-                            </div>
-                            <div class="test-user">
-                                <strong>diana_artist</strong>
-                                <span>Diana Arts</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {/if}
-{/if}
-
 <style>
-    :global(:root) {
+    /* Component-scoped CSS variables */
+    .debug-trigger,
+    .debug-panel,
+    .debug-overlay {
         --olive: #4a571a;
         --sage: #999f85;
         --beige: #e1d4cb;
@@ -381,8 +47,12 @@
     }
 
     @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
     }
 
     .debug-overlay {
@@ -400,8 +70,12 @@
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
 
     .debug-panel {
@@ -739,3 +413,395 @@
         }
     }
 </style>
+
+<script lang="ts">
+    import { dev, browser } from '$app/environment';
+    import { onMount } from 'svelte';
+
+    // Check if we're in development mode using multiple methods
+    let shouldRender = $state(false);
+
+    let isOpen = $state(false);
+    let isLoading = $state(false);
+    interface TestResult {
+        name: string;
+        url: string;
+        method: string;
+        status: number;
+        ok: boolean;
+        timing: number;
+        data: unknown;
+        timestamp: string;
+    }
+
+    interface SeedResult {
+        success: boolean;
+        message: string;
+        users: string[];
+        friendsAdded: boolean;
+        sharedEntriesCreated: boolean;
+    }
+
+    let testResults = $state<TestResult[]>([]);
+    let lastTestSummary = $state<{
+        totalTests: number;
+        successful: number;
+        failed: number;
+        avgTime: number;
+        seedResult?: SeedResult;
+    } | null>(null);
+
+    async function runFullSystemTest() {
+        if (isLoading) return;
+
+        isLoading = true;
+        testResults = [];
+
+        const tests = [
+            { name: 'API Health Check', url: '/api/test', method: 'GET' },
+            { name: 'Database Stats', url: '/api/stats', method: 'GET' },
+            {
+                name: 'Seed Test Users & Friends',
+                url: '/api/dev/seed',
+                method: 'POST',
+            },
+            { name: 'List Journals', url: '/api/journals', method: 'GET' },
+            {
+                name: 'List Journals with Entries',
+                url: '/api/journals?withEntries=true',
+                method: 'GET',
+            },
+            {
+                name: 'Get Friends Usernames',
+                url: '/api/friends',
+                method: 'GET',
+            },
+            {
+                name: 'Get Friends Public Entries',
+                url: '/api/friends/entries',
+                method: 'GET',
+            },
+            { name: 'Final Stats Check', url: '/api/stats', method: 'GET' },
+        ];
+
+        let seedResult = null;
+
+        for (const test of tests) {
+            const testStartTime = performance.now();
+
+            try {
+                const options: RequestInit = {
+                    method: test.method,
+                    headers: { 'Content-Type': 'application/json' },
+                };
+
+                const res = await fetch(test.url, options);
+                const timing = Math.round(performance.now() - testStartTime);
+
+                let data: unknown;
+                try {
+                    data = (await res.json()) as unknown;
+                } catch {
+                    data = await res.text();
+                }
+
+                const result: TestResult = {
+                    name: test.name,
+                    url: test.url,
+                    method: test.method,
+                    status: res.status,
+                    ok: res.ok,
+                    timing,
+                    data: res.ok
+                        ? data
+                        : `Error ${res.status}: ${(data as { message?: string })?.message || String(data) || 'Failed'}`,
+                    timestamp: new Date().toISOString(),
+                };
+
+                testResults.push(result);
+
+                if (test.name === 'Seed Test Users & Friends' && res.ok) {
+                    seedResult = data as SeedResult;
+                }
+            } catch (err) {
+                const timing = Math.round(performance.now() - testStartTime);
+                testResults.push({
+                    name: test.name,
+                    url: test.url,
+                    method: test.method,
+                    status: 0,
+                    ok: false,
+                    timing,
+                    data: `Network error: ${String(err)}`,
+                    timestamp: new Date().toISOString(),
+                });
+            }
+        }
+
+        const successful = testResults.filter((r) => r.ok).length;
+        const failed = testResults.filter((r) => !r.ok).length;
+        const avgTime = Math.round(
+            testResults.reduce((acc, r) => acc + r.timing, 0) /
+                testResults.length,
+        );
+
+        lastTestSummary = {
+            totalTests: testResults.length,
+            successful,
+            failed,
+            avgTime,
+            seedResult: seedResult || undefined,
+        };
+
+        isLoading = false;
+    }
+
+    async function clearTestData() {
+        if (isLoading) return;
+
+        isLoading = true;
+
+        try {
+            const res = await fetch('/api/dev/seed', { method: 'DELETE' });
+            await res.json();
+
+            if (res.ok) {
+                // stats check AFTER clearing
+                await fetch('/api/stats').then((r) => r.json());
+                lastTestSummary = null;
+                testResults = [];
+            }
+        } catch (err) {
+            console.error('Failed to clear test data:', err);
+        }
+
+        isLoading = false;
+    }
+
+    function togglePanel() {
+        isOpen = !isOpen;
+    }
+
+    function closePanel() {
+        isOpen = false;
+    }
+
+    function handleKeydown(e: KeyboardEvent) {
+        if (e.key === 'Escape' && isOpen) {
+            closePanel();
+        }
+    }
+
+    onMount(() => {
+        // Check multiple indicators for development mode
+        const isDevMode =
+            dev === true ||
+            import.meta.env.DEV === true ||
+            import.meta.env.MODE === 'development' ||
+            window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1';
+
+        console.log('DevDebugPanel mounted:', {
+            dev,
+            browser,
+            'import.meta.env.DEV': import.meta.env.DEV,
+            'import.meta.env.MODE': import.meta.env.MODE,
+            hostname: window.location.hostname,
+            isDevMode,
+        });
+
+        // Only render in browser and dev mode
+        shouldRender = browser && isDevMode;
+
+        document.addEventListener('keydown', handleKeydown);
+        return () => {
+            console.log('DevDebugPanel unmounting');
+            document.removeEventListener('keydown', handleKeydown);
+        };
+    });
+</script>
+
+{#if shouldRender}
+    <!-- Debug Trigger Button -->
+    <button
+        class="debug-trigger"
+        onclick={togglePanel}
+        title="Open Debug Panel (Dev Mode)"
+        disabled={isLoading}
+    >
+        {#if isLoading}
+            <span class="loading-spinner">⏳</span>
+        {:else}
+            🧪
+        {/if}
+    </button>
+
+    <!-- Debug Panel Modal -->
+    {#if isOpen}
+        <div
+            class="debug-overlay"
+            onclick={closePanel}
+            onkeydown={(e) => e.key === 'Enter' && closePanel()}
+            role="button"
+            tabindex="0"
+        >
+            <div
+                class="debug-panel"
+                onclick={(e) => e.stopPropagation()}
+                onkeydown={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                tabindex="-1"
+            >
+                <!-- Header -->
+                <div class="panel-header">
+                    <h2>🧪 Development Tools</h2>
+                    <button
+                        class="close-btn"
+                        onclick={closePanel}
+                        title="Close (Esc)"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                <!-- Main Actions -->
+                <div class="panel-content">
+                    <div class="main-actions">
+                        <button
+                            class="primary-action-btn"
+                            onclick={runFullSystemTest}
+                            disabled={isLoading}
+                        >
+                            {#if isLoading}
+                                ⏳ Running Tests...
+                            {:else}
+                                🚀 Setup & Test All APIs
+                            {/if}
+                        </button>
+
+                        <button
+                            class="secondary-action-btn"
+                            onclick={clearTestData}
+                            disabled={isLoading}
+                        >
+                            🧹 Clear Test Data
+                        </button>
+                    </div>
+
+                    <!-- Test Summary -->
+                    {#if lastTestSummary}
+                        <div class="test-summary">
+                            <h3>📊 Last Test Results</h3>
+                            <div class="summary-grid">
+                                <div class="summary-card">
+                                    <div class="summary-label">Total Tests</div>
+                                    <div class="summary-value">
+                                        {lastTestSummary.totalTests}
+                                    </div>
+                                </div>
+                                <div class="summary-card success">
+                                    <div class="summary-label">Successful</div>
+                                    <div class="summary-value">
+                                        {lastTestSummary.successful}
+                                    </div>
+                                </div>
+                                <div
+                                    class="summary-card {lastTestSummary.failed >
+                                    0
+                                        ? 'error'
+                                        : ''}"
+                                >
+                                    <div class="summary-label">Failed</div>
+                                    <div class="summary-value">
+                                        {lastTestSummary.failed}
+                                    </div>
+                                </div>
+                                <div class="summary-card">
+                                    <div class="summary-label">Avg Time</div>
+                                    <div class="summary-value">
+                                        {lastTestSummary.avgTime}ms
+                                    </div>
+                                </div>
+                            </div>
+
+                            {#if lastTestSummary.seedResult && lastTestSummary.seedResult.friendsAdded}
+                                <div class="seed-info">
+                                    <p>
+                                        ✅ Test users created and added as
+                                        friends
+                                    </p>
+                                    <p>
+                                        📰 Shared journal entries created for
+                                        feed testing
+                                    </p>
+                                    <p>
+                                        🔑 Test user password: <code
+                                            >testpass123</code
+                                        >
+                                    </p>
+                                </div>
+                            {/if}
+                        </div>
+                    {/if}
+
+                    <!-- Recent Test Results -->
+                    {#if testResults.length > 0}
+                        <div class="test-results">
+                            <h3>🔍 Detailed Results</h3>
+                            <div class="results-list">
+                                {#each testResults as result, index (index)}
+                                    <div
+                                        class="result-item {result.ok
+                                            ? 'success'
+                                            : 'error'}"
+                                    >
+                                        <div class="result-header">
+                                            <span class="result-icon">
+                                                {result.ok ? '✅' : '❌'}
+                                            </span>
+                                            <span class="result-name"
+                                                >{result.name}</span
+                                            >
+                                            <span class="result-timing"
+                                                >{result.timing}ms</span
+                                            >
+                                        </div>
+                                        {#if !result.ok}
+                                            <div class="result-error">
+                                                {String(result.data)}
+                                            </div>
+                                        {/if}
+                                    </div>
+                                {/each}
+                            </div>
+                        </div>
+                    {/if}
+
+                    <!-- Test Users Info -->
+                    <div class="test-users-info">
+                        <h3>👥 Available Test Users</h3>
+                        <div class="test-users-grid">
+                            <div class="test-user">
+                                <strong>alice_writer</strong>
+                                <span>Alice Cooper</span>
+                            </div>
+                            <div class="test-user">
+                                <strong>bob_traveler</strong>
+                                <span>Bob the Explorer</span>
+                            </div>
+                            <div class="test-user">
+                                <strong>charlie_dev</strong>
+                                <span>Charlie Code</span>
+                            </div>
+                            <div class="test-user">
+                                <strong>diana_artist</strong>
+                                <span>Diana Arts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {/if}
+{/if}

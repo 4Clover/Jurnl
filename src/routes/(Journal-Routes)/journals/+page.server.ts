@@ -13,19 +13,19 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
         if (!response.ok) {
             console.error('Failed to fetch journals:', response.status);
             return {
-                journals: []
+                journals: [],
             };
         }
 
         const journals = await response.json();
 
         return {
-            journals
+            journals,
         };
     } catch (error) {
         console.error('Error loading journals:', error);
         return {
-            journals: []
+            journals: [],
         };
     }
 };

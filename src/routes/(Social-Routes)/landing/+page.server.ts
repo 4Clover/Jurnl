@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ locals, url, fetch }) => {
     let journalList = [];
 
     try {
-        const response = await fetch('/api/friend/sharedEntries');
+        const response = await fetch('/api/friends/shared');
         if (response.ok) {
             const data = await response.json();
             journalList = data.journalList;

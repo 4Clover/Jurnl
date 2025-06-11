@@ -1,3 +1,30 @@
+<style>
+    .google-login-button {
+        background-color: #ffffff; /* Google's white */
+        color: #4285f4; /* Google's blue for text */
+        border: 1px solid #dadce0; /* Subtle border */
+        box-shadow:
+            0 1px 2px 0 rgba(60, 64, 67, 0.3),
+            0 1px 3px 1px rgba(60, 64, 67, 0.15);
+        width: calc(
+            100% - 20px
+        ); /* Match fieldbox width slightly less due to padding */
+        max-width: 300px;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .google-login-button:hover {
+        background-color: #f8f9fa;
+        border-color: #c6c6c6;
+    }
+</style>
+
 <script lang="ts">
     import type { PageProps } from './$types';
     import { enhance } from '$app/forms';
@@ -24,18 +51,22 @@
         <div class="spacing"></div>
         <h2 class="center-item title">Log In to View Your Journal</h2>
         <div class="spacing"></div>
-        
+
         <div class="center-item" style="margin-bottom: 20px;">
             <a href="/auth/login/google" class="google-login-button button-sm">
-                <img src="/google-logo.svg.webp" alt="Google logo" style="height: 20px; margin-right: 10px; vertical-align: middle;" />
+                <img
+                    src="/google-logo.svg.webp"
+                    alt="Google logo"
+                    style="height: 20px; margin-right: 10px; vertical-align: middle;"
+                />
                 Sign in with Google
             </a>
         </div>
-        
+
         <div class="center-item" style="margin-bottom: 15px;">
             <span class="aside">Or continue with username/password</span>
         </div>
-        
+
         {#if generalFormError}
             <div>
                 Error:
@@ -112,26 +143,3 @@
         </div>
     </div>
 </main>
-
-<style>
-    .google-login-button {
-        background-color: #ffffff; /* Google's white */
-        color: #4285F4; /* Google's blue for text */
-        border: 1px solid #dadce0; /* Subtle border */
-        box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-        width: calc(100% - 20px); /* Match fieldbox width slightly less due to padding */
-        max-width: 300px;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .google-login-button:hover {
-        background-color: #f8f9fa;
-        border-color: #c6c6c6;
-    }
-</style>

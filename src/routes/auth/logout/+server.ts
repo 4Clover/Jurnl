@@ -26,7 +26,7 @@ export const POST: RequestHandler = async (event) => {
             // token could be invalid so proceed to delete cookie
             console.error(
                 'Error invalidating session from DB during logout:',
-                error
+                error,
             );
         }
     } else {

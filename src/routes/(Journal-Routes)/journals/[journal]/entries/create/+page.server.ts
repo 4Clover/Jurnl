@@ -22,11 +22,14 @@ export const load: PageServerLoad = async ({ params, fetch, locals }) => {
 
         // Verify user owns this journal
         if (journal.user !== locals.user.id) {
-            throw error(403, 'You do not have permission to add entries to this journal');
+            throw error(
+                403,
+                'You do not have permission to add entries to this journal',
+            );
         }
 
         return {
-            journal
+            journal,
         };
     } catch (err) {
         console.error('Error loading journal:', err);

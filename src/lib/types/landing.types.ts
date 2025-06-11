@@ -1,6 +1,6 @@
-import type { IJournal, IEntrySerializable } from "$schemas";
-import type { SerializableUser } from "$schemas";
-import type { Types } from "mongoose";
+import type { IJournal, IEntrySerializable } from '$schemas';
+import type { SerializableUser } from '$schemas';
+import type { Types } from 'mongoose';
 
 export interface UserJournalsProps {
     journalList: IJournal[];

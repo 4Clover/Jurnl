@@ -1,10 +1,9 @@
-
 import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
 export const load = (async ({ params, parent, fetch }) => {
     const { user } = await parent();
-    
+
     if (!user) {
         redirect(303, '/auth/login');
     }
@@ -17,6 +16,6 @@ export const load = (async ({ params, parent, fetch }) => {
     const journal = await journalResponse.json();
 
     return {
-        journal
+        journal,
     };
 }) satisfies PageServerLoad;

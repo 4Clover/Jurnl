@@ -4,6 +4,7 @@ import type {
     SerializableUser,
     SerializableSession,
 } from '$lib/server/database/schemas';
+import type { LogContext } from '$lib/types/logger.types';
 
 declare global {
     namespace App {
@@ -16,6 +17,7 @@ declare global {
         interface Locals {
             user: SerializableUser | null;
             session: SerializableSession | null;
+            logContext?: LogContext;
         }
         // interface PageData {}
         // interface Platform {}

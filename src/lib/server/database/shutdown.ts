@@ -8,21 +8,24 @@ let shutdownInProgress = false;
 async function gracefulShutdown() {
     if (shutdownInProgress) return;
     shutdownInProgress = true;
-    
+
     console.log('\n🛑 Graceful shutdown initiated...');
-    
+
     try {
         // PRODUCTION: mongoose connection
-        if (mongoose.connection.readyState === mongoose.ConnectionStates.connected) {
+        if (
+            mongoose.connection.readyState ===
+            mongoose.ConnectionStates.connected
+        ) {
             await mongoose.connection.close();
             console.log('✅ MongoDB connection closed');
         }
-        
+
         // DEV: memory server
         if (dev) {
             await stopMemoryServer();
         }
-        
+
         console.log('✅ Shutdown complete');
         process.exit(0);
     } catch (error) {

@@ -9,7 +9,7 @@ export const SESSION_COOKIE_NAME = 'Jurnl_session_token';
 export function setSessionCookie(
     event: RequestEvent,
     clientToken: string,
-    expiresAt: Date
+    expiresAt: Date,
 ): void {
     const isProduction = !dev;
     const maxAge = Math.floor((expiresAt.getTime() - Date.now()) / 1000);

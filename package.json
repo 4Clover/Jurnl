@@ -68,10 +68,7 @@
         "node": "v22.16.0"
     },
     "lint-staged": {
-        "*.{js,ts,svelte}": [
-            "eslint --fix",
-            "prettier --write"
-        ],
+        "*.{js,ts,svelte}": ["eslint --fix", "prettier --write"],
         "*.{js,ts,svelte,json,md,html,css,yml}": "prettier --write"
     },
     "dependencies": {

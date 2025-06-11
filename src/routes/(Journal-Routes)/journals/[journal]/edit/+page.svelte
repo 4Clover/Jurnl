@@ -1,111 +1,3 @@
-<script lang="ts">
-    import type { PageData } from './$types';
-    import { goto } from '$app/navigation';
-    import { enhance } from '$app/forms';
-
-    let { data }: { data: PageData } = $props();
-
-    let title = $state(data.journal.title);
-    let description = $state(data.journal.description || '');
-    let isSubmitting = $state(false);
-    let error = $state<string | null>(null);
-
-    async function handleSubmit(e: Event) {
-        e.preventDefault();
-        if (!title.trim()) {
-            error = 'Title is required';
-            return;
-        }
-
-        isSubmitting = true;
-        error = null;
-
-        try {
-            const response = await fetch(`/api/journals/${data.journal._id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    title: title.trim(),
-                    description: description.trim()
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to update journal');
-            }
-
-            await goto(`/journals/${data.journal._id}`);
-        } catch (err) {
-            error = err instanceof Error ? err.message : 'Failed to update journal';
-        } finally {
-            isSubmitting = false;
-        }
-    }
-</script>
-
-<div class="page-container">
-    <header class="page-header">
-        <nav class="breadcrumb">
-            <a href="/journals">My Journals</a>
-            <span>/</span>
-            <a href="/journals/{data.journal._id}">{data.journal.title}</a>
-            <span>/</span>
-            <span>Edit</span>
-        </nav>
-        <h1>Edit Journal</h1>
-    </header>
-
-    {#if error}
-        <div class="error-message" role="alert">
-            {error}
-        </div>
-    {/if}
-
-    <form onsubmit={handleSubmit} class="journal-form">
-        <div class="form-field">
-            <label for="title">Journal Title</label>
-            <input
-                id="title"
-                type="text"
-                bind:value={title}
-                placeholder="Enter journal title"
-                disabled={isSubmitting}
-                required
-            />
-        </div>
-
-        <div class="form-field">
-            <label for="description">Description (Optional)</label>
-            <textarea
-                id="description"
-                bind:value={description}
-                placeholder="Describe your journal..."
-                rows="4"
-                disabled={isSubmitting}
-            ></textarea>
-        </div>
-
-        <div class="form-actions">
-            <button
-                type="button"
-                class="button button-secondary"
-                onclick={() => window.history.back()}
-                disabled={isSubmitting}
-            >
-                Cancel
-            </button>
-            <button
-                type="submit"
-                class="button button-primary"
-                disabled={isSubmitting}
-            >
-                {isSubmitting ? 'Updating...' : 'Update Journal'}
-            </button>
-        </div>
-    </form>
-</div>
-
 <style>
     .page-container {
         max-width: 800px;
@@ -232,3 +124,114 @@
         cursor: not-allowed;
     }
 </style>
+
+<script lang="ts">
+    import type { PageData } from './$types';
+    import { goto } from '$app/navigation';
+    import { enhance } from '$app/forms';
+
+    let { data }: { data: PageData } = $props();
+
+    let title = $state(data.journal.title);
+    let description = $state(data.journal.description || '');
+    let isSubmitting = $state(false);
+    let error = $state<string | null>(null);
+
+    async function handleSubmit(e: Event) {
+        e.preventDefault();
+        if (!title.trim()) {
+            error = 'Title is required';
+            return;
+        }
+
+        isSubmitting = true;
+        error = null;
+
+        try {
+            const response = await fetch(`/api/journals/${data.journal._id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: title.trim(),
+                    description: description.trim(),
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(
+                    errorData.message || 'Failed to update journal',
+                );
+            }
+
+            await goto(`/journals/${data.journal._id}`);
+        } catch (err) {
+            error =
+                err instanceof Error ? err.message : 'Failed to update journal';
+        } finally {
+            isSubmitting = false;
+        }
+    }
+</script>
+
+<div class="page-container">
+    <header class="page-header">
+        <nav class="breadcrumb">
+            <a href="/journals">My Journals</a>
+            <span>/</span>
+            <a href="/journals/{data.journal._id}">{data.journal.title}</a>
+            <span>/</span>
+            <span>Edit</span>
+        </nav>
+        <h1>Edit Journal</h1>
+    </header>
+
+    {#if error}
+        <div class="error-message" role="alert">
+            {error}
+        </div>
+    {/if}
+
+    <form onsubmit={handleSubmit} class="journal-form">
+        <div class="form-field">
+            <label for="title">Journal Title</label>
+            <input
+                id="title"
+                type="text"
+                bind:value={title}
+                placeholder="Enter journal title"
+                disabled={isSubmitting}
+                required
+            />
+        </div>
+
+        <div class="form-field">
+            <label for="description">Description (Optional)</label>
+            <textarea
+                id="description"
+                bind:value={description}
+                placeholder="Describe your journal..."
+                rows="4"
+                disabled={isSubmitting}
+            ></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button
+                type="button"
+                class="button button-secondary"
+                onclick={() => window.history.back()}
+                disabled={isSubmitting}
+            >
+                Cancel
+            </button>
+            <button
+                type="submit"
+                class="button button-primary"
+                disabled={isSubmitting}
+            >
+                {isSubmitting ? 'Updating...' : 'Update Journal'}
+            </button>
+        </div>
+    </form>
+</div>

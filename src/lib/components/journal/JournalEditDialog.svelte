@@ -5,18 +5,22 @@
         description: string;
         color: string;
         journalId: string;
-        onSave: (data: { title: string; description: string; color: string }) => Promise<void>;
+        onSave: (data: {
+            title: string;
+            description: string;
+            color: string;
+        }) => Promise<void>;
         onCancel: () => void;
     }
 
-    let { 
-        isOpen = false, 
+    let {
+        isOpen = false,
         title = '',
         description = '',
         color = '#a2aec6',
         journalId,
-        onSave, 
-        onCancel
+        onSave,
+        onCancel,
     }: Props = $props();
 
     let formTitle = $state(title);
@@ -30,9 +34,9 @@
         '#999f85', // sage
         '#e1d4cb', // beige
         '#bf95aa', // powder pink
-        '#e0a699', 
-        '#b1a0ba', 
-        '#a0bab7', 
+        '#e0a699',
+        '#b1a0ba',
+        '#a0bab7',
         '#bad9b6',
     ];
 
@@ -47,7 +51,9 @@
     });
 
     const remainingChars = $derived(500 - (formDescription?.length || 0));
-    const isValid = $derived(formTitle.trim().length > 0 && formTitle.length <= 100);
+    const isValid = $derived(
+        formTitle.trim().length > 0 && formTitle.length <= 100,
+    );
 
     async function handleSave() {
         if (!isValid) {
@@ -67,10 +73,11 @@
             await onSave({
                 title: formTitle.trim(),
                 description: formDescription.trim(),
-                color: formColor
+                color: formColor,
             });
         } catch (err) {
-            error = err instanceof Error ? err.message : 'Failed to save changes';
+            error =
+                err instanceof Error ? err.message : 'Failed to save changes';
         } finally {
             isSubmitting = false;
         }
@@ -99,8 +106,8 @@
 </script>
 
 {#if isOpen}
-    <div 
-        class="dialog-backdrop" 
+    <div
+        class="dialog-backdrop"
         onclick={handleBackdropClick}
         onkeydown={handleKeydown}
         role="dialog"
@@ -110,14 +117,14 @@
     >
         <div class="dialog-content">
             <h2 id="dialog-title" class="dialog-title">Edit Journal</h2>
-            
+
             <form onsubmit={handleFormSubmit} class="edit-form">
                 {#if error}
                     <div class="error-message" role="alert">
                         {error}
                     </div>
                 {/if}
-                
+
                 <div class="form-group">
                     <label for="journal-title" class="form-label">Title</label>
                     <input
@@ -137,7 +144,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="journal-description" class="form-label">Description</label>
+                    <label for="journal-description" class="form-label"
+                        >Description</label
+                    >
                     <textarea
                         id="journal-description"
                         bind:value={formDescription}
@@ -157,24 +166,24 @@
                     <fieldset>
                         <legend class="form-label">Cover Color</legend>
                         <div class="color-picker">
-                        {#each presetColors as presetColor}
-                            <button
-                                type="button"
-                                class="color-option"
-                                class:selected={formColor === presetColor}
-                                style="background-color: {presetColor}"
-                                onclick={() => formColor = presetColor}
-                                disabled={isSubmitting}
-                                aria-label="Select {presetColor} color"
-                            ></button>
-                        {/each}
+                            {#each presetColors as presetColor}
+                                <button
+                                    type="button"
+                                    class="color-option"
+                                    class:selected={formColor === presetColor}
+                                    style="background-color: {presetColor}"
+                                    onclick={() => (formColor = presetColor)}
+                                    disabled={isSubmitting}
+                                    aria-label="Select {presetColor} color"
+                                ></button>
+                            {/each}
                         </div>
                     </fieldset>
                 </div>
             </form>
-            
+
             <div class="dialog-actions">
-                <button 
+                <button
                     type="button"
                     class="button button-secondary"
                     onclick={handleCancel}
@@ -182,7 +191,7 @@
                 >
                     Cancel
                 </button>
-                <button 
+                <button
                     type="button"
                     class="button button-primary"
                     onclick={handleSave}

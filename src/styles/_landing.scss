@@ -4,7 +4,8 @@
 //
 // For UserJournals.svelte
 //
-.cancel-button, .create-submit-button {
+.cancel-button,
+.create-submit-button {
     padding: 0.5rem 1rem;
     border-radius: 6px;
     font-weight: 500;
@@ -39,7 +40,9 @@
 
 .color-option.selected {
     border-color: #111827;
-    box-shadow: 0 0 0 2px white, 0 0 0 4px #111827;
+    box-shadow:
+        0 0 0 2px white,
+        0 0 0 4px #111827;
 }
 
 .color-picker {
@@ -83,7 +86,8 @@
     background: #2563eb;
 }
 
-.create-submit-button:disabled, .cancel-button:disabled {
+.create-submit-button:disabled,
+.cancel-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -252,7 +256,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--color), var(--color-dark, var(--color)));
+    background: linear-gradient(
+        135deg,
+        var(--color),
+        var(--color-dark, var(--color))
+    );
     position: relative;
     flex-shrink: 0;
 }
@@ -329,7 +337,8 @@
     flex-shrink: 0;
 }
 
-.settings-btn:hover, .settings-btn:focus {
+.settings-btn:hover,
+.settings-btn:focus {
     background: #f3f4f6;
     color: #374151;
     transform: scale(1);
@@ -407,7 +416,6 @@
     &__button {
         width: 40%;
         margin: 0;
-
     }
 }
 
@@ -431,19 +439,19 @@
     color: red;
     display: block;
     white-space: nowrap;
-	width: 100%;
+    width: 100%;
 }
 
 .friend-func {
     display: flex;
-	justify-content: flex-end;
+    justify-content: flex-end;
 }
 
 .friend-title {
     display: flex;
-	//justify-content: flex-begin;
+    //justify-content: flex-begin;
     white-space: nowrap;
-	width: 100%;
+    width: 100%;
 }
 
 .manage-friend {
@@ -479,7 +487,6 @@
 }
 
 .public-entry-preview {
-
     padding: 0.67rem;
 
     background-color: variables.$gray;

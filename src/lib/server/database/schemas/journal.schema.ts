@@ -2,10 +2,10 @@
 
 export interface IJournal extends Document {
     title: string;
-    user: Types.ObjectId; 
+    user: Types.ObjectId;
     cover_color: string;
-    description?: string; 
-    entries: Types.ObjectId[]; 
+    description?: string;
+    entries: Types.ObjectId[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -62,7 +62,9 @@ JournalSchema.set('toJSON', {
         // Convert ObjectIds to strings for client-side use
         ret._id = ret._id.toString();
         ret.user = ret.user.toString();
-        ret.entries = ret.entries.map((entry: Types.ObjectId) => entry.toString());
+        ret.entries = ret.entries.map((entry: Types.ObjectId) =>
+            entry.toString(),
+        );
         delete ret.__v;
         return ret;
     },

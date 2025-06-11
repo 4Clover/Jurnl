@@ -23,12 +23,14 @@
             start_period: 10s
         restart: unless-stopped
         command: [
-            '--auth',
-            '--bind_ip_all',
-            '--wiredTigerCacheSizeGB', '1',  # Limit cache size
-            '--wiredTigerEngineConfigString', 'cache_size=1GB',
-            '--quiet',  # Reduce logging
-        ]
+                '--auth',
+                '--bind_ip_all',
+                '--wiredTigerCacheSizeGB',
+                '1', # Limit cache size
+                '--wiredTigerEngineConfigString',
+                'cache_size=1GB',
+                '--quiet', # Reduce logging
+            ]
         networks:
             - app_network
 
@@ -36,8 +38,8 @@ networks:
     app_network:
         driver: bridge
         driver_opts:
-            com.docker.network.bridge.enable_icc: "true"
-            com.docker.network.driver.mtu: "1500"
+            com.docker.network.bridge.enable_icc: 'true'
+            com.docker.network.driver.mtu: '1500'
 
 volumes:
     mongo_data:

@@ -1,5 +1,8 @@
 <script lang="ts">
-    import { getTemplateList, type EntryTemplate } from '$lib/types/templates.types';
+    import {
+        getTemplateList,
+        type EntryTemplate,
+    } from '$lib/types/templates.types';
 
     interface Props {
         selectedTemplate?: string;
@@ -19,7 +22,8 @@
         if (template.zones.picture_text.enabled) zones.push('Photos');
         if (template.zones.list.enabled) zones.push('Lists');
         if (template.zones.text_right.enabled) zones.push('Notes');
-        if (template.zones.free_form_content.enabled) zones.push('Free Writing');
+        if (template.zones.free_form_content.enabled)
+            zones.push('Free Writing');
         return zones;
     }
 </script>
@@ -27,7 +31,7 @@
 <div class="template-selector">
     <h2>Choose a Template</h2>
     <p class="subtitle">Select a template to structure your journal entry</p>
-    
+
     <div class="template-grid">
         {#each templates as template}
             <button
