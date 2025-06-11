@@ -371,7 +371,10 @@
 //.addfriend-button in _buttons.scss
 
 .delete-friend-button {
-    color: variables.$red;
+    color: variables.$olive;
+    background-color: variables.$off-white;
+    padding: 4px;
+    border-radius: 4px;
 }
 
 .feed-title {
