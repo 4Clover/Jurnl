@@ -52,7 +52,7 @@
                         onclick={() =>
                             (window.location.href =
                                 '/journals/' +
-                                entry.journal +
+                                journal.id +
                                 '/' +
                                 type +
                                 '/' +
