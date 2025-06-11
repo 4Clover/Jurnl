@@ -34,20 +34,23 @@ Jurnl is designed to bring the personal touch of traditional journaling to the d
 ### Quick Start
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/jurnl.git
-   cd jurnl
-   ```
+
+    ```bash
+    git clone https://github.com/your-username/jurnl.git
+    cd jurnl
+    ```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+
+    ```bash
+    npm install
+    ```
 
 3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+
+    ```bash
+    npm run dev
+    ```
 
 4. Open http://localhost:3000 in your browser
 
@@ -68,6 +71,7 @@ npm run test       # Run tests
 ## Debug Panel
 
 Jurnl includes a developer debug panel at `/debug` that allows you to:
+
 - Test all API routes directly
 - Check authentication states
 - Verify database operations

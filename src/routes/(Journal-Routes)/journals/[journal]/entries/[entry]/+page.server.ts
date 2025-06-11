@@ -2,19 +2,16 @@
 import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params, fetch, locals }) => {
-    // Redirect to login if not authenticated
     if (!locals.user) {
         throw redirect(303, '/auth/login');
     }
 
     try {
-        // Fetch journal and entry in parallel
         const [journalRes, entryRes] = await Promise.all([
             fetch(`/api/journals/${params.journal}`),
             fetch(`/api/journals/${params.journal}/entries/${params.entry}`),
         ]);
 
-        // Check journal response
         if (!journalRes.ok) {
             if (journalRes.status === 404) {
                 throw error(404, 'Journal not found');
@@ -22,7 +19,6 @@ export const load: PageServerLoad = async ({ params, fetch, locals }) => {
             throw error(journalRes.status, 'Failed to load journal');
         }
 
-        // Check entry response
         if (!entryRes.ok) {
             if (entryRes.status === 404) {
                 throw error(404, 'Entry not found');

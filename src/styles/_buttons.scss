@@ -139,7 +139,8 @@ button {
     font-family: 'Nothing You Could Do';
 }
 
-.submit-button, .add-button {
+.submit-button,
+.add-button {
     @include primary;
     font-family: 'Nothing You Could Do';
 }

@@ -45,10 +45,10 @@ export async function addFriendFromForm(
     formData: FormData,
 ): Promise<FriendResponse> {
     const context = getContext();
-    const log = logger.child({ 
+    const log = logger.child({
         ...context,
         service: 'FriendService',
-        operation: 'addFriend'
+        operation: 'addFriend',
     });
     const timer = log.startTimer();
 
@@ -61,16 +61,16 @@ export async function addFriendFromForm(
         error(400, 'No username provided');
     }
 
-    log.debug('Adding friend', { 
-        currentUserId, 
-        friendUsername 
+    log.debug('Adding friend', {
+        currentUserId,
+        friendUsername,
     });
 
     const friend = await findUserByUsername(friendUsername);
 
     if (currentUserId === friend._id.toString()) {
-        log.warn('User attempted to add themselves as friend', { 
-            userId: currentUserId 
+        log.warn('User attempted to add themselves as friend', {
+            userId: currentUserId,
         });
         error(400, 'Cannot add yourself as friend');
     }
@@ -81,9 +81,9 @@ export async function addFriendFromForm(
             (id) => id.toString() === friend._id.toString(),
         )
     ) {
-        log.info('Friend relationship already exists', { 
-            currentUserId, 
-            friendId: friend._id.toString() 
+        log.info('Friend relationship already exists', {
+            currentUserId,
+            friendId: friend._id.toString(),
         });
         error(400, 'Already friends');
     }
@@ -99,7 +99,7 @@ export async function addFriendFromForm(
     timer.end('Friend added successfully', {
         currentUserId,
         friendId: friend._id.toString(),
-        friendUsername
+        friendUsername,
     });
 
     return { message: 'Added friend' };

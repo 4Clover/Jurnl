@@ -3,13 +3,13 @@ import { json, error } from '@sveltejs/kit';
 import { journalService, entryService, userService } from './index';
 import { journalServiceWithEntries } from './journal.service';
 import { seedTestUsers, clearTestData } from '../database/seed-dev-data';
-import { 
-    addFriendFromForm, 
+import {
+    addFriendFromForm,
     addFriendValidated,
-    deleteFriendByUsername, 
+    deleteFriendByUsername,
     getFriendUsernames,
-    getFriendsPublicEntries, 
-    getUserSharedEntries 
+    getFriendsPublicEntries,
+    getUserSharedEntries,
 } from './friend.service';
 import { dev } from '$app/environment';
 
@@ -26,7 +26,6 @@ export class ApiRouter {
         return this;
     }
 
-    // Register route
     on(method: string, path: string, handler: RouteHandler) {
         if (!this.routes.has(path)) {
             this.routes.set(path, new Map());
@@ -44,20 +43,16 @@ export class ApiRouter {
     delete = (path: string, handler: RouteHandler) =>
         this.on('DELETE', path, handler);
 
-    // Match and handle request
     async handle(event: RequestEvent): Promise<Response> {
-        // Remove base path
         const path = event.url.pathname.replace(
             new RegExp(`^${this.basePath}/?`),
             '',
         );
 
-        // Check auth if required
         if (this.authRequired && !event.locals.user) {
             error(401, 'Unauthorized');
         }
 
-        // Try exact match for other routes
         for (const [routePath, methods] of this.routes) {
             const params = this.matchPath(path, routePath);
             if (params !== null) {
@@ -74,7 +69,6 @@ export class ApiRouter {
         error(404, 'Route not found');
     }
 
-    // Path matching with params
     private matchPath(
         actual: string,
         pattern: string,
@@ -91,11 +85,9 @@ export class ApiRouter {
             const actualPart = actualParts[i];
 
             if (patternPart?.startsWith(':')) {
-                // parameter
                 if (!patternPart || !actualPart) return null;
                 params[patternPart.slice(1)] = actualPart;
             } else if (patternPart !== actualPart) {
-                // no match
                 return null;
             }
         }
@@ -104,9 +96,7 @@ export class ApiRouter {
     }
 }
 
-// Create the main API router with all routes
 export const api = new ApiRouter()
-    // Enable auth for all routes
     .requireAuth()
 
     .get('test', async () => {
@@ -117,9 +107,7 @@ export const api = new ApiRouter()
         });
     })
 
-    // ===== JOURNALS =====
     .get('journals', (event) => {
-        // Check if we need to populate entries for landing page
         const url = new URL(event.request.url);
         const withEntries = url.searchParams.get('withEntries') === 'true';
 
@@ -140,7 +128,6 @@ export const api = new ApiRouter()
         journalService.delete(event, event.params.id!),
     )
 
-    // ===== ENTRIES =====
     .get('journals/:journalId/entries', (event) =>
         entryService.listByJournal(event, event.params.journalId!),
     )
@@ -158,12 +145,9 @@ export const api = new ApiRouter()
         entryService.delete(event, event.params.entryId!),
     )
 
-    // ===== USERS =====
     .get('users/:id', (event) => userService.get(event, event.params.id!))
     .put('users/:id', (event) => userService.update(event, event.params.id!))
 
-    // ===== FRIENDS =====
-    // Put specific routes first to avoid conflicts with parameterized routes
     .get('friends/entries', async (event) => {
         const result = await getFriendsPublicEntries(event);
         return json(result.result);
@@ -178,21 +162,22 @@ export const api = new ApiRouter()
     })
     .post('friends', async (event) => {
         const contentType = event.request.headers.get('content-type');
-        
+
         if (contentType?.includes('application/json')) {
-            // Handle JSON requests
             const body = await event.request.json();
             const result = await addFriendValidated(event, body);
             return json(result);
         } else {
-            // Handle FormData requests (existing forms)
             const formData = await event.request.formData();
             const result = await addFriendFromForm(event, formData);
             return json(result);
         }
     })
     .delete('friends/:username', async (event) => {
-        const result = await deleteFriendByUsername(event, event.params.username!);
+        const result = await deleteFriendByUsername(
+            event,
+            event.params.username!,
+        );
         return json(result);
     })
 
@@ -211,7 +196,6 @@ export const api = new ApiRouter()
         });
     })
 
-    // ===== DEVELOPMENT ENDPOINTS =====
     .post('dev/seed', async (event) => {
         if (!dev) {
             error(403, 'Development endpoints only available in dev mode');

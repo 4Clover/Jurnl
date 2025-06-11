@@ -158,7 +158,8 @@
                         aria-label="Open entry: {entry.title}"
                     >
                         <div class="entry-preview">
-                            <span class="entry-title"><p>{entry.title}</p></span>
+                            <span class="entry-title"><p>{entry.title}</p></span
+                            >
                             <p class="entry-date">
                                 {new Date(
                                     entry.entry_date,

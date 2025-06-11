@@ -15,16 +15,16 @@ logger.error('Error occurred', new Error('Something went wrong'));
 logger.fatal('Critical error', error);
 
 // With metadata
-logger.info('User logged in', { 
-  userId: '123', 
-  loginMethod: 'google' 
+logger.info('User logged in', {
+    userId: '123',
+    loginMethod: 'google',
 });
 
 // Performance timing
 const timer = logger.startTimer();
 // ... perform operation ...
-timer.end('Database query completed', { 
-  query: 'SELECT * FROM users' 
+timer.end('Database query completed', {
+    query: 'SELECT * FROM users',
 });
 ```
 
@@ -37,10 +37,10 @@ export async function addFriendFromForm(
     formData: FormData,
 ): Promise<FriendResponse> {
     const context = getContext();
-    const log = logger.child({ 
+    const log = logger.child({
         ...context,
         service: 'FriendService',
-        operation: 'addFriend'
+        operation: 'addFriend',
     });
     const timer = log.startTimer();
 
@@ -49,7 +49,7 @@ export async function addFriendFromForm(
     timer.end('Friend added successfully', {
         currentUserId,
         friendId: friend._id.toString(),
-        friendUsername
+        friendUsername,
     });
 }
 ```
@@ -65,19 +65,19 @@ import { logger } from '$lib/client/logger';
 try {
     const response = await fetch('/api/journals', {
         method: 'POST',
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
     });
-    
+
     if (!response.ok) {
         throw new Error('Failed to create journal');
     }
-    
-    logger.info('Journal created successfully', { 
-        journalId: response.data.id 
+
+    logger.info('Journal created successfully', {
+        journalId: response.data.id,
     });
 } catch (error) {
     logger.error('Failed to create journal', error, {
-        context: { formData: data }
+        context: { formData: data },
     });
 }
 ```
@@ -109,7 +109,17 @@ Error: Duplicate key error
 ### Production Mode (JSON format)
 
 ```json
-{"level":"info","message":"User logged in","timestamp":"2024-01-15T10:23:45.123Z","context":{"requestId":"abc-123","userId":"user-456","ip":"192.168.1.1"},"metadata":{"loginMethod":"google"}}
+{
+    "level": "info",
+    "message": "User logged in",
+    "timestamp": "2024-01-15T10:23:45.123Z",
+    "context": {
+        "requestId": "abc-123",
+        "userId": "user-456",
+        "ip": "192.168.1.1"
+    },
+    "metadata": { "loginMethod": "google" }
+}
 ```
 
 ## Configuration
@@ -139,7 +149,7 @@ const customLogger = createLogger({
     level: 'warn',
     format: 'json',
     colors: false,
-    performanceLogging: true
+    performanceLogging: true,
 });
 ```
 

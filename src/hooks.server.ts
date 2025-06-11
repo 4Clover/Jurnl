@@ -32,7 +32,10 @@ export const handle: Handle = async ({ event, resolve }) => {
         try {
             await connectToDatabase();
         } catch (error) {
-            requestLogger.error('Database connection failed in handle hook', error);
+            requestLogger.error(
+                'Database connection failed in handle hook',
+                error,
+            );
             // locals to null and continue without blocking
             event.locals.user = null;
             event.locals.session = null;
@@ -49,44 +52,47 @@ export const handle: Handle = async ({ event, resolve }) => {
             });
         }
 
-    const clientToken = event.cookies.get(SESSION_COOKIE_NAME);
+        const clientToken = event.cookies.get(SESSION_COOKIE_NAME);
 
-    if (clientToken) {
-        // validate session if database is connected
-        if (!isDatabaseConnected()) {
-            requestLogger.warn('Database not connected, skipping session validation');
-            event.locals.user = null;
-            event.locals.session = null;
-            return resolve(event);
-        }
+        if (clientToken) {
+            // validate session if database is connected
+            if (!isDatabaseConnected()) {
+                requestLogger.warn(
+                    'Database not connected, skipping session validation',
+                );
+                event.locals.user = null;
+                event.locals.session = null;
+                return resolve(event);
+            }
 
-        const validationResult = await validateClientSessionToken(clientToken);
+            const validationResult =
+                await validateClientSessionToken(clientToken);
 
-        if (validationResult.user && validationResult.session) {
-            // assign the serializable user and session data to locals
-            event.locals.user = validationResult.user;
-            event.locals.session = validationResult.session;
+            if (validationResult.user && validationResult.session) {
+                // assign the serializable user and session data to locals
+                event.locals.user = validationResult.user;
+                event.locals.session = validationResult.session;
 
-            // refresh session cookie
-            const newExpiry = await refreshSession(
-                validationResult.session._id,
-            );
-            if (newExpiry) {
-                setSessionCookie(event, clientToken, newExpiry);
+                // refresh session cookie
+                const newExpiry = await refreshSession(
+                    validationResult.session._id,
+                );
+                if (newExpiry) {
+                    setSessionCookie(event, clientToken, newExpiry);
+                }
+            } else {
+                // invalid or expired token so clear locals
+                event.locals.user = null;
+                event.locals.session = null;
             }
         } else {
-            // invalid or expired token so clear locals
+            // no client token found
             event.locals.user = null;
             event.locals.session = null;
         }
-    } else {
-        // no client token found
-        event.locals.user = null;
-        event.locals.session = null;
-    }
 
         const response = await resolve(event);
-        
+
         // Log request completion with appropriate level based on status code
         const duration = Math.round(performance.now() - startTime);
         const logData = {
@@ -97,7 +103,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 
         if (response.status >= 500) {
             // 5xx: Server errors
-            requestLogger.error(`Request completed with server error`, undefined, logData);
+            requestLogger.error(
+                `Request completed with server error`,
+                undefined,
+                logData,
+            );
         } else if (response.status >= 400) {
             // 4xx: Client errors (400, 401, 403, 404, 405, etc.)
             requestLogger.warn(`Request completed with client error`, logData);
@@ -108,7 +118,7 @@ export const handle: Handle = async ({ event, resolve }) => {
             // 2xx: Success
             requestLogger.info(`Request completed successfully`, logData);
         }
-        
+
         return response;
     });
 };

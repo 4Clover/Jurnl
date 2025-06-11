@@ -12,20 +12,17 @@ import type {
     ILogger,
 } from '$lib/types/logger.types';
 
-// CSS styles for browser console
 const STYLES: Record<LogLevel, string> = {
-    debug: 'color: #3b82f6; font-weight: bold;',   // Blue
-    info: 'color: #10b981; font-weight: bold;',    // Green
-    warn: 'color: #f59e0b; font-weight: bold;',    // Yellow
-    error: 'color: #ef4444; font-weight: bold;',   // Red
-    fatal: 'color: #8b5cf6; font-weight: bold;',   // Purple
+    debug: 'color: #3b82f6; font-weight: bold;',
+    info: 'color: #10b981; font-weight: bold;',
+    warn: 'color: #f59e0b; font-weight: bold;',
+    error: 'color: #ef4444; font-weight: bold;',
+    fatal: 'color: #8b5cf6; font-weight: bold;',
 };
 
-// Additional styles
 const TIMESTAMP_STYLE = 'color: #6b7280; font-size: 0.9em;';
 const CONTEXT_STYLE = 'color: #9ca3af; font-style: italic;';
 
-// Emojis for visual distinction
 const LEVEL_EMOJIS: Record<LogLevel, string> = {
     debug: '🔵',
     info: '🟢',
@@ -34,7 +31,6 @@ const LEVEL_EMOJIS: Record<LogLevel, string> = {
     fatal: '🟣',
 };
 
-// Local storage keys
 const STORAGE_KEYS = {
     LOG_BUFFER: 'jurnl_log_buffer',
     LOG_CONFIG: 'jurnl_log_config',
@@ -46,10 +42,7 @@ export class ClientLogger implements ILogger {
     private logBuffer: LogEntry[] = [];
     private maxBufferSize = 100;
 
-    constructor(
-        config: Partial<LoggerConfig> = {},
-        context: LogContext = {}
-    ) {
+    constructor(config: Partial<LoggerConfig> = {}, context: LogContext = {}) {
         this.config = this.mergeConfig(config);
         this.context = this.enrichContext(context);
         this.loadLogBuffer();
@@ -58,7 +51,7 @@ export class ClientLogger implements ILogger {
     private mergeConfig(partial: Partial<LoggerConfig>): LoggerConfig {
         // Check for stored config
         const storedConfig = this.getStoredConfig();
-        
+
         const defaults: LoggerConfig = {
             level: import.meta.env.DEV ? 'debug' : 'info',
             format: 'pretty', // Always pretty in browser
@@ -74,7 +67,7 @@ export class ClientLogger implements ILogger {
                 ip: false, // Not available in browser
             },
         };
-        
+
         return { ...defaults, ...storedConfig, ...partial };
     }
 
@@ -89,7 +82,9 @@ export class ClientLogger implements ILogger {
 
         // Try to get user context from DOM or window
         if (typeof window !== 'undefined' && window && '__USER__' in window) {
-            const windowWithUser = window as Window & { __USER__?: { id?: string; username?: string } };
+            const windowWithUser = window as Window & {
+                __USER__?: { id?: string; username?: string };
+            };
             if (windowWithUser.__USER__) {
                 enriched.userId = windowWithUser.__USER__.id;
                 enriched.username = windowWithUser.__USER__.username;
@@ -102,7 +97,7 @@ export class ClientLogger implements ILogger {
     private getStoredConfig(): Partial<LoggerConfig> {
         try {
             const stored = localStorage.getItem(STORAGE_KEYS.LOG_CONFIG);
-            return stored ? JSON.parse(stored) as Partial<LoggerConfig> : {};
+            return stored ? (JSON.parse(stored) as Partial<LoggerConfig>) : {};
         } catch {
             return {};
         }
@@ -125,7 +120,10 @@ export class ClientLogger implements ILogger {
             if (this.logBuffer.length > this.maxBufferSize) {
                 this.logBuffer = this.logBuffer.slice(-this.maxBufferSize);
             }
-            localStorage.setItem(STORAGE_KEYS.LOG_BUFFER, JSON.stringify(this.logBuffer));
+            localStorage.setItem(
+                STORAGE_KEYS.LOG_BUFFER,
+                JSON.stringify(this.logBuffer),
+            );
         } catch {
             // Ignore storage errors
         }
@@ -147,23 +145,25 @@ export class ClientLogger implements ILogger {
             const formatted: LogEntry['error'] = {
                 message: error.message,
             };
-            
+
             if (this.config.includeStackTrace && error.stack) {
-                const stackLines = error.stack.split('\n').slice(0, this.config.maxStackDepth + 1);
+                const stackLines = error.stack
+                    .split('\n')
+                    .slice(0, this.config.maxStackDepth + 1);
                 formatted.stack = stackLines.join('\n');
             }
-            
+
             if ('code' in error && typeof error.code === 'string') {
                 formatted.code = error.code;
             }
-            
+
             if ('cause' in error) {
                 formatted.cause = error.cause;
             }
-            
+
             return formatted;
         }
-        
+
         return {
             message: String(error),
         };
@@ -173,7 +173,7 @@ export class ClientLogger implements ILogger {
         level: LogLevel,
         message: string,
         error?: unknown,
-        metadata?: Record<string, unknown>
+        metadata?: Record<string, unknown>,
     ): LogEntry {
         const entry: LogEntry = {
             level,
@@ -205,10 +205,20 @@ export class ClientLogger implements ILogger {
                 };
             };
             entry.performance = {
-                memory: performanceMemory.memory ? {
-                    heapUsed: Math.round(performanceMemory.memory.usedJSHeapSize / 1024 / 1024),
-                    heapTotal: Math.round(performanceMemory.memory.totalJSHeapSize / 1024 / 1024),
-                } : undefined,
+                memory: performanceMemory.memory
+                    ? {
+                          heapUsed: Math.round(
+                              performanceMemory.memory.usedJSHeapSize /
+                                  1024 /
+                                  1024,
+                          ),
+                          heapTotal: Math.round(
+                              performanceMemory.memory.totalJSHeapSize /
+                                  1024 /
+                                  1024,
+                          ),
+                      }
+                    : undefined,
             };
         }
 
@@ -268,7 +278,7 @@ export class ClientLogger implements ILogger {
         level: LogLevel,
         message: string,
         error?: unknown,
-        metadata?: Record<string, unknown>
+        metadata?: Record<string, unknown>,
     ): void {
         if (!this.shouldLog(level)) return;
 
@@ -328,11 +338,19 @@ export class ClientLogger implements ILogger {
         this.log('warn', message, undefined, metadata);
     }
 
-    error(message: string, error?: unknown, metadata?: Record<string, unknown>): void {
+    error(
+        message: string,
+        error?: unknown,
+        metadata?: Record<string, unknown>,
+    ): void {
         this.log('error', message, error, metadata);
     }
 
-    fatal(message: string, error?: unknown, metadata?: Record<string, unknown>): void {
+    fatal(
+        message: string,
+        error?: unknown,
+        metadata?: Record<string, unknown>,
+    ): void {
         this.log('fatal', message, error, metadata);
     }
 
@@ -355,7 +373,7 @@ export class ClientLogger implements ILogger {
     }
 
     // Client-specific methods
-    
+
     /**
      * Get the current log buffer
      */
@@ -384,7 +402,10 @@ export class ClientLogger implements ILogger {
     updateConfig(config: Partial<LoggerConfig>): void {
         this.config = { ...this.config, ...config };
         try {
-            localStorage.setItem(STORAGE_KEYS.LOG_CONFIG, JSON.stringify(config));
+            localStorage.setItem(
+                STORAGE_KEYS.LOG_CONFIG,
+                JSON.stringify(config),
+            );
         } catch {
             // Ignore storage errors
         }
@@ -397,7 +418,7 @@ export const logger = new ClientLogger();
 // Export a function to create logger instances with custom config
 export function createLogger(
     config?: Partial<LoggerConfig>,
-    context?: LogContext
+    context?: LogContext,
 ): ClientLogger {
     return new ClientLogger(config, context);
 }

@@ -34,7 +34,10 @@
                     }));
                     console.log(`Loaded ${friendlist.length} friends`);
                 } else {
-                    console.error('Invalid response format - expected array:', data);
+                    console.error(
+                        'Invalid response format - expected array:',
+                        data,
+                    );
                     friendlist = [];
                 }
             } else {
@@ -61,8 +64,10 @@
     <div class="error">{error}</div>
 {:else if friendlist.length === 0}
     <div class="no-friends">
-        <p>No friends have shared entries with you yet. Add some friends so they
-        can see your shared entries!</p>
+        <p>
+            No friends have shared entries with you yet. Add some friends so
+            they can see your shared entries!
+        </p>
     </div>
 {:else}
     {#each friendlist as friend}

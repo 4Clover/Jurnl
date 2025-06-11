@@ -26,10 +26,8 @@
         onTemplateChange,
     }: Props = $props();
 
-    // Get template configuration
     let template = $derived(getTemplate(templateId));
 
-    // Zone states - Initialize with existing data if in edit mode
     let title = $state(initialData?.title || '');
     let pictureUrl = $state<string | null>(
         initialData?.content_zones?.picture_text?.image?.url || null,
@@ -54,14 +52,11 @@
         initialData?.shared_with_friends || 'private',
     );
 
-    // UI states
     let isSubmitting = $state(false);
     let error = $state<string | null>(null);
     let uploadingImage = $state(false);
     let showTemplateChangeDialog = $state(false);
     let pendingTemplateId = $state<string | null>(null);
-
-    // Check if any zones have content (for template change warning)
     function hasZoneContent(zoneId: string): boolean {
         switch (zoneId) {
             case 'picture_text':
@@ -82,11 +77,9 @@
         }
     }
 
-    // Handle template change request
     function requestTemplateChange(newTemplateId: string) {
         if (!onTemplateChange) return;
 
-        // Check if switching templates would lose data
         const newTemplate = getTemplate(newTemplateId);
         if (!newTemplate) return;
 
@@ -113,10 +106,8 @@
         }
     }
 
-    // Confirm template change
     function confirmTemplateChange() {
         if (pendingTemplateId && onTemplateChange) {
-            // Clear data from zones that won't be in new template
             const newTemplate = getTemplate(pendingTemplateId);
             if (newTemplate) {
                 if (!newTemplate.zones.picture_text.enabled) {
@@ -142,37 +133,31 @@
         }
     }
 
-    // Cancel template change
     function cancelTemplateChange() {
         showTemplateChangeDialog = false;
         pendingTemplateId = null;
     }
 
-    // Add a new list item
     function addListItem() {
         listItems = [...listItems, { text: '', checked: false }];
     }
 
-    // Remove a list item
     function removeListItem(index: number) {
         listItems = listItems.filter((_, i) => i !== index);
     }
 
-    // Update list item text
     function updateListItem(index: number, text: string) {
         listItems = listItems.map((item, i) =>
             i === index ? { ...item, text } : item,
         );
     }
 
-    // Toggle list item checked state
     function toggleListItem(index: number) {
         listItems = listItems.map((item, i) =>
             i === index ? { ...item, checked: !item.checked } : item,
         );
     }
 
-    // Handle image upload (placeholder - implement actual upload logic)
     async function handleImageUpload(event: Event) {
         const input = event.target as HTMLInputElement;
         const file = input.files?.[0];
@@ -192,7 +177,6 @@
         }
     }
 
-    // Submit the entry
     async function handleSubmit(e: Event) {
         e.preventDefault();
         if (!title.trim()) {

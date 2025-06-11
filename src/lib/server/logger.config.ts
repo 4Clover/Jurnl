@@ -23,7 +23,10 @@ export function getLoggerConfig(): Partial<LoggerConfig> {
 
     // Log level
     const logLevel = process.env[ENV_VARS.LOG_LEVEL]?.toLowerCase() as LogLevel;
-    if (logLevel && ['debug', 'info', 'warn', 'error', 'fatal'].includes(logLevel)) {
+    if (
+        logLevel &&
+        ['debug', 'info', 'warn', 'error', 'fatal'].includes(logLevel)
+    ) {
         config.level = logLevel;
     }
 
@@ -126,7 +129,9 @@ export function getEnvironmentConfig(): Partial<LoggerConfig> {
  * Merge multiple configuration sources with proper precedence
  * Priority: User config > Environment variables > Environment defaults
  */
-export function mergeLoggerConfig(userConfig?: Partial<LoggerConfig>): LoggerConfig {
+export function mergeLoggerConfig(
+    userConfig?: Partial<LoggerConfig>,
+): LoggerConfig {
     const defaults: LoggerConfig = {
         level: 'info',
         format: 'pretty',

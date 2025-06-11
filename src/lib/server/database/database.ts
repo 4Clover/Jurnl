@@ -6,19 +6,17 @@ import { startMemoryServer } from './memory-server';
 
 import './schemas';
 
-// TODO: Fix the type errors --  P A I N
+// TODO: Fix the type errors
 
 interface MongooseConnection {
     promise: Promise<Mongoose> | null;
     connection: Mongoose | null;
 }
 
-// Default for Production -- current set to local and for docker
 const defaultConnectionString =
     'mongodb://root:example@mongo:27017/jurnl?authSource=admin&directConnection=' +
     'true&maxPoolSize=10&w=majority&wtimeoutMS=2500&maxIdleTimeMS=60000&maxConnecting=2';
 
-// Global singleton [singleton ref page] for connection caching
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
 const globalWithMongoose = globalThis as any;
 
@@ -32,12 +30,10 @@ const cached: MongooseConnection = globalWithMongoose.mongoose;
 let isInitializing = false;
 
 async function connectToDatabase(): Promise<Mongoose> {
-    // Check for active connection
     if (cached.connection && mongoose.connection.readyState === 1) {
         return cached.connection;
     }
 
-    // If currently connecting, wait
     if (cached.promise) {
         try {
             cached.connection = await cached.promise;
@@ -49,25 +45,20 @@ async function connectToDatabase(): Promise<Mongoose> {
         }
     }
 
-    // Prevent multiple simultaneous init attempts
     if (isInitializing) {
-        // Wait a bit and try again
         await new Promise((resolve) => setTimeout(resolve, 100));
         return connectToDatabase();
     }
 
     isInitializing = true;
 
-    // If existing connection in any state, disconnect first
     if (mongoose.connection.readyState !== 0) {
         console.log('Disconnecting existing MongoDB connection...');
         await mongoose.disconnect();
     }
 
-    // No connection or promise, create!
     let connectionString: string;
 
-    // Use in-memory MongoDB for dev unless MONGODB_URI is explicitly set
     if (dev && (!env.MONGODB_URI || env.MONGODB_URI.trim() === '')) {
         connectionString = await startMemoryServer();
     } else {
@@ -77,11 +68,11 @@ async function connectToDatabase(): Promise<Mongoose> {
     console.log('Connecting to MongoDB...');
 
     const mongOpts = {
-        maxPoolSize: dev ? 5 : 10, // Fewer connections for memory server
+        maxPoolSize: dev ? 5 : 10,
         serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 45000,
         bufferCommands: false,
-        directConnection: !dev, // Don't use direct connection for memory server
+        directConnection: !dev,
         maxIdleTimeMS: 60000,
         maxConnecting: 2,
     } as unknown as ConnectOptions;
@@ -117,15 +108,10 @@ export function isDatabaseConnected(): boolean {
 }
 
 /**
- * Get mongoose connection state
- * 0 = disconnected
- * 1 = connected
- * 2 = connecting
- * 3 = disconnecting
+ * Get mongoose connection state (0=disconnected, 1=connected, 2=connecting, 3=disconnecting)
  */
 export function getConnectionState(): number {
     return mongoose.connection.readyState;
 }
 
-// Call whenever needed, caching will let this be fine
 export default connectToDatabase;

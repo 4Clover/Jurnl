@@ -49,7 +49,10 @@ export function extractRequestContext(event: RequestEvent): LogContext {
     // Add IP address (considering proxies)
     const forwardedFor = event.request.headers.get('x-forwarded-for');
     const realIp = event.request.headers.get('x-real-ip');
-    const ip = forwardedFor?.split(',')[0]?.trim() || realIp || event.getClientAddress();
+    const ip =
+        forwardedFor?.split(',')[0]?.trim() ||
+        realIp ||
+        event.getClientAddress();
     if (ip) {
         context.ip = ip;
     }
@@ -62,7 +65,7 @@ export function extractRequestContext(event: RequestEvent): LogContext {
  */
 export function runWithContext<T>(
     context: LogContext,
-    fn: () => T | Promise<T>
+    fn: () => T | Promise<T>,
 ): T | Promise<T> {
     return contextStorage.run(context, fn);
 }
@@ -78,7 +81,7 @@ export function getContext(): LogContext | undefined {
  * Get a specific value from the current context
  */
 export function getContextValue<K extends keyof LogContext>(
-    key: K
+    key: K,
 ): LogContext[K] | undefined {
     const context = getContext();
     return context?.[key];
@@ -98,7 +101,7 @@ export function updateContext(updates: Partial<LogContext>): void {
  * Create a child context with additional values
  */
 export function createChildContext(
-    additionalContext: Partial<LogContext>
+    additionalContext: Partial<LogContext>,
 ): LogContext {
     const currentContext = getContext() || {};
     return {
@@ -112,10 +115,10 @@ export function createChildContext(
  */
 export function attachRequestContext(event: RequestEvent): void {
     const context = extractRequestContext(event);
-    
+
     // Store context in event.locals for easy access
     event.locals.logContext = context;
-    
+
     // Make context available via AsyncLocalStorage
     runWithContext(context, () => {
         // The actual request handling will happen within this context
@@ -150,16 +153,18 @@ export class ContextTimer {
  * Decorator for adding context to async functions
  */
 export function withContext(additionalContext: Partial<LogContext>) {
-    return function <T extends { [K: string]: (...args: unknown[]) => unknown }>(
-        target: T,
-        propertyKey: string,
-        descriptor: PropertyDescriptor
-    ) {
-        const originalMethod = descriptor.value as (...args: unknown[]) => unknown;
+    return function <
+        T extends { [K: string]: (...args: unknown[]) => unknown },
+    >(target: T, propertyKey: string, descriptor: PropertyDescriptor) {
+        const originalMethod = descriptor.value as (
+            ...args: unknown[]
+        ) => unknown;
 
         descriptor.value = async function (this: T, ...args: unknown[]) {
             const context = createChildContext(additionalContext);
-            return runWithContext(context, () => originalMethod.apply(this, args));
+            return runWithContext(context, () =>
+                originalMethod.apply(this, args),
+            );
         };
 
         return descriptor;
@@ -174,7 +179,7 @@ export function createContextualLogger() {
     if (!context) {
         throw new Error('No request context available');
     }
-    
+
     // This will be used when integrating with the logger
     return {
         context,

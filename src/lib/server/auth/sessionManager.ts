@@ -11,7 +11,7 @@ import type {
     SerializableUser,
 } from '$lib/server/database/schemas';
 
-const SESSION_LIFESPAN_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+const SESSION_LIFESPAN_MS = 30 * 24 * 60 * 60 * 1000;
 const SESSION_TOKEN_BYTE_LENGTH = 32;
 
 const randomReader: RandomReader = {
@@ -58,7 +58,6 @@ export async function createSession(
     const clientToken = generateClientSessionToken();
     const sessionId = await hashTokenForSessionId(clientToken);
     const expiresAt = new Date(Date.now() + SESSION_LIFESPAN_MS);
-    // delete any old session with same id (highly improbable but safe to keep)
     await Session.findByIdAndDelete(sessionId).exec();
 
     const newSession = new Session({
@@ -83,9 +82,8 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
     if (!clientToken) return { user: null, session: null };
 
     const sessionId = await hashTokenForSessionId(clientToken);
-    const sessionDoc = await Session.findById(sessionId).exec(); // don't populate user yet
+    const sessionDoc = await Session.findById(sessionId).exec();
 
-    // validate session
     if (!sessionDoc || sessionDoc.expiresAt.getTime() < Date.now()) {
         if (sessionDoc) {
             console.warn(`Deleting expired/invalid session: ${sessionId}`);
@@ -99,11 +97,9 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         return { user: null, session: null };
     }
 
-    //  Mongoose document now fetched given session is valid
     const userDoc = await User.findById(sessionDoc.userId).exec();
 
     if (!userDoc) {
-        // data integrity issue found, delete session
         console.error(
             `CRITICAL: Session ${sessionId} found but 
             associated user ${sessionDoc.userId.toString()} not found. 
@@ -113,7 +109,6 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         return { user: null, session: null };
     }
 
-    // serializable User
     const safeUser: SerializableUser = {
         id: userDoc._id.toString(),
         username: userDoc.username,
@@ -130,16 +125,15 @@ export async function validateClientSessionToken(clientToken: string): Promise<{
         journals: [],
     };
 
-    // serializable session
     const serializableSessionData: SerializableSession = {
-        _id: sessionDoc._id, // string
-        userId: userDoc._id.toString(), //  user ObjectId to string
-        expiresAt: sessionDoc.expiresAt.toISOString(), // Date to ISO string
+        _id: sessionDoc._id,
+        userId: userDoc._id.toString(),
+        expiresAt: sessionDoc.expiresAt.toISOString(),
     };
 
     return {
-        user: safeUser, // prepped User data
-        session: serializableSessionData, // prepped Session data
+        user: safeUser,
+        session: serializableSessionData,
     };
 }
 
@@ -167,14 +161,13 @@ export async function invalidateAllUserSessions(
 
 export async function refreshSession(
     sessionId: string,
-    threshold: number = 7 * 24 * 60 * 60 * 1000, // 7 days
+    threshold: number = 7 * 24 * 60 * 60 * 1000,
 ): Promise<Date | null> {
     const session = await Session.findById(sessionId);
     if (!session) return null;
 
     const timeLeft = session.expiresAt.getTime() - Date.now();
 
-    // Only refresh if less than threshold time left
     if (timeLeft < threshold) {
         session.expiresAt = new Date(Date.now() + SESSION_LIFESPAN_MS);
         await session.save();
