@@ -4,23 +4,26 @@
     import UserProfile from '$components/landing/UserProfile.svelte';
     import UserCloseFriends from '$components/landing/UserCloseFriends.svelte';
     import UserPublicEntries from '$components/landing/UserPublicEntries.svelte';
-    import type { PageProps } from './$types';
-    let { data }: PageProps = $props();
-    
+    //import type { PageProps } from './$types';
+    import { page } from '$app/state';
+    const { data } = $derived(page);
+    const user = $derived(data.user);
+    const journalList = $derived(data.friendJournals);
+
     console.log(data);
 </script>
 
 <main class="landing-page">
     <section class="user-journals">
-        <UserJournals journalList={data.user.journals}/>
+        <UserJournals journalList={data.user.journals} />
     </section>
     <section class="user-profile">
         <UserProfile userInfo={{ username: data.user.username_display }} />
     </section>
     <section class="user-close-friends">
-        <UserCloseFriends userInfo={data.user}/>
+        <UserCloseFriends userInfo={data.user} />
     </section>
     <section class="user-public-entries">
-        <UserPublicEntries />
+        <UserPublicEntries journalList={data.journalList} type="entries" />
     </section>
 </main>

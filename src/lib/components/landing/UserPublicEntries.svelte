@@ -1,5 +1,4 @@
 <script lang="ts">
-
     const props = $props();
 
     const defaultJournals = [
@@ -25,11 +24,11 @@
                 { name: 'First Prototype', date: '2025-05-18' },
                 { name: 'Feedback Round', date: '2025-05-25' },
             ],
-        }
+        },
     ];
 
     const journalList = props.journalList ?? defaultJournals;
-    
+    const type = props.type ?? 'publicEntries';
 </script>
 
 <h2>Public Entries</h2>
@@ -37,16 +36,33 @@
 {#each journalList as journal}
     <h4>{journal.title}</h4>
     <div class="public-entry-journal">
-        <div class="journal-cover" style="background-color:#a2aec6;"></div>
-        <div class="public-entry-times">
-            {#each journal.entries as entry}
-                <p class="public-entry-time">{entry.date}</p>
-            {/each}
-        </div>
-        <div class="public-entry-previews">
-            {#each journal.entries as entry}
-                <p class="public-entry-preview">{entry.name}</p>
-            {/each}
+        <div
+            class="journal-cover"
+            style="background-color: {journal.color}"
+        ></div>
+        <div class="public-entry-scroll">
+            <div class="public-entry-times">
+                {#each journal.entries as entry}
+                    <p class="public-entry-time">{entry.date}</p>
+                {/each}
+            </div>
+            <div class="public-entry-previews">
+                {#each journal.entries as entry}
+                    <button
+                        onclick={() =>
+                            (window.location.href =
+                                '/journals/' +
+                                entry.journal +
+                                '/' +
+                                type +
+                                '/' +
+                                entry.id)}
+                    >
+                        <p class="public-entry-preview">{entry.name}</p>
+                        <!--create public viewing version of journal entry-->
+                    </button>
+                {/each}
+            </div>
         </div>
     </div>
 {/each}

@@ -57,7 +57,6 @@
     text-align: center;
 }
 
-
 //SOURCE: https://www.w3schools.com/howto/howto_css_menu_horizontal_scroll.asp
 .journal-scroll {
     display: flex;
@@ -101,8 +100,6 @@
     width: 18.8rem;
     height: 7.31rem;
     padding: 0.188rem;
-
-
 
     margin: auto;
     margin-top: 15rem;
@@ -182,7 +179,6 @@
     &__button {
         width: 40%;
         margin: 0;
-
     }
 }
 
@@ -249,6 +245,15 @@
     gap: 1.5rem;
     padding-inline-start: 1.37rem;
 }
+.public-entry-scroll {
+    overflow-y: auto;
+    max-height: 18rem;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    padding-inline-start: 1.37rem;
+}
 
 .public-entry-time {
     width: 13.57rem;
@@ -266,7 +271,6 @@
 }
 
 .public-entry-preview {
-
     padding: 0.67rem;
 
     background-color: variables.$gray;
@@ -278,21 +282,21 @@
 
 .friend-title {
     display: flex;
-	//justify-content: flex-begin;
+    //justify-content: flex-begin;
     white-space: nowrap;
-	width: 100%;
+    width: 100%;
 }
 
 .friend-error {
     color: red;
     display: block;
     white-space: nowrap;
-	width: 100%;
+    width: 100%;
 }
 
 .friend-func {
     display: flex;
-	justify-content: flex-end;
+    justify-content: flex-end;
 }
 
 // User profile setup page components
