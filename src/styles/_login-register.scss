@@ -1,0 +1,42 @@
+@use 'variables';
+
+.center-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem;
+}
+
+.label {
+    width: 50%; /* Same width as box */
+    text-align: left;
+}
+
+.login-box {
+    background: variables.$beige;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 0.5rem;
+    max-width: 50%;
+    width: 100%;
+    margin-bottom: 3rem;
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2vh;
+    background-color: variables.$off-white;
+}
+
+.spacing {
+    margin-top: 2.5rem;
+}
+
+.aside {
+    display: inline-block;
+}
+
+.title {
+    text-align: center;
+}

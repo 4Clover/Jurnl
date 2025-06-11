@@ -1,0 +1,146 @@
+@use 'variables';
+@use 'fonts';
+
+button {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+}
+
+@mixin primary {
+    background: variables.$olive;
+    display: flex;
+    min-width: 7rem;
+    max-width: none;
+    padding: 0.5rem 2rem;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid variables.$off-white;
+    color: variables.$off-white;
+    margin: 1rem;
+    white-space: nowrap;
+
+    &:hover {
+        border: 3px solid variables.$olive;
+    }
+
+    &:active {
+        border: 3px solid variables.$olive;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+}
+
+@mixin secondary {
+    background: variables.$off-white;
+    display: flex;
+    min-width: 7rem;
+    flex: 1;
+    padding: 0.5rem 2rem;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid variables.$sage;
+    color: variables.$olive;
+    margin: 1rem;
+    white-space: nowrap;
+
+    &:hover {
+        border: 3px solid variables.$sage;
+    }
+
+    &:active {
+        border: 3px solid variables.$sage;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+}
+
+.button-sm {
+    padding: 0.5rem 0.5rem;
+    font-size: 1rem;
+}
+
+.button-md {
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+}
+
+.button-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 2rem;
+}
+
+.primary-button {
+    @include primary;
+}
+
+.secondary-button {
+    @include secondary;
+}
+
+.logout-button {
+    @include secondary;
+    font-size: 1rem;
+    display: inline-block;
+    width: min-content;
+    text-wrap: nowrap;
+    overflow: hidden;
+    position: relative;
+    justify-self: right;
+    margin-right: 0;
+    padding: 0.5rem 0 0.5rem 0rem;
+}
+
+.text-align-selector:hover {
+    background-color: variables.$beige;
+}
+
+.addfriend-button {
+    @include primary;
+    height: 3.125rem;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.create-button {
+    @include primary;
+    height: 3.125rem;
+    margin-inline: 0;
+}
+
+.cancel-button {
+    @include secondary;
+    font-size: 1rem;
+    display: inline-block;
+    width: min-content;
+    text-wrap: nowrap;
+    overflow: hidden;
+    justify-self: right;
+    margin-right: 0;
+    padding: 0.5rem 0 0.5rem 0rem;
+    max-width: 5rem;
+    font-family: 'Nothing You Could Do';
+}
+
+.cancel-button {
+    @include secondary;
+    font-size: 1rem;
+    display: inline-block;
+    width: min-content;
+    text-wrap: nowrap;
+    overflow: hidden;
+    justify-self: right;
+    margin-right: 0;
+    padding: 0.5rem 0 0.5rem 0rem;
+    max-width: 5rem;
+    font-family: 'Nothing You Could Do';
+}
+
+.create-submit-button {
+    @include primary;
+    font-family: 'Nothing You Could Do';
+}
+
+.submit-button,
+.add-button {
+    @include primary;
+    font-family: 'Nothing You Could Do';
+}
