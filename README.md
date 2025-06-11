@@ -120,7 +120,7 @@ For basic development, no configuration is needed. For production or custom setu
 ```
 
 5. Click 'create oauth client'.
-<img width="1025" alt="Screenshot 2025-06-11 at 10 30 41 AM" src="https://github.com/user-attachments/assets/15b81462-b311-4b8f-8942-5ae4826222bf" width="300" height="250"/>
+<img width="1025" alt="Screenshot 2025-06-11 at 10 30 41 AM" src="https://github.com/user-attachments/assets/15b81462-b311-4b8f-8942-5ae4826222bf" width="300" height="350"/>
 
 ```
  Application Type: Web Application
