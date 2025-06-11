@@ -51,10 +51,12 @@ body {
 
     &__links {
         display: flex;
-        gap: 1rem;
+        gap: 2rem;
         margin-left: auto;
 
         a {
+            font-family: 'Neue Montreal';
+            font-size: 20px;
             text-decoration: none;
             color: variables.$off-white;
             transition: color 0.3s;
