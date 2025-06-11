@@ -117,7 +117,7 @@ For basic development, no configuration is needed. For production or custom setu
 <img width="1025" alt="Screenshot 2025-06-11 at 10 28 56 AM" src="https://github.com/user-attachments/assets/aa30fa4c-cc1b-4a49-baeb-a04d3f48520b" width="200" height="350"/>
 5. Setup project configurations.
 
-<img width="1025" alt="Screenshot 2025-06-11 at 10 29 49 AM" src="https://github.com/user-attachments/assets/4478291b-87b1-4080-85fc-0c94d27eb434" width="200" height="350"/>
+<img width="1025" alt="Screenshot 2025-06-11 at 10 29 49 AM" src="https://github.com/user-attachments/assets/4478291b-87b1-4080-85fc-0c94d27eb434" width="200" height="400"/>
 
 ```
  App name: Jurnl
@@ -127,7 +127,7 @@ For basic development, no configuration is needed. For production or custom setu
 
 5. Click 'create oauth client'.
 
-<img width="1025" alt="Screenshot 2025-06-11 at 10 30 41 AM" src="https://github.com/user-attachments/assets/15b81462-b311-4b8f-8942-5ae4826222bf" width="300" height="350"/>
+<img width="1025" alt="Screenshot 2025-06-11 at 10 30 41 AM" src="https://github.com/user-attachments/assets/15b81462-b311-4b8f-8942-5ae4826222bf" width="300" height="400"/>
 
 ```
  Application Type: Web Application
