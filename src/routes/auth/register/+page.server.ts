@@ -105,9 +105,13 @@ export const actions: Actions = {
                 auth_provider: 'password',
                 createdAt: newUserDoc.createdAt.toISOString(),
                 updatedAt: newUserDoc.updatedAt.toISOString(),
-                close_friends: newUserDoc.close_friends.map(id => id.toString()),
-                can_view_friends: newUserDoc.can_view_friends.map(id => id.toString()),
-                journals: []
+                close_friends: newUserDoc.close_friends.map((id) =>
+                    id.toString(),
+                ),
+                can_view_friends: newUserDoc.can_view_friends.map((id) =>
+                    id.toString(),
+                ),
+                journals: [],
             };
 
             locals.session = {

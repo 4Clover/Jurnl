@@ -56,7 +56,7 @@
             });
             if (response.ok) {
                 const data = await response.json();
-                successMessage = data.message; // comment out later
+                successMessage = '';
                 console.log('s:', successMessage);
                 friends.push(friendUsername as never);
                 friendUsername = '';
@@ -85,7 +85,7 @@
             });
             if (response.ok) {
                 const data = await response.json();
-                successMessage = data.message;
+                successMessage = '';
                 console.log('s:', successMessage);
                 friends.forEach((friend, index) => {
                     if (friend === username) {

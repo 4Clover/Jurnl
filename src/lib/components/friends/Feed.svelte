@@ -11,7 +11,6 @@
     $effect(() => {
         if (loading) {
             (async () => {
-                console.log('HERE');
                 try {
                     const response = await fetch('/api/friend/publicEntries');
                     if (response.ok) {

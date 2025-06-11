@@ -9,8 +9,6 @@
     const { data } = $derived(page);
     const user = $derived(data.user);
     const journalList = $derived(data.friendJournals);
-
-    console.log(data);
 </script>
 
 <main class="landing-page">

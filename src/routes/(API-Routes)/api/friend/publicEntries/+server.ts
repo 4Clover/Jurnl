@@ -62,7 +62,6 @@ export const GET: RequestHandler = async ({ locals }) => {
         }
         return fail(500, { error: 'unable to find friends' });
     } catch (error) {
-        console.log('here');
         console.error('Could not get viewable entries from friend', error);
         return fail(500, { error: 'unable to find friends' });
     }
