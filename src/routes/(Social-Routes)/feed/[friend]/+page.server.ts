@@ -11,9 +11,18 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
     try {
         // Find the friend by username
-        const friend = await User.findOne({ username: friendUsername }).select(
-            'username username_display bio_text bio_image_url avatar_url',
-        );
+        let friend;
+        if (friendUsername.startsWith('USERID')) {
+            friend = await User.findById(friendUsername.slice(6)).select(
+                'username username_display bio_text bio_image_url avatar_url',
+            );
+        } else {
+            friend = await User.findOne({
+                username: friendUsername,
+            }).select(
+                'username username_display bio_text bio_image_url avatar_url',
+            );
+        }
 
         if (!friend) {
             error(404, 'User not found');
@@ -21,14 +30,14 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
         // Check if current user can view this friend
         const currentUser = await User.findById(locals.user.id).select(
-            'close_friends',
+            'can_view_friends',
         );
-        const isFriend = currentUser?.close_friends.some(
+        const isFriend = currentUser?.can_view_friends.some(
             (id) => id.toString() === friend._id.toString(),
         );
 
         if (!isFriend) {
-            error(403, 'You can only view profiles of your friends');
+            error(403, 'You can only view profiles shared with you');
         }
 
         // Get friend's shared entries grouped by journal
@@ -47,6 +56,8 @@ export const load: PageServerLoad = async ({ params, locals }) => {
             const journalId = journal._id.toString();
             if (!journalsMap.has(journalId)) {
                 journalsMap.set(journalId, {
+                    id: journalId,
+                    color: journal.cover_color,
                     title: journal.title,
                     entries: [],
                 });
@@ -54,6 +65,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
             journalsMap.get(journalId).entries.push({
                 name: entry.title,
                 date: entry.entry_date.toISOString().split('T')[0],
+                id: entry._id.toString(),
             });
         });
 
@@ -65,8 +77,8 @@ export const load: PageServerLoad = async ({ params, locals }) => {
             bio_text: friend.bio_text || "This user hasn't written a bio yet.",
             bio_image_url:
                 friend.bio_image_url ||
-                friend.avatar_url ||
-                'https://i.pinimg.com/736x/6c/21/68/6c21684b57384c2d91d6d86ef2cbe2a4.jpg',
+                'https://i.pinimg.com/736x/6c/21/68/6c21684b57384c2d91d6d86ef2cbe2a4.jpg' ||
+                friend.avatar_url,
         };
 
         return {

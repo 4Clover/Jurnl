@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals, url, fetch }) => {
         // so they can be redirected back after successful login
         redirect(
             303,
-            `/auth/login?redirectTo=${encodeURIComponent(url.pathname)}`
+            `/auth/login?redirectTo=${encodeURIComponent(url.pathname)}`,
         );
     }
 
@@ -25,13 +25,31 @@ export const load: PageServerLoad = async ({ locals, url, fetch }) => {
         console.error('Error loading journals:', error);
     }
 
+    let journalList = [];
+
+    try {
+        const response = await fetch('/api/friend/sharedEntries');
+        if (response.ok) {
+            const data = await response.json();
+            journalList = data.journalList;
+        } else {
+            console.error(
+                "Failed to get user's public entries",
+                response.status,
+            );
+        }
+    } catch (error) {
+        console.log(error);
+        console.error('Error fetching shared entries:', error);
+    }
+
     //logged in, allow access and pass user data to the page
     // use user data to get bio and stuff
     return {
         user: {
             ...locals.user,
-            journals
+            journals,
         },
+        journalList: journalList,
     };
 };
-

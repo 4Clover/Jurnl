@@ -10,7 +10,7 @@
 
 {#if friendInfo && friendJournals}
     <UserProfile userInfo={friendInfo} />
-    <UserPublicEntries journalList={friendJournals} />
+    <UserPublicEntries journalList={friendJournals} type="publicEntries" />
 {:else}
     <p>Loading...</p>
 {/if}

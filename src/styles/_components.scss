@@ -1,0 +1,377 @@
+@use 'variables';
+
+.center-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem;
+}
+
+.label {
+    width: 50%; /* Same width as box */
+    text-align: left;
+}
+
+.login-box {
+    background: variables.$beige;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 0.5rem;
+    max-width: 50%;
+    width: 100%;
+    margin-bottom: 3rem;
+}
+
+.fieldbox {
+    margin-top: 1rem;
+    width: 50%;
+    height: 3rem;
+    padding: 1rem;
+    background: variables.$off-white;
+    border: 2px solid variables.$beige;
+    border-radius: 5px;
+    &__friend {
+        width: 10rem;
+        height: 3rem;
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2vh;
+    background-color: variables.$off-white;
+}
+
+.spacing {
+    margin-top: 2.5rem;
+}
+
+.aside {
+    display: inline-block;
+}
+
+.title {
+    text-align: center;
+}
+
+//SOURCE: https://www.w3schools.com/howto/howto_css_menu_horizontal_scroll.asp
+.journal-scroll {
+    display: flex;
+    overflow: auto;
+    white-space: nowrap;
+    padding-block-start: 0.5rem;
+}
+
+.journal-preview {
+    display: flex;
+}
+
+.journal-cover {
+    min-width: 13rem;
+    min-height: 18rem;
+}
+
+.journal-page-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.journal-book-cover {
+    width: 29rem;
+    height: 38.313rem;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+}
+
+.journal-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    background-color: variables.$off-white;
+    position: absolute;
+    top: 17rem;
+    width: 18.8rem;
+    height: 7.31rem;
+    padding: 0.188rem;
+
+    margin: auto;
+    margin-top: 15rem;
+    margin-left: 5rem;
+    z-index: 20;
+}
+
+.journal-title-box {
+    width: 18.5rem;
+    height: 3.5rem;
+    background-color: variables.$brown;
+}
+
+.journal-title-box > h3 {
+    color: variables.$off-white;
+    text-align: center;
+}
+
+.journal-menu-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 18.5rem;
+    height: 3.5rem;
+}
+
+.entry-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 51rem;
+    width: 21.875rem;
+    padding-top: 4.25rem;
+    gap: 1.75rem;
+    background-color: variables.$beige;
+}
+
+.entry-sidebar-item {
+    width: 18.75rem;
+    height: 3.563rem;
+    background-color: variables.$baby-blue;
+}
+
+.entry-toolbar {
+    width: 100%;
+    height: 3.06rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: variables.$light-brown;
+}
+
+.feed-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin: 1rem;
+    img {
+        max-height: 21rem;
+        min-height: 18rem;
+        width: 30%;
+        object-fit: cover;
+    }
+    &__desc {
+        width: 70%;
+    }
+}
+
+.feed-title {
+    display: flex;
+    align-items: center;
+    &__name {
+        width: 60%;
+    }
+    &__button {
+        width: 40%;
+        margin: 0;
+    }
+}
+
+.feed-entry {
+    background-color: variables.$beige;
+    text-align: left;
+    padding: 1rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.user-profile {
+    padding-block-start: 2.5rem;
+}
+
+.user-profile-image {
+    max-width: 31.25rem;
+    max-height: 23.5rem;
+    width: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.user-close-friends {
+    padding-block-start: 2.5rem;
+}
+
+.manage-friends {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.manage-friend {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: variables.$beige;
+    padding: 1.5rem;
+    min-width: 23.75rem;
+    height: 5.13rem;
+}
+
+.delete-friend-button {
+    color: variables.$red;
+}
+
+.user-public-entries {
+    padding-block-start: 2.5rem;
+}
+
+.public-entry-journal {
+    padding-block-end: 2rem;
+    display: flex;
+}
+
+.public-entry-times {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-inline-start: 1.37rem;
+}
+.public-entry-scroll {
+    // overflow-y: auto;
+    // max-height: 18rem;
+    // width: 80%;
+    // display: flex;
+    // flex-direction: row;
+    // gap: 1.5rem;
+    // padding-inline-start: 1.37rem;
+}
+
+.public-entry-time {
+    width: 13.57rem;
+    padding: 0.67rem;
+    flex-shrink: 0;
+    background-color: variables.$gray;
+}
+
+.public-entry-previews {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.5rem;
+    padding-inline-start: 1.37rem;
+}
+
+.public-entry-preview {
+    padding: 0.67rem;
+
+    background-color: variables.$gray;
+}
+
+.addfriend {
+    display: flex;
+}
+
+.friend-title {
+    display: flex;
+    //justify-content: flex-begin;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.friend-error {
+    color: red;
+    display: block;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.friend-func {
+    display: flex;
+    justify-content: flex-end;
+}
+
+// User profile setup page components
+.picture-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+// ImagePreview
+.image-preview {
+    position: relative;
+}
+
+.image-preview img {
+    width: 18.75rem;
+    height: 12.5rem;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.remove-image {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+// Image Upload
+.image-upload input[type='file'] {
+    display: none;
+}
+
+.upload-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 12.5rem;
+    width: 18.75rem;
+    background: white;
+    border: 2px dashed #d1d5db;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.upload-placeholder:hover {
+    border-color: #9ca3af;
+    background: #f9fafb;
+}
+
+// TextBoxForm
+.text-box textarea {
+    width: 18.75rem;
+    height: 12.5rem;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+@media screen and (min-width: variables.$user-profile-breakpoint) {
+    .user-profile-contents {
+        display: flex;
+    }
+    .user-profile-description {
+        display: flex;
+        padding-inline: 2.5rem;
+        align-items: center;
+    }
+}
