@@ -16,7 +16,6 @@
 <main class="landing-page">
     <section class="user-journals">
         <UserJournals journalList={data.user.journals} />
-        <UserJournals journalList={data.user.journals} />
     </section>
     <section class="user-profile">
         <UserProfile
@@ -28,7 +27,6 @@
         />
     </section>
     <section class="user-close-friends">
-        <UserCloseFriends userInfo={data.user} />
         <UserCloseFriends userInfo={data.user} />
     </section>
     <section class="user-public-entries">
