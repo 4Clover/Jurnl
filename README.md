@@ -106,8 +106,12 @@ For basic development, no configuration is needed. For production or custom setu
 
 1. Login to the [Google Auth Console](https://console.cloud.google.com/auth).
 2. Select 'create project' and give it a name.
-<img width="1013" alt="Screenshot 2025-06-11 at 10 27 18 AM" src="https://github.com/user-attachments/assets/ac654449-196a-4a1c-89be-f56929f456f7" width="200" height="300"/> 
-- Name: Jurnl
+<img width="1013" alt="Screenshot 2025-06-11 at 10 27 18 AM" src="https://github.com/user-attachments/assets/ac654449-196a-4a1c-89be-f56929f456f7" width="200" height="300"/>
+
+```
+ Name: Jurnl
+```
+
 3. Click on clients and then 'get started'.
 <img width="1013" alt="Screenshot 2025-06-11 at 10 28 56 AM" src="https://github.com/user-attachments/assets/aa30fa4c-cc1b-4a49-baeb-a04d3f48520b" width="200" height="350"/>
 4. Setup project configurations.
