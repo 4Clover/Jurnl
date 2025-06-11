@@ -479,10 +479,12 @@
 }
 
 .public-entry-preview {
-
     padding: 0.67rem;
-
     background-color: variables.$gray;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .public-entry-previews {
@@ -494,7 +496,7 @@
 }
 
 .public-entry-scroll {
-    overflow-y: auto;
+    overflow: auto;
     max-height: 18rem;
     width: 80%;
     display: flex;
