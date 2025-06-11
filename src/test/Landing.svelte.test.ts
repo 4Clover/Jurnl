@@ -29,8 +29,8 @@ test('UserPublicEntries', () => {
     const journal1 = getByText('Test Journal 1');
     const journal2 = getByText('Test Journal 2');
 
-    expect(journal1).toBeInTheDocument();
-    expect(journal2).toBeInTheDocument();
+    expect(journal1).toBeTruthy();
+    expect(journal2).toBeTruthy();
 });
 
 test('UserProfile', () => {
@@ -45,8 +45,8 @@ test('UserProfile', () => {
     const username = getByText('Test');
     const bio_text = getByText('Test Text');
 
-    expect(username).toBeInTheDocument();
-    expect(bio_text).toBeInTheDocument();
+    expect(username).toBeTruthy();
+    expect(bio_text).toBeTruthy();
 });
 
 describe('UserJournal', () => {
@@ -61,8 +61,8 @@ describe('UserJournal', () => {
 
         const { getByText } = render(UserJournal, { props });
 
-        expect(getByText('Test Journal')).toBeInTheDocument();
-        expect(getByText('0 entries')).toBeInTheDocument();
+        expect(getByText('Test Journal')).toBeTruthy();
+        expect(getByText('0 entries')).toBeTruthy();
     });
 
     it('renders recent entries if available', () => {

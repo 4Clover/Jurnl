@@ -13,13 +13,13 @@ describe('JournalMenu', () => {
     it('renders the journal title', () => {
         const { getByText } = render(JournalMenu, { props });
 
-        expect(getByText('My Journal')).toBeInTheDocument();
+        expect(getByText('My Journal')).toBeTruthy();
     });
 
     it('renders a "new entry" link with correct href', () => {
         const { getByText } = render(JournalMenu, { props });
         const link = getByText('new entry') as HTMLAnchorElement;
-        expect(link).toBeInTheDocument();
+        expect(link).toBeTruthy();
         expect(link.tagName).toBe('A');
         expect(link.getAttribute('href')).toBe('/journals/123/entries/create');
     });
@@ -42,8 +42,8 @@ describe('JournalEditDialog', () => {
             props: { ...defaultProps, onSave, onCancel },
         });
 
-        expect(getByDisplayValue('My Journal')).toBeInTheDocument();
-        expect(getByDisplayValue('Desc text')).toBeInTheDocument();
+        expect(getByDisplayValue('My Journal')).toBeTruthy();
+        expect(getByDisplayValue('Desc text')).toBeTruthy();
         const colorButtons = getAllByRole('button', { name: /Select #/i });
         expect(colorButtons.length).toBeGreaterThan(0);
     });
@@ -59,6 +59,6 @@ describe('EntrySidebarItem', () => {
     it('renders the journal title', () => {
         const { getByText } = render(EntrySidebarItem, { props });
 
-        expect(getByText('My Entry')).toBeInTheDocument();
+        expect(getByText('My Entry')).toBeTruthy();
     });
 });
