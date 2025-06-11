@@ -99,18 +99,31 @@ src/
 
 For basic development, no configuration is needed. For production or custom setups:
 
-- `MONGODB_URI` - MongoDB connection string (optional in dev)
-- Additional OAuth variables for Google login (optional)
+- `MONGODB_URI` = mongodb://root:example@localhost:27017/ - MongoDB connection string (optional in dev)
+- `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` OAuth variables for Google login (optional)
 
-## Contributing
+## Setting Up OAuth
 
-We welcome contributions! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
+1. Login to the [Google Auth Console](https://console.cloud.google.com/auth).
+2. Select 'create project' and give it a name.
+<img width="1013" alt="Screenshot 2025-06-11 at 10 27 18 AM" src="https://github.com/user-attachments/assets/ac654449-196a-4a1c-89be-f56929f456f7" /> - Name: Jurnl
+3. Click on clients and then 'get started'.
+<img width="1013" alt="Screenshot 2025-06-11 at 10 28 56 AM" src="https://github.com/user-attachments/assets/aa30fa4c-cc1b-4a49-baeb-a04d3f48520b" />
+4. Setup project configurations.
+<img width="565" alt="Screenshot 2025-06-11 at 10 29 49 AM" src="https://github.com/user-attachments/assets/4478291b-87b1-4080-85fc-0c94d27eb434" />
+- App name: Jurnl
+- User support email: <your-email>
+- Audience: External
+5. Click 'create oauth client'.
+<img width="1025" alt="Screenshot 2025-06-11 at 10 30 41 AM" src="https://github.com/user-attachments/assets/15b81462-b311-4b8f-8942-5ae4826222bf" />
+- Application Type: Web Application
+- Name: Jurnl
+- Authorized JavaScript origins: http://localhost:3000
+- Authorized redirect URIs: 
+    - http://localhost:3000/profile
+    - http://localhost:3000/journals
+    - http://localhost:3000/auth/login/google/callback
+6. Save and copy client ID and secret to .env
 
 ## License
 
