@@ -93,7 +93,7 @@ export default defineConfig (({mode}) => ({
 
     resolve: {
         dedupe: ['svelte'], // Prevent duplicate Svelte instances
-        conditions: mode === 'test' ? ['browser'] : [],
+        conditions: mode === 'test' ? ['browser'] : undefined,
     },
 
     // Enhanced dependency optimization

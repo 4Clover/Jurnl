@@ -1,7 +1,10 @@
 <script lang="ts">
-    import { dev } from '$app/environment';
+    import { dev, browser } from '$app/environment';
     import { onMount } from 'svelte';
-
+    
+    // Check if we're in development mode using multiple methods
+    let shouldRender = $state(false);
+    
     let isOpen = $state(false);
     let isLoading = $state(false);
     interface TestResult {
@@ -134,7 +137,7 @@
             }
         } catch (err) {
             console.error('Failed to clear test data:', err);
-        }0
+        }
         
         isLoading = false;
     }
@@ -154,14 +157,35 @@
     }
 
     onMount(() => {
+        // Check multiple indicators for development mode
+        const isDevMode = 
+            dev === true || 
+            import.meta.env.DEV === true ||
+            import.meta.env.MODE === 'development' ||
+            window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1';
+            
+        console.log('DevDebugPanel mounted:', {
+            dev,
+            browser,
+            'import.meta.env.DEV': import.meta.env.DEV,
+            'import.meta.env.MODE': import.meta.env.MODE,
+            hostname: window.location.hostname,
+            isDevMode
+        });
+        
+        // Only render in browser and dev mode
+        shouldRender = browser && isDevMode;
+        
         document.addEventListener('keydown', handleKeydown);
         return () => {
+            console.log('DevDebugPanel unmounting');
             document.removeEventListener('keydown', handleKeydown);
         };
     });
 </script>
 
-{#if dev}
+{#if shouldRender}
     <!-- Debug Trigger Button -->
     <button
         class="debug-trigger"
